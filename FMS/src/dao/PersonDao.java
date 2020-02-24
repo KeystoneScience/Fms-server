@@ -227,14 +227,7 @@ public class PersonDao {
             rs = stmt.executeQuery();
             //Person_id, associated_Username, first_name, last_name, gender, father_id, mother_id, spouse_id
             if (rs.next()) {
-//                String pid = rs.getString("Person_id");
-//                String assu= rs.getString("associated_Username");
-//                String fs = rs.getString("first_name");
-//                String ls =rs.getString("last_name");
-//                String g = rs.getString("gender");
-//                String fi = rs.getString("father_id");
-//                String mi = rs.getString("mother_id");
-//                String si = rs.getString("spouse_id");
+
                 Person = new Person(rs.getString("Person_id"),
                         rs.getString("associated_Username"),
                         rs.getString("first_name"),
