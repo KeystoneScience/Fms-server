@@ -45,23 +45,22 @@ public class FillService
             udao.removeUser(user);
             user.setPerson_id(UUID.randomUUID().toString()); //sets person ID to a random made UUID Possibly wrong order
             udao.insertUser(user);
+
+
+
             Person userPerson = new Person(user.getPerson_id(),user.getId(),user.getFirst_name(),user.getLast_name(),user.getGender(),"","",""); // Construct person object based on user
             pdao.insertPerson(userPerson);
 
             edao.generateBirth(userPerson,1999);
 
+            GenerateGenerations(userPerson, fr.getNumGenerations());
 
-
-
-
-
-
-
-
+            db.closeConnection(true);
 
 
         }catch (DataAccessException | SQLException e) {
-            e.printStackTrace();
+            fR.setSuccess(false);
+            fR.setMessage(e.getMessage());
         }
 
         return fR;
@@ -118,8 +117,9 @@ public class FillService
             edao.generateBirth(dad,birthYearDad);
 
             edao.generateDeath(mom,deathYearMom);
-            edao.generateDeath(dad,deathYearDad)
+            edao.generateDeath(dad,deathYearDad);
 
+            MarriageOfTwo(mom.getPerson_id(),dad.getPerson_id(),child.getPerson_id());
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -134,10 +134,6 @@ public class FillService
 
 
     }
-
-
-
-    private void GenerateCouple(){}
 
     private void MarriageOfTwo(String spouse1, String spouse2, String childID) throws DataAccessException, SQLException {
         Random r = new Random();
@@ -164,43 +160,5 @@ public class FillService
         edao.insertEvent(spouse1Event);
         edao.insertEvent(spouse2Event);
 
-    }
-
-    private void GiveBornAndDead(String personID, String childID) throws DataAccessException, SQLException {
-        Random r = new Random();
-
-        PersonDao pdao = new PersonDao(db.openConnection());
-        EventDao edao = new EventDao(db.openConnection());
-
-
-        Event childBirth = edao.findBirth(childID);
-
-
-
-        Person person = pdao.find(personID);
-        Person child = pdao.find(childID);
-
-        //Generates reasonable birth and death based off of child birth.
-        int birthYear = childBirth.getYear() - 23 - r.nextInt(10);
-        int deathYear = childBirth.getYear() + 10 + r.nextInt(30);
-
-        float birthLatitude = 0.0f;
-        float birthLongitude = 0.0f;
-        String birthID = "";
-        String birthCountry ="";
-        String birthCity = "";
-
-        float deathLatitude = 0.0f;
-        float deathLongitude = 0.0f;
-        String deathID = "";
-        String deathCountry ="";
-        String deathCity = "";
-
-
-        Event birth = new Event(birthID, child.getAssociated_Username(),personID,birthLatitude,birthLongitude,birthCountry, birthCity, "birth", birthYear);
-        Event death = new Event(deathID, child.getAssociated_Username(),personID,deathLatitude,deathLongitude,deathCountry, deathCity, "death", deathYear);
-
-        edao.insertEvent(birth);
-        edao.insertEvent(death);
     }
 }

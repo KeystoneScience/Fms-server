@@ -18,6 +18,10 @@ public class AuthTokenDao {
 
     private Connection connection;
 
+    public AuthTokenDao(Connection connection) {
+        this.connection = connection;
+    }
+
     public Connection getConnection() {
         return connection;
     }
