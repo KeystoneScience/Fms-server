@@ -49,11 +49,11 @@ public class Database {
             Statement stmt = this.conn.createStatement();
 
             try {
-                String sql = "DELETE FROM Event";
+                String sql = "DELETE FROM event";
                 stmt.executeUpdate(sql);
-                sql = "DELETE FROM User";
+                sql = "DELETE FROM user";
                 stmt.executeUpdate(sql);
-                sql = "DELETE FROM Person";
+                sql = "DELETE FROM person";
                 stmt.executeUpdate(sql);
 
 

@@ -40,7 +40,7 @@ public class PersonDao {
         PreparedStatement stmt = null;
         try {
             String sql;
-            sql = "delete from Person";
+            sql = "delete from person";
             stmt = connection.prepareStatement(sql);
             stmt.executeUpdate();
             System.out.printf("cleared Person table");
@@ -64,7 +64,7 @@ public class PersonDao {
     public void insertPerson(Person pe) throws SQLException, DataAccessException {
         PreparedStatement stmt = null;
         try {
-            String sql = "insert into Person (Person_id, associated_Username, first_name, last_name, gender, father_id, mother_id, spouse_id) values (?, ?, ?, ?, ?, ?, ?, ?)";
+            String sql = "insert into person (person_id, associated_Username, first_name, last_name, gender, father_id, mother_id, spouse_id) values (?, ?, ?, ?, ?, ?, ?, ?)";
             stmt = connection.prepareStatement(sql);
 
 
@@ -121,7 +121,7 @@ public class PersonDao {
             //int count = stmt.executeUpdate();
 
             // Reset the auto-increment counter so new books start over with an id of 1
-            sql = "delete from Person where name = '"+ ps.getPerson_id() + "'";
+            sql = "delete from person where name = '"+ ps.getPerson_id() + "'";
             stmt = connection.prepareStatement(sql);
             stmt.executeUpdate();
             System.out.printf("Deleted Person: %s\n", ps.getPerson_id());
@@ -146,7 +146,7 @@ public class PersonDao {
         ResultSet rs = null;
 
         try {
-            String sql = "select Person_id, associated_Username, first_name, last_name, gender, father_id, mother_id, spouse_id from Person";
+            String sql = "select person_id, associated_Username, first_name, last_name, gender, father_id, mother_id, spouse_id from person";
             stmt = connection.prepareStatement(sql);
 
             rs = stmt.executeQuery();
@@ -186,10 +186,10 @@ public class PersonDao {
     public void updatePerson(Person ps,String PersonIdToUpdate) throws SQLException {
         PreparedStatement stmt = null;
         try {
-            String sql = "update Person " +
-                    "set Person_id = ?, associated_Username = ?, first_name = ?, last_name = ?," +
+            String sql = "update person " +
+                    "set person_id = ?, associated_Username = ?, first_name = ?, last_name = ?," +
                     " gender = ?, father_id = ?, mother_id = ?, spouse_id = ?"+
-                    "where Person_id = ?";
+                    "where person_id = ?";
             stmt = connection.prepareStatement(sql);
             stmt.setString(1, ps.getPerson_id());
             stmt.setString(2, ps.getAssociated_Username());
@@ -221,7 +221,7 @@ public class PersonDao {
     public Person find(String ID) throws DataAccessException {
         Person Person;
         ResultSet rs = null;
-        String sql = "SELECT * FROM Person WHERE Person_id = ?;";
+        String sql = "SELECT * FROM person WHERE person_id = ?;";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, ID);
             rs = stmt.executeQuery();

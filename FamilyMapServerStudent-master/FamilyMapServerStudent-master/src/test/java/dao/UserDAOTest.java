@@ -109,7 +109,7 @@ public class UserDAOTest {
         }
 
         //Now make sure that compareTest is indeed null
-        assertNull(compareTest);
+         assertNull(compareTest);
     }
 
 
