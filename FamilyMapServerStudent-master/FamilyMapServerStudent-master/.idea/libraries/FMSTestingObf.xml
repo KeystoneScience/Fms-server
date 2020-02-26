@@ -2,8 +2,10 @@
   <library name="FMSTestingObf">
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/libs/FMSTestingObf.jar!/" />
+      <root url="file://$PROJECT_DIR$/libs" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
+    <jarDirectory url="file://$PROJECT_DIR$/libs" recursive="false" />
   </library>
 </component>
