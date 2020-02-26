@@ -1,8 +1,11 @@
 package dao;
 
-import model.Event;
-import model.Person;
+import com.google.gson.Gson;
+import model.*;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,11 +21,38 @@ import java.util.UUID;
  */
 public class EventDao {
 
+    private LocationList locations = new LocationList();
+
     private Connection connection;
 
     public EventDao(Connection conn) {
         connection = conn;
     }
+
+
+    public void generateLists(){
+        Gson gson = new Gson();
+        try {
+
+            System.out.println("Reading JSONs");
+            System.out.println("----------------------------");
+
+
+            //IF BUG, CHECK PATH STUFF.
+
+            BufferedReader br = new BufferedReader(new FileReader(PersonDao.class.getClassLoader()
+                    .getResource("locations.json").getPath()
+                    .replaceAll("%20", " ")));
+
+            //convert the json string back to object
+            LocationList locations = gson.fromJson(br, LocationList.class);
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -366,10 +396,11 @@ public class EventDao {
         death.setEvent_id(UUID.randomUUID().toString());
         death.setAssociated_Username(person.getAssociated_Username());
         death.setPerson_id(person.getPerson_id());
-        death.setLatitude(0f); //FIXME
-        death.setLongitude(0f); //FIXME
-        death.setCountry(""); //FIXME
-        death.setCity(""); //FIXME
+        Location local = locations.getRandom();
+        death.setLatitude(local.getLatitude());
+        death.setLongitude(local.getLongitude());
+        death.setCountry(local.getCountry());
+        death.setCity(local.getCity()); //FIXME
         death.setEvent_type("death");
         death.setYear(dod);
         try {

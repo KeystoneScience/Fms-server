@@ -1,26 +1,72 @@
 package dao;
 
-import model.Event;
+import model.ListStructure;
 import model.Person;
-import model.User;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
+import com.google.gson.Gson;
 /**
  * the Person data access class. This class is responsible for
  * performing operations on the Person sql table.
  */
 public class PersonDao {
 
+
+
     private Connection connection;
+    private ListStructure fnames = new ListStructure();
+    private ListStructure mnames = new ListStructure();
+    private ListStructure snames = new ListStructure();
+
+
 
     public PersonDao(Connection conn) {
         connection=conn;
+    }
+
+    public void generateLists(){
+        Gson gson = new Gson();
+        try {
+
+            System.out.println("Reading JSONs");
+            System.out.println("----------------------------");
+
+
+            //IF BUG, CHECK PATH STUFF.
+
+            BufferedReader br = new BufferedReader(new FileReader(PersonDao.class.getClassLoader()
+                    .getResource("fnames.json").getPath()
+                    .replaceAll("%20", " ")));
+
+            //convert the json string back to object
+            ListStructure fnames = gson.fromJson(br, ListStructure.class);
+
+            br = new BufferedReader(new FileReader(PersonDao.class.getClassLoader()
+                    .getResource("mnames.json").getPath()
+                    .replaceAll("%20", " ")));
+
+            //convert the json string back to object
+            ListStructure mnames = gson.fromJson(br, ListStructure.class);
+
+            br = new BufferedReader(new FileReader(PersonDao.class.getClassLoader()
+                    .getResource("snames.json").getPath()
+                    .replaceAll("%20", " ")));
+
+            //convert the json string back to object
+            ListStructure snames = gson.fromJson(br, ListStructure.class);
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public Connection getConnection() {

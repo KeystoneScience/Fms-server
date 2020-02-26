@@ -16,6 +16,7 @@ import java.util.UUID;
  */
 public class FillService
 {
+    //private boolean[] changeLastName = [true];
     private Database db = new Database();
     boolean success;
 
@@ -66,6 +67,12 @@ public class FillService
         return fR;
     }
 
+    /**
+     * Recursive Algorithm to populate generations
+     * @param child
+     * @param numGenerationsToGenerate
+     * @throws DataAccessException
+     */
     private void GenerateGenerations(Person child, int numGenerationsToGenerate) throws DataAccessException {
         Person base = new Person();
         base.setAssociated_Username(child.getAssociated_Username());
@@ -84,6 +91,8 @@ public class FillService
 
 
         //set first and last names from the last and first name database FIXME
+        dad.setLast_name(child.getLast_name());
+
 
 
         child.setFather_id(dad.getPerson_id());

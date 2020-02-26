@@ -4,6 +4,7 @@ package request;
  * This class contains the information submitted from the client for queuing a registration
  */
 public class RegisterRequest {
+    //FIXME these variables, and in all requests, need to match what is given on the server info datasheet so that they may work with JSON
     /** the User's ID    */
     private String UserName;
     /** the User's password    */
