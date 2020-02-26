@@ -18,10 +18,25 @@ public class FillService
 {
     //private boolean[] changeLastName = [true];
     private Database db = new Database();
+    private PersonDao pdao;
+    private EventDao edao;
+    private UserDao udao;
+
     boolean success;
 
     public FillService(){
     };
+
+    private void openObjects(){
+        try {
+            PersonDao pdao = new PersonDao(db.getConnection());
+            UserDao udao = new UserDao(db.getConnection());
+            EventDao edao = new EventDao(db.getConnection());
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
+
+    }
 
     /**
      * This function serves the fill request
@@ -33,9 +48,7 @@ public class FillService
         try {
             db.openConnection();
 
-            PersonDao pdao = new PersonDao(db.getConnection());
-            UserDao udao = new UserDao(db.getConnection());
-            EventDao edao = new EventDao(db.getConnection());
+            openObjects();
 
             User user = udao.find(fr.getUserID());
 
@@ -53,6 +66,8 @@ public class FillService
             pdao.insertPerson(userPerson);
 
             edao.generateBirth(userPerson,1999);
+
+
 
             GenerateGenerations(userPerson, fr.getNumGenerations());
 
@@ -90,7 +105,7 @@ public class FillService
         dad.setSpouse_id(mom.getPerson_id());
 
 
-        //set first and last names from the last and first name database FIXME
+
         dad.setLast_name(child.getLast_name());
 
 
@@ -100,7 +115,7 @@ public class FillService
 
         Random r = new Random();
 
-        EventDao edao = new EventDao(db.openConnection());
+
 
 
         Event childBirth = edao.findBirth(child.getPerson_id());
@@ -115,9 +130,14 @@ public class FillService
 
         db.openConnection();
 
-        PersonDao pdao = new PersonDao(db.getConnection());
 
         try {
+            dad.setLast_name(child.getLast_name());
+            mom.setLast_name(pdao.randomLastName());
+
+            dad.setFirst_name(pdao.randomMaleName());
+            mom.setFirst_name(pdao.randomFemaleName());
+
             pdao.updatePerson(child, child.getPerson_id());
             pdao.insertPerson(mom);
             pdao.insertPerson(dad);

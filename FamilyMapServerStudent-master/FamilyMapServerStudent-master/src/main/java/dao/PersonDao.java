@@ -25,6 +25,7 @@ public class PersonDao {
     private ListStructure fnames = new ListStructure();
     private ListStructure mnames = new ListStructure();
     private ListStructure snames = new ListStructure();
+    private boolean hasBeenRead = false;
 
 
 
@@ -32,8 +33,24 @@ public class PersonDao {
         connection=conn;
     }
 
-    public void generateLists(){
+    public String randomFemaleName(){
+        generateLists();
+        return fnames.getRandom();
+    }
+    public String randomMaleName(){
+        generateLists();
+        return mnames.getRandom();
+    }
+    public String randomLastName(){
+        generateLists();
+        return snames.getRandom();
+    }
+
+    private void generateLists(){
         Gson gson = new Gson();
+        if(hasBeenRead){
+            return;
+        }
         try {
 
             System.out.println("Reading JSONs");
@@ -63,7 +80,7 @@ public class PersonDao {
             //convert the json string back to object
             ListStructure snames = gson.fromJson(br, ListStructure.class);
 
-
+            hasBeenRead = true;
         } catch (IOException e) {
             e.printStackTrace();
         }

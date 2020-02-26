@@ -22,7 +22,7 @@ import java.util.UUID;
 public class EventDao {
 
     private LocationList locations = new LocationList();
-
+    private boolean hasBeenRead = false;
     private Connection connection;
 
     public EventDao(Connection conn) {
@@ -32,6 +32,9 @@ public class EventDao {
 
     public void generateLists(){
         Gson gson = new Gson();
+        if(hasBeenRead){
+            return;
+        }
         try {
 
             System.out.println("Reading JSONs");
@@ -47,7 +50,7 @@ public class EventDao {
             //convert the json string back to object
             LocationList locations = gson.fromJson(br, LocationList.class);
 
-
+            hasBeenRead = true;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -372,14 +375,16 @@ public class EventDao {
     }
 
     public boolean generateBirth(Person person, int birthday) throws SQLException, DataAccessException {
+        generateLists();
         Event birth = new Event();
         birth.setEvent_id(UUID.randomUUID().toString());
         birth.setAssociated_Username(person.getAssociated_Username());
         birth.setPerson_id(person.getPerson_id());
-        birth.setLatitude(0f); //FIXME
-        birth.setLongitude(0f); //FIXME
-        birth.setCountry(""); //FIXME
-        birth.setCity(""); //FIXME
+        Location local = locations.getRandom();
+        birth.setLatitude(local.getLatitude());
+        birth.setLongitude(local.getLongitude());
+        birth.setCountry(local.getCountry());
+        birth.setCity(local.getCity());
         birth.setEvent_type("birth");
         birth.setYear(birthday);
         try {
@@ -392,6 +397,7 @@ public class EventDao {
     }
 
     public boolean generateDeath(Person person, int dod) throws SQLException, DataAccessException {
+        generateLists();
         Event death = new Event();
         death.setEvent_id(UUID.randomUUID().toString());
         death.setAssociated_Username(person.getAssociated_Username());
@@ -400,7 +406,7 @@ public class EventDao {
         death.setLatitude(local.getLatitude());
         death.setLongitude(local.getLongitude());
         death.setCountry(local.getCountry());
-        death.setCity(local.getCity()); //FIXME
+        death.setCity(local.getCity());
         death.setEvent_type("death");
         death.setYear(dod);
         try {
