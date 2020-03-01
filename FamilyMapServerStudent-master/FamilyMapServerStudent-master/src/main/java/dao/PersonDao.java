@@ -316,4 +316,84 @@ public class PersonDao {
         }
         return null;
     }
+
+
+
+    public Person find(String ID, String associatedUsername) throws DataAccessException {
+        Person Person;
+        ResultSet rs = null;
+        String sql = "SELECT * FROM person WHERE person_id = ? and associated_Username = ?;";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, ID);
+            stmt.setString(2, associatedUsername);
+
+            rs = stmt.executeQuery();
+            //Person_id, associated_Username, first_name, last_name, gender, father_id, mother_id, spouse_id
+            if (rs.next()) {
+
+                Person = new Person(rs.getString("Person_id"),
+                        rs.getString("associated_Username"),
+                        rs.getString("first_name"),
+                        rs.getString("last_name"),
+                        rs.getString("gender"),
+                        rs.getString("father_id"),
+                        rs.getString("mother_id"),
+                        rs.getString("spouse_id"));
+                return Person;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DataAccessException("Error encountered while finding Person");
+        } finally {
+            if(rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+        return null;
+    }
+
+
+    public List<Person> findPersons(String ID) throws DataAccessException {
+        List<Person> persons = new ArrayList<>();
+        Person Person;
+        ResultSet rs = null;
+        String sql = "SELECT * FROM person WHERE associated_username = ?;";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, ID);
+            rs = stmt.executeQuery();
+            while(rs.next()) {
+                String Person_id = rs.getString(1);
+                String associated_Username = rs.getString(2);
+                String first_name = rs.getString(3);
+                String last_name = rs.getString(4);
+                String gender = rs.getString(5);
+                String father_id = rs.getString(6);
+                String mother_id = rs.getString(7);
+                String spouse_id = rs.getString(8);
+
+                persons.add(new Person(Person_id,associated_Username,first_name,last_name,gender,father_id,mother_id,spouse_id
+                ));
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DataAccessException("Error encountered while finding Person");
+        } finally {
+            if(rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+        return null;
+    }
+
 }

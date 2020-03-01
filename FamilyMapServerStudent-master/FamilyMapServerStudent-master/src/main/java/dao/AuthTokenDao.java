@@ -2,6 +2,7 @@ package dao;
 
 import model.AuthToken;
 import model.Event;
+import model.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -165,4 +166,34 @@ public class AuthTokenDao {
     }
 
 
+    public AuthToken find(String ID) throws DataAccessException {
+        AuthToken at;
+        ResultSet rs = null;
+        String sql = "SELECT * FROM authToken WHERE token = ?;";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, ID);
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                at = new AuthToken(rs.getString("token"),rs.getString("username"));
+                return at;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DataAccessException("Error encountered while finding auth token");
+        } finally {
+            if(rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+        return null;
+    }
+
+
+
 }
+

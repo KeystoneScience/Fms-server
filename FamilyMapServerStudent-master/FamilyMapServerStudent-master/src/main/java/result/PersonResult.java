@@ -3,6 +3,7 @@ package result;
 import model.Person;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -11,7 +12,7 @@ import java.util.ArrayList;
  */
 
 public class PersonResult extends ParentResult{
-    private ArrayList<Person> people;
+    private List<Person> people = new ArrayList<>();
     private String assoUserName;
     private String PersonID;
     private String firstName;
@@ -112,20 +113,24 @@ public class PersonResult extends ParentResult{
         this.spouseID = spouseID;
     }
 
-    /**
-     * Constructor for the Person api path
-     * @param people ArrayList
-     */
-    public PersonResult(ArrayList<Person> people) {
-        this.people = people;
+
+    public void fillPerson(Person p){
+        assoUserName = p.getAssociated_Username();
+        PersonID = p.getPerson_id();
+        firstName = p.getFirst_name();
+        lastName = p.getLast_name();
+        gender = p.getGender();
+        fatherID = p.getFather_id();
+        motherID = p.getMother_id();
+        spouseID = p.getSpouse_id();
     }
 
     //maybe use a list here?
-    public ArrayList<Person> getPeople() {
+    public List<Person> getPeople() {
         return people;
     }
 
-    public void setPeople(ArrayList<Person> people) {
+    public void setPeople(List<Person> people) {
         this.people = people;
     }
 
