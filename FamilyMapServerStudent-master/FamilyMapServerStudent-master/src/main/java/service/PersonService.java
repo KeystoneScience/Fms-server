@@ -90,7 +90,7 @@ public class PersonService {
             pr.setSuccess(false);
             pr.setMessage(e.getMessage());
             try {
-                db.closeConnection(true);
+                db.closeConnection(false);
             } catch (DataAccessException ex) {
                 pr.setMessage(e.getMessage());
             }

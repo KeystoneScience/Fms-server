@@ -6,7 +6,7 @@ package request;
 public class RegisterRequest {
     //FIXME these variables, and in all requests, need to match what is given on the server info datasheet so that they may work with JSON
     /** the User's ID    */
-    private String UserName;
+    private String userName;
     /** the User's password    */
     private String password;
     /** the User's email*/
@@ -24,12 +24,12 @@ public class RegisterRequest {
     public RegisterRequest(){};
 
 
-    public String getUserName() {
-        return UserName;
+    public String getuserName() {
+        return userName;
     }
 
-    public void setUserName(String UserName) {
-        this.UserName = UserName;
+    public void setuserName(String userName) {
+        this.userName = userName;
     }
 
     public String getPassword() {

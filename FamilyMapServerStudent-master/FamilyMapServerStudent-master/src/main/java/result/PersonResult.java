@@ -13,8 +13,8 @@ import java.util.List;
 
 public class PersonResult extends ParentResult{
     private List<Person> people = new ArrayList<>();
-    private String assoUserName;
-    private String PersonID;
+    private String associatedUsername;
+    private String personID;
     private String firstName;
     private String lastName;
     private String gender;
@@ -25,19 +25,19 @@ public class PersonResult extends ParentResult{
 
 
     public String getAssoUserName() {
-        return assoUserName;
+        return associatedUsername;
     }
 
-    public void setAssoUserName(String assoUserName) {
-        this.assoUserName = assoUserName;
+    public void setAssoUserName(String associatedUsername) {
+        this.associatedUsername = associatedUsername;
     }
 
-    public String getPersonID() {
-        return PersonID;
+    public String getpersonID() {
+        return personID;
     }
 
-    public void setPersonID(String PersonID) {
-        this.PersonID = PersonID;
+    public void setpersonID(String personID) {
+        this.personID = personID;
     }
 
     public String getFirstName() {
@@ -92,9 +92,9 @@ public class PersonResult extends ParentResult{
     public PersonResult(){};
 
     /**
-     * Constructor for the PersonID api with all the necessary data bins.
-     * @param assoUserName Username associated to the Person
-     * @param PersonID Unique identifier for the Person
+     * Constructor for the personID api with all the necessary data bins.
+     * @param associatedUsername Username associated to the Person
+     * @param personID Unique identifier for the Person
      * @param firstName first name
      * @param lastName last name
      * @param gender gender (m or f)
@@ -102,9 +102,9 @@ public class PersonResult extends ParentResult{
      * @param motherID unique identifier for the mother
      * @param spouseID unique identifier for the spouse
      */
-    public PersonResult(String assoUserName, String PersonID, String firstName, String lastName, String gender, String fatherID, String motherID, String spouseID) {
-        this.assoUserName = assoUserName;
-        this.PersonID = PersonID;
+    public PersonResult(String associatedUsername, String personID, String firstName, String lastName, String gender, String fatherID, String motherID, String spouseID) {
+        this.associatedUsername = associatedUsername;
+        this.personID = personID;
         this.firstName = firstName;
         this.lastName = lastName;
         this.gender = gender;
@@ -115,8 +115,8 @@ public class PersonResult extends ParentResult{
 
 
     public void fillPerson(Person p){
-        assoUserName = p.getAssociated_Username();
-        PersonID = p.getPerson_id();
+        associatedUsername = p.getAssociated_Username();
+        personID = p.getPerson_id();
         firstName = p.getFirst_name();
         lastName = p.getLast_name();
         gender = p.getGender();
@@ -135,11 +135,11 @@ public class PersonResult extends ParentResult{
     }
 
     /**
-     * Function to return the successful response for PersonID api.
+     * Function to return the successful response for personID api.
      * (More to add here later)
      * @return type string, returns response
      */
-    public String successfulResponsePersonID(){
+    public String successfulResponsepersonID(){
 
         //I will construct this string with a string builder, and return it
         return null;

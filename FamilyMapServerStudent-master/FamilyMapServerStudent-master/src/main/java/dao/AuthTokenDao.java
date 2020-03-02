@@ -36,7 +36,7 @@ public class AuthTokenDao {
      * @param au authentication token
      * @throws SQLException input output SQL exception
      */
-    private void insertAuthToken(AuthToken au) throws SQLException {
+    public void insertAuthToken(AuthToken au) throws SQLException {
         PreparedStatement stmt = null;
         try {
             String sql = "insert into AuthToken (token, Username) values (?, ?)";

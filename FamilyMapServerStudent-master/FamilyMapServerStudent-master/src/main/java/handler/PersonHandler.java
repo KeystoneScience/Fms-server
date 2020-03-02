@@ -118,7 +118,7 @@ public class PersonHandler {
                         else{
                             exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
 
-                            String responseJsonString = new String("{\"message\" : \"" + pr.getMessage() + "\"}");
+                            String responseJsonString = "{\"message\" : \"" + pr.getMessage() + "\"}";
 
 
                             OutputStreamWriter osq = new OutputStreamWriter(exchange.getResponseBody());

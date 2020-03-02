@@ -8,11 +8,11 @@ package result;
 public class RegisterResult extends ParentResult {
 
     /** authentication token for the User */
-    private String AuthToken;
+    private String authToken;
     /** Username associated with the request  */
-    private String UserName;
+    private String userName;
     /** the identification of the Person object linked to the User*/
-    private String PersonId;
+    private String personID;
 
 
 
@@ -23,8 +23,8 @@ public class RegisterResult extends ParentResult {
      */
     public String successfulResponse(){
         //here is where i will put the information found in the specs:
-        //        "AuthToken": "cf7a368f", // Non-empty auth token string
-        //                "UserName": "susan", // User name passed in with request
+        //        "authToken": "cf7a368f", // Non-empty auth token string
+        //                "userName": "susan", // User name passed in with request
         //                "PersonID": "39f9fe46" // Non-empty string containing the Person ID of the
         //// User’s generated Person object
         //"success":"true" // Boolean identifier
@@ -38,35 +38,35 @@ public class RegisterResult extends ParentResult {
         super();
 
     }
-    public RegisterResult(String message, String AuthToken, String UserName, String PersonId) {
+    public RegisterResult(String message, String authToken, String userName, String personID) {
         super(message);
-        this.AuthToken = AuthToken;
-        this.UserName = UserName;
-        this.PersonId = PersonId;
+        this.authToken = authToken;
+        this.userName = userName;
+        this.personID = personID;
     }
 
-    public String getAuthToken() {
-        return AuthToken;
+    public String getauthToken() {
+        return authToken;
     }
 
-    public void setAuthToken(String AuthToken) {
-        this.AuthToken = AuthToken;
+    public void setauthToken(String authToken) {
+        this.authToken = authToken;
     }
 
-    public String getUserName() {
-        return UserName;
+    public String getuserName() {
+        return userName;
     }
 
-    public void setUserName(String UserName) {
-        this.UserName = UserName;
+    public void setuserName(String userName) {
+        this.userName = userName;
     }
 
-    public String getPersonId() {
-        return PersonId;
+    public String getpersonID() {
+        return personID;
     }
 
-    public void setPersonId(String PersonId) {
-        this.PersonId = PersonId;
+    public void setpersonID(String personID) {
+        this.personID = personID;
     }
 
     public RegisterResult(String message) {

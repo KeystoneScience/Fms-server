@@ -50,7 +50,7 @@ public class FillService
 
             openObjects();
 
-            User user = udao.find(fr.getUserID());
+            User user = udao.find(fr.getuserName());
 
             if (user == null){ //Checks if user exists
                 throw new DataAccessException("Username is not in the database.");
@@ -77,6 +77,11 @@ public class FillService
         }catch (DataAccessException | SQLException e) {
             fR.setSuccess(false);
             fR.setMessage(e.getMessage());
+            try{
+                db.closeConnection(false);
+            } catch (DataAccessException ex) {
+                fR.setMessage(ex.getMessage());
+            }
         }
 
         return fR;

@@ -5,29 +5,29 @@ package request;
  * to be filled along with the Username
  */
 public class FillRequest {
-    private String UserID;
+    private String userName;
     private int numGenerations;
 
-    public FillRequest(String UserID) {
-        this.UserID = UserID;
+    public FillRequest(String userName) {
+        this.userName = userName;
     }
 
     /**
      * data object constructor
-     * @param UserID unique string specifying the User
+     * @param userName unique string specifying the User
      * @param numGenerations number of generations to generate
      */
-    public FillRequest(String UserID, int numGenerations) {
-        this.UserID = UserID;
+    public FillRequest(String userName, int numGenerations) {
+        this.userName = userName;
         this.numGenerations = numGenerations;
     }
 
-    public String getUserID() {
-        return UserID;
+    public String getuserName() {
+        return userName;
     }
 
-    public void setUserID(String UserID) {
-        this.UserID = UserID;
+    public void setuserName(String userName) {
+        this.userName = userName;
     }
 
     public int getNumGenerations() {

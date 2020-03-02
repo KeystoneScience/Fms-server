@@ -8,12 +8,12 @@ import java.util.ArrayList;
 
 /**
  * This class has the data structure for information regarding any
- * fill Event. It will pass in array lists for Users, people, and Events.
+ * fill Event. It will pass in array lists for users, persons, and events.
  */
 public class LoadRequest {
-    private ArrayList<User> Users;
-    private ArrayList<Person> people;
-    private ArrayList<Event> Events;
+    private ArrayList<User> users;
+    private ArrayList<Person> persons;
+    private ArrayList<Event> events;
 
     /**
      * load request constructor
@@ -21,26 +21,26 @@ public class LoadRequest {
     public LoadRequest(){};
 
     public ArrayList<User> getUsers() {
-        return Users;
+        return users;
     }
 
-    public void setUsers(ArrayList<User> Users) {
-        this.Users = Users;
+    public void setUsers(ArrayList<User> users) {
+        this.users = users;
     }
 
     public ArrayList<Person> getPeople() {
-        return people;
+        return persons;
     }
 
-    public void setPeople(ArrayList<Person> people) {
-        this.people = people;
+    public void setPeople(ArrayList<Person> persons) {
+        this.persons = persons;
     }
 
     public ArrayList<Event> getEvents() {
-        return Events;
+        return events;
     }
 
-    public void setEvents(ArrayList<Event> Events) {
-        this.Events = Events;
+    public void setEvents(ArrayList<Event> events) {
+        this.events = events;
     }
 }

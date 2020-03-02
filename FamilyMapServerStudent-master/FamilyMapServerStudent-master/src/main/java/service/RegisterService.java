@@ -74,7 +74,7 @@ public class RegisterService {
             result.setSuccess(false);
             result.setMessage(e.getMessage());
             try {
-                db.closeConnection(true);
+                db.closeConnection(false);
             } catch (DataAccessException ex) {
                 result.setMessage(ex.getMessage());
             }
