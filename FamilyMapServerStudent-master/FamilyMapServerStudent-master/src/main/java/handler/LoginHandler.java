@@ -49,16 +49,7 @@ public class LoginHandler implements HttpHandler {
                 if (lr.isSuccess()) {
                     exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
 
-                    String responseJsonString = gson.toJson(lr);
 
-
-
-                    OutputStreamWriter osq = new OutputStreamWriter(exchange.getResponseBody());
-                    osq.write(responseJsonString);
-                    osq.flush();
-
-                    // output stream, indicating that the response is complete.
-                    exchange.getResponseBody().close();
 
 
                 } else {
@@ -66,19 +57,17 @@ public class LoginHandler implements HttpHandler {
                     // status code to the client.
                     exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
 
-
-
-                    String responseJsonString ="{\"message\" : \"" + lr.getMessage() + "\"}";
-
-
-
-                    OutputStreamWriter osq = new OutputStreamWriter(exchange.getResponseBody());
-                    osq.write(responseJsonString);
-                    osq.flush();
-
-                    // output stream, indicating that the response is complete.
-                    exchange.getResponseBody().close();
                 }
+                String responseJsonString = gson.toJson(lr);
+
+
+
+                OutputStreamWriter osq = new OutputStreamWriter(exchange.getResponseBody());
+                osq.write(responseJsonString);
+                osq.flush();
+
+                // output stream, indicating that the response is complete.
+                exchange.getResponseBody().close();
 
 
             }

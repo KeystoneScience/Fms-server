@@ -3,20 +3,21 @@ package result;
 import model.Event;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * data structure containing the responses for the Event api
  */
 public class EventResult extends ParentResult {
-    private ArrayList<Event> Events;
-    private String decendant;
-    private String EventID;
-    private String PersonID;
+    private List<Event> data;
+    private String associatedUsername;
+    private String eventID;
+    private String personID;
     private double latitude;
     private double longitude;
     private String country;
     private String city;
-    private String EventType;
+    private String eventType;
     private int year;
 
 
@@ -35,27 +36,27 @@ public class EventResult extends ParentResult {
     }
 
     public String getDecendant() {
-        return decendant;
+        return associatedUsername;
     }
 
     public void setDecendant(String decendant) {
-        this.decendant = decendant;
+        this.associatedUsername = decendant;
     }
 
     public String getEventID() {
-        return EventID;
+        return eventID;
     }
 
     public void setEventID(String EventID) {
-        this.EventID = EventID;
+        this.eventID = EventID;
     }
 
     public String getPersonID() {
-        return PersonID;
+        return personID;
     }
 
     public void setPersonID(String PersonID) {
-        this.PersonID = PersonID;
+        this.personID = PersonID;
     }
 
     public double getLatitude() {
@@ -91,11 +92,11 @@ public class EventResult extends ParentResult {
     }
 
     public String getEventType() {
-        return EventType;
+        return eventType;
     }
 
     public void setEventType(String EventType) {
-        this.EventType = EventType;
+        this.eventID = EventType;
     }
 
     public int getYear() {
@@ -106,11 +107,11 @@ public class EventResult extends ParentResult {
         this.year = year;
     }
 
-    public ArrayList<Event> getEvents() {
-        return Events;
+    public List<Event> getEvents() {
+        return data;
     }
 
-    public void setEvents(ArrayList<Event> Events) {
-        this.Events = Events;
+    public void setEvents(List<Event> Events) {
+        this.data = Events;
     }
 }

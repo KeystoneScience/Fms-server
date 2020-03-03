@@ -12,7 +12,7 @@ import java.util.List;
  */
 
 public class PersonResult extends ParentResult{
-    private List<Person> people = new ArrayList<>();
+    private List<Person> data = new ArrayList<>();
     private String associatedUsername;
     private String personID;
     private String firstName;
@@ -127,11 +127,11 @@ public class PersonResult extends ParentResult{
 
     //maybe use a list here?
     public List<Person> getPeople() {
-        return people;
+        return data;
     }
 
     public void setPeople(List<Person> people) {
-        this.people = people;
+        this.data = people;
     }
 
     /**

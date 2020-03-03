@@ -16,22 +16,6 @@ public class RegisterHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
 
-        // This handler allows a "Ticket to Ride" player to claim ability
-        // route between two cities (part of the Ticket to Ride game).
-        // The HTTP request body contains a JSON object indicating which
-        // route the caller wants to claim (a route is defined by two cities).
-        // This implementation is clearly unrealistic, because it
-        // doesn't actually do anything other than print out the received JSON string.
-        // It is also unrealistic in that it accepts only one specific
-        // hard-coded auth token.
-        // However, it does demonstrate the following:
-        // 1. How to get the HTTP request type (or, "method")
-        // 2. How to access HTTP request headers
-        // 3. How to read JSON data from the HTTP request body
-        // 4. How to return the desired status code (200, 404, etc.)
-        //		in an HTTP response
-        // 5. How to check an incoming HTTP request for an auth token
-
 
         try {
             // Determine the HTTP request type (GET, POST, etc.).
@@ -40,6 +24,7 @@ public class RegisterHandler implements HttpHandler {
             // client is "posting" information to the server for processing.
             if (exchange.getRequestMethod().toLowerCase().equals("post")) {
                 RegisterService rs = new RegisterService();
+
                 RegisterRequest rq;
 
 
@@ -49,6 +34,8 @@ public class RegisterHandler implements HttpHandler {
                 String reqData = readString(reqBody);
 
                 // Display/log the request JSON data
+                System.out.println("New Register Request JSON input:");
+
                 System.out.println(reqData);
 
                 //Reader toBeRead = new InputStreamReader(exchange.getRequestBody());
@@ -68,17 +55,6 @@ public class RegisterHandler implements HttpHandler {
                     string to a response body
                      */
 
-                    String responseJsonString = gson.toJson(rr);
-
-
-
-                    OutputStreamWriter osq = new OutputStreamWriter(exchange.getResponseBody());
-                    osq.write(responseJsonString);
-                    osq.flush();
-
-                    // output stream, indicating that the response is complete.
-                    exchange.getResponseBody().close();
-
 
                 } else {
                     // The HTTP request was invalid somehow, so we return a "bad request"
@@ -90,19 +66,30 @@ public class RegisterHandler implements HttpHandler {
                     /*
                     Do some handling with oerhaps an output stream, then write that
                     string to a response body
-                     */
-
-                    String responseJsonString = new String("{\"message\" : \"" + rr.getMessage() + "\"}");
-
-
-
-                    OutputStreamWriter osq = new OutputStreamWriter(exchange.getResponseBody());
-                    osq.write(responseJsonString);
-                    osq.flush();
-
-                    // output stream, indicating that the response is complete.
-                    exchange.getResponseBody().close();
+//                     */
+//
+//                    String responseJsonString = "{\"message\" : \"" + rr.getMessage() + "\"}";
+//
+//
+//
+//                    OutputStreamWriter osq = new OutputStreamWriter(exchange.getResponseBody());
+//                    osq.write(responseJsonString);
+//                    osq.flush();
+//
+//                    // output stream, indicating that the response is complete.
+//                    exchange.getResponseBody().close();
                 }
+
+                String responseJsonString = gson.toJson(rr);
+
+
+
+                OutputStreamWriter osq = new OutputStreamWriter(exchange.getResponseBody());
+                osq.write(responseJsonString);
+                osq.flush();
+
+                // output stream, indicating that the response is complete.
+                exchange.getResponseBody().close();
 
 
             }

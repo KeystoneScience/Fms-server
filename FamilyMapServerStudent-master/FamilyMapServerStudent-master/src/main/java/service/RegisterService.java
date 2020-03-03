@@ -48,16 +48,22 @@ public class RegisterService {
         wasSuccesful = true;
         RegisterResult result = new RegisterResult();
 
+
         try{
             db.openConnection();
             UserDao udao = new UserDao(db.getConnection());
             PersonDao pdao = new PersonDao(db.getConnection());
             EventDao edao = new EventDao(db.getConnection());
             AuthTokenDao adao = new AuthTokenDao(db.getConnection());
-
+            if(!r.getGender().toLowerCase().equals("m") &&  !r.getGender().toLowerCase().equals("f")){
+                throw new DataAccessException("Please use a valid gender.");
+            }
             String newID = UUID.randomUUID().toString();
-            User newUser = new User(newID, r.getPassword(), r.getEmail(), r.getFirstName(), r.getLastName(), r.getGender(),"");
+            User newUser = new User(r.getuserName(), r.getPassword(), r.getEmail(), r.getFirstName(), r.getLastName(), r.getGender(),newID);
 
+            udao.insertUser(newUser);
+            db.commit();
+           // udao.find(newUser.getId());
             FillRequest fr = new FillRequest(newUser.getId(),4);
 
             FillService fs = new FillService();
@@ -66,11 +72,16 @@ public class RegisterService {
 
             String token = UUID.randomUUID().toString();
             AuthToken authToken = new AuthToken(token,newUser.getId());
+            result.setauthToken(authToken.getToken());
+            result.setuserName(newUser.getId());
+            result.setpersonID(fR.getUserPerson());
 
             result.setSuccess(true);
+            db.closeConnection(true);
 
 
-        } catch (DataAccessException e) {
+
+        } catch (DataAccessException | SQLException e) {
             result.setSuccess(false);
             result.setMessage(e.getMessage());
             try {

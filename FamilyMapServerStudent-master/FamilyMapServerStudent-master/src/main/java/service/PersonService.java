@@ -26,7 +26,7 @@ public class PersonService {
     /**
      * returns Person from specified PersonID and UserID
      * @param PersonID Unique identifier for the Person
-     * @param UserID unique string specifying the User
+     * @param authToken unique string specifying the User
      * @return success or error results of finding the Person
      */
     public PersonResult findPerson(String PersonID, String authToken){
@@ -52,7 +52,7 @@ public class PersonService {
             pr.setSuccess(false);
             pr.setMessage(e.getMessage());
             try {
-                db.closeConnection(true);
+                db.closeConnection(false);
             } catch (DataAccessException ex) {
                 pr.setMessage(e.getMessage());
             }
@@ -74,11 +74,15 @@ public class PersonService {
             db.openConnection();
 
 
-            AuthTokenDao atd = new AuthTokenDao(db.openConnection());
-            PersonDao pd = new PersonDao(db.openConnection());
+            AuthTokenDao atd = new AuthTokenDao(db.getConnection());
+
+            PersonDao pd = new PersonDao(db.getConnection());
 
 
             model.AuthToken at = atd.find(AuthToken);
+            if(at == null){
+                throw new DataAccessException("Auth Token Incorrect.");
+            }
             List<Person> persons = pd.findPersons(at.getUsername());
 
             pr.setPeople(persons);

@@ -32,6 +32,15 @@ public class Database {
         return this.conn == null ? this.openConnection() : this.conn;
     }
 
+    public void commit() throws DataAccessException {
+        try {
+
+            this.conn.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void closeConnection(boolean commit) throws DataAccessException {
         try {
             if (commit) {

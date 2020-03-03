@@ -34,9 +34,9 @@ public class LoginService {
             db.openConnection();
             UserDao ud = new UserDao(db.getConnection());
             User user = ud.find(lr.getuserName());
-            //FIxme possibly need to handle an error of null password here.
+
             if(user != null) {
-                if (user.getPassword() == lr.getPassword()) { //Username and password check out
+                if (user.getPassword().equals(lr.getPassword())) { //Username and password check out
                     AuthTokenDao atd = new AuthTokenDao(db.getConnection());
                     String token = UUID.randomUUID().toString();
                     AuthToken at = new AuthToken(token,lr.getuserName());
@@ -47,10 +47,17 @@ public class LoginService {
                     lR.setpersonID(user.getPerson_id());
                     lR.setAutherizationToken(at.getToken());
                     lR.setSuccess(true);
-
-                    db.closeConnection(true);
+                }
+                else{
+                    lR.setMessage("Password Incorrect.");
+                    lR.setSuccess(false);
                 }
             }
+            else{
+                lR.setMessage("Username not found.");
+                lR.setSuccess(false);
+            }
+            db.closeConnection(true);
 
 
         } catch (DataAccessException | SQLException e) {

@@ -18,9 +18,9 @@ public class FillService
 {
     //private boolean[] changeLastName = [true];
     private Database db = new Database();
-    private PersonDao pdao;
-    private EventDao edao;
-    private UserDao udao;
+    private PersonDao pdao;// = new PersonDao();
+    private EventDao edao;// = new EventDao();
+    private UserDao udao;// = new UserDao();
 
     boolean success;
 
@@ -29,9 +29,9 @@ public class FillService
 
     private void openObjects(){
         try {
-            PersonDao pdao = new PersonDao(db.getConnection());
-            UserDao udao = new UserDao(db.getConnection());
-            EventDao edao = new EventDao(db.getConnection());
+             pdao = new PersonDao(db.getConnection());
+             udao = new UserDao(db.getConnection());
+             edao = new EventDao(db.getConnection());
         } catch (DataAccessException e) {
             e.printStackTrace();
         }
@@ -56,21 +56,19 @@ public class FillService
                 throw new DataAccessException("Username is not in the database.");
             }
 
-            udao.removeUser(user);
-            user.setPerson_id(UUID.randomUUID().toString()); //sets person ID to a random made UUID Possibly wrong order
-            udao.insertUser(user);
-
-
+            pdao.removePerson(user);
+            edao.removeEvent(user);
 
             Person userPerson = new Person(user.getPerson_id(),user.getId(),user.getFirst_name(),user.getLast_name(),user.getGender(),"","",""); // Construct person object based on user
             pdao.insertPerson(userPerson);
-
+            fR.setUserPerson(userPerson.getPerson_id());
             edao.generateBirth(userPerson,1999);
 
 
 
             GenerateGenerations(userPerson, fr.getNumGenerations());
-
+            fR.setSuccess(true);
+            fR.setNumPeople(fr.getNumGenerations());
             db.closeConnection(true);
 
 
@@ -94,11 +92,11 @@ public class FillService
      * @throws DataAccessException
      */
     private void GenerateGenerations(Person child, int numGenerationsToGenerate) throws DataAccessException {
-        Person base = new Person();
-        base.setAssociated_Username(child.getAssociated_Username());
+        Person mom = new Person();
+        Person dad = new Person();
+        mom.setAssociated_Username(child.getAssociated_Username());
+        dad.setAssociated_Username(child.getAssociated_Username());
 
-        Person dad = base;
-        Person mom = base;
 
         dad.setGender("m");
         mom.setGender("f");
@@ -108,11 +106,6 @@ public class FillService
 
         mom.setSpouse_id(dad.getPerson_id());
         dad.setSpouse_id(mom.getPerson_id());
-
-
-
-        dad.setLast_name(child.getLast_name());
-
 
 
         child.setFather_id(dad.getPerson_id());
@@ -133,7 +126,6 @@ public class FillService
         int birthYearDad = childBirth.getYear() - 23 - r.nextInt(10);
         int deathYearDad = childBirth.getYear() + 10 + r.nextInt(30);
 
-        db.openConnection();
 
 
         try {
@@ -153,6 +145,8 @@ public class FillService
             edao.generateDeath(mom,deathYearMom);
             edao.generateDeath(dad,deathYearDad);
 
+            int marriageYear = childBirth.getYear() - 1 - r.nextInt(5);
+
             MarriageOfTwo(mom.getPerson_id(),dad.getPerson_id(),child.getPerson_id());
 
         } catch (SQLException e) {
@@ -171,9 +165,6 @@ public class FillService
 
     private void MarriageOfTwo(String spouse1, String spouse2, String childID) throws DataAccessException, SQLException {
         Random r = new Random();
-        EventDao edao = new EventDao(db.openConnection());
-
-
         Event childBirth = edao.findBirth(childID);
 
         //Generates reasonable birth and death based off of child birth.

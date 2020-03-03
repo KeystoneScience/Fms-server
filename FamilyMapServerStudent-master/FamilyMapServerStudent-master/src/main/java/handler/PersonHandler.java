@@ -3,6 +3,7 @@ package handler;
 import com.google.gson.Gson;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
 import dao.DataAccessException;
 import dao.Database;
 import model.Person;
@@ -21,14 +22,14 @@ import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PersonHandler {
+public class PersonHandler implements HttpHandler {
 
 
-    //@Override
+    @Override
 
     public void handle(HttpExchange exchange) throws IOException {
 
-
+        PersonResult pr = new PersonResult();
 
 
         try {
@@ -37,7 +38,7 @@ public class PersonHandler {
             // This operation requires a POST request, because the
             // client is "posting" information to the server for processing.
             if (exchange.getRequestMethod().toLowerCase().equals("get")) {
-                PersonResult pr = new PersonResult();
+
                 PersonService ps = new PersonService();
 
 
@@ -61,13 +62,17 @@ public class PersonHandler {
                         }
 
                     }
-                    UrlRequests.add(partition.toString());
+                    if(!partition.toString().equals("")) {
+                        UrlRequests.add(partition.toString());
+                    }
 
                     if (UrlRequests.size() < 1 || UrlRequests.size() > 2) {
                         pr.setSuccess(false);
                         pr.setMessage("Input is not formatted correctly.");
                         exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
-                        String responseJsonString = new String("{\"message\" : \"" + pr.getMessage() + "\"}");
+                        Gson gson = new Gson();
+                        //Fixme might need to check case work.
+                        String responseJsonString = gson.toJson(pr);
 
 
                         OutputStreamWriter osq = new OutputStreamWriter(exchange.getResponseBody());
@@ -118,8 +123,8 @@ public class PersonHandler {
                         else{
                             exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
 
-                            String responseJsonString = "{\"message\" : \"" + pr.getMessage() + "\"}";
-
+                            Gson gson = new Gson();
+                            String responseJsonString = gson.toJson(pr);
 
                             OutputStreamWriter osq = new OutputStreamWriter(exchange.getResponseBody());
                             osq.write(responseJsonString);
@@ -137,16 +142,21 @@ public class PersonHandler {
             }
         }
         catch (IOException | DataAccessException e) {
+            pr.setSuccess(false);
             // Some kind of internal error has occurred inside the server (not the
             // client's fault), so we return an "internal server error" status code
             // to the client.
-            exchange.sendResponseHeaders(HttpURLConnection.HTTP_SERVER_ERROR, 0);
-            // We are not sending a response body, so close the response body
+            exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+
+            Gson gson = new Gson();
+            String responseJsonString = gson.toJson(pr);
+
+            OutputStreamWriter osq = new OutputStreamWriter(exchange.getResponseBody());
+            osq.write(responseJsonString);
+            osq.flush();
+
             // output stream, indicating that the response is complete.
             exchange.getResponseBody().close();
-
-            // Display/log the stack trace
-            e.printStackTrace();
         }
     }
 

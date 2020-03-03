@@ -1,5 +1,7 @@
 package service;
 
+import dao.DataAccessException;
+import dao.Database;
 import result.ClearResult;
 
 /**
@@ -7,6 +9,7 @@ import result.ClearResult;
  */
 public class ClearService {
     private boolean success;
+    private Database db = new Database();
 
     /**
      * the clear service
@@ -14,7 +17,25 @@ public class ClearService {
      */
     public ClearResult clear(){
         ClearResult cR = new ClearResult();
+        try {
+            db.openConnection();
 
+            db.clearTables();
+
+            db.closeConnection(true);
+            cR.setSuccess(true);
+            cR.setMessage("Clear succeeded.");
+
+        } catch (DataAccessException e) {
+            cR.setSuccess(false);
+
+            cR.setMessage(e.getMessage());
+            try{
+                db.closeConnection(false);
+            } catch (DataAccessException ex) {
+                ex.printStackTrace();
+            }
+        }
         return cR;
     }
 

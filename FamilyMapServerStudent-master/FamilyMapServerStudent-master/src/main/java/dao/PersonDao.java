@@ -6,13 +6,14 @@ import model.Person;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import com.google.gson.Gson;
+import model.User;
+
 /**
  * the Person data access class. This class is responsible for
  * performing operations on the Person sql table.
@@ -31,6 +32,10 @@ public class PersonDao {
 
     public PersonDao(Connection conn) {
         connection=conn;
+    }
+
+    public PersonDao() {
+
     }
 
     public String randomFemaleName(){
@@ -59,26 +64,21 @@ public class PersonDao {
 
             //IF BUG, CHECK PATH STUFF.
 
-            BufferedReader br = new BufferedReader(new FileReader(PersonDao.class.getClassLoader()
-                    .getResource("fnames.json").getPath()
-                    .replaceAll("%20", " ")));
+            BufferedReader br = new BufferedReader(new FileReader(FileSystems.getDefault().getPath("src\\json\\fnames.json").toFile()));
+
 
             //convert the json string back to object
-            ListStructure fnames = gson.fromJson(br, ListStructure.class);
+            fnames = gson.fromJson(br, ListStructure.class);
 
-            br = new BufferedReader(new FileReader(PersonDao.class.getClassLoader()
-                    .getResource("mnames.json").getPath()
-                    .replaceAll("%20", " ")));
+            br = new BufferedReader(new FileReader(FileSystems.getDefault().getPath("src\\json\\mnames.json").toFile()));
 
             //convert the json string back to object
-            ListStructure mnames = gson.fromJson(br, ListStructure.class);
+            mnames = gson.fromJson(br, ListStructure.class);
 
-            br = new BufferedReader(new FileReader(PersonDao.class.getClassLoader()
-                    .getResource("snames.json").getPath()
-                    .replaceAll("%20", " ")));
+            br = new BufferedReader(new FileReader(FileSystems.getDefault().getPath("src\\json\\snames.json").toFile()));
 
             //convert the json string back to object
-            ListStructure snames = gson.fromJson(br, ListStructure.class);
+            snames = gson.fromJson(br, ListStructure.class);
 
             hasBeenRead = true;
         } catch (IOException e) {
@@ -192,6 +192,29 @@ public class PersonDao {
             if (stmt != null) {
                 stmt.close();
             }
+        }
+    }
+
+
+
+    public void removePerson(User user) throws DataAccessException {
+        try {
+            Statement stmt = null;
+            try {
+                stmt = connection.createStatement();
+                String sql = "delete from person where associated_username = '" + user.getId() + "'";
+                stmt.executeUpdate(sql);
+
+
+            }
+            finally {
+                if (stmt != null) {
+                    stmt.close();
+                }
+            }
+        }
+        catch (SQLException e) {
+            throw new DataAccessException("delete user from database failed");
         }
     }
 
@@ -393,7 +416,7 @@ public class PersonDao {
             }
 
         }
-        return null;
+        return persons;
     }
 
 }

@@ -4,12 +4,12 @@ import com.google.gson.Gson;
 import model.*;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -29,6 +29,31 @@ public class EventDao {
         connection = conn;
     }
 
+    public EventDao() {
+
+    }
+
+    public void removeEvent(User user) throws DataAccessException {
+        try {
+            Statement stmt = null;
+            try {
+                stmt = connection.createStatement();
+                String sql = "delete from event where associated_username = '" + user.getId() + "'";
+                stmt.executeUpdate(sql);
+
+
+            }
+            finally {
+                if (stmt != null) {
+                    stmt.close();
+                }
+            }
+        }
+        catch (SQLException e) {
+            throw new DataAccessException("delete user from database failed");
+        }
+    }
+
 
     public void generateLists(){
         Gson gson = new Gson();
@@ -42,13 +67,14 @@ public class EventDao {
 
 
             //IF BUG, CHECK PATH STUFF.
+            String location = "src\\json\\locations.json" ;
+            Path filePath = FileSystems.getDefault().getPath(location);
 
-            BufferedReader br = new BufferedReader(new FileReader(PersonDao.class.getClassLoader()
-                    .getResource("locations.json").getPath()
-                    .replaceAll("%20", " ")));
+
+            BufferedReader br = new BufferedReader(new FileReader(filePath.toFile()));
 
             //convert the json string back to object
-            LocationList locations = gson.fromJson(br, LocationList.class);
+            locations = gson.fromJson(br, LocationList.class);
 
             hasBeenRead = true;
         } catch (IOException e) {
@@ -166,45 +192,41 @@ public class EventDao {
      * @return return list of Events
      * @throws SQLException input output SQL exception
      */
-    public List<Event> getEvents() throws SQLException {
-
-        List<Event> Events = new ArrayList<>();
-
-        PreparedStatement stmt = null;
+    public List<Event> getUserEvents(String ID) throws DataAccessException {
+        List<Event> events = new ArrayList<>();
         ResultSet rs = null;
-
-        try {
-            String sql = "select Event_id, associated_Username, Person_id, latitude, longitude, country, city, Event_type, year from Event";
-            stmt = connection.prepareStatement(sql);
-
+        String sql = "SELECT * FROM event WHERE associated_username = ?;";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, ID);
             rs = stmt.executeQuery();
             while(rs.next()) {
-                String Event_id = rs.getString(1);
+                String event_id = rs.getString(1);
                 String associated_Username = rs.getString(2);
-                String Person_id = rs.getString(3);
-                float latitude  = rs.getFloat(4);
+                String person_id = rs.getString(3);
+                float latitude = rs.getFloat(4);
                 float longitude = rs.getFloat(5);
                 String country = rs.getString(6);
                 String city = rs.getString(7);
-                String Event_type = rs.getString(8);
+                String event_type = rs.getString(8);
                 int year = rs.getInt(9);
 
-
-                Events.add(new Event(Event_id,associated_Username,Person_id,latitude,longitude,country,city,Event_type,year
-                ));
+                events.add(new Event(event_id,associated_Username,person_id,latitude,longitude,country,city,event_type,year));
 
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DataAccessException("Error encountered while finding Person");
         } finally {
             if(rs != null) {
-                rs.close();
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
 
-            if(stmt != null) {
-                stmt.close();
-            }
         }
-
-        return Events;
+        return events;
     }
 
     /**
@@ -242,6 +264,50 @@ public class EventDao {
             }
         }
     }
+
+    public Event find(String ID, String associatedUsername) throws DataAccessException {
+        Event event;
+        ResultSet rs = null;
+        String sql = "SELECT * FROM event WHERE event_id = ? and associated_Username = ?;";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, ID);
+            stmt.setString(2, associatedUsername);
+
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                String event_id = rs.getString(1);
+                String associated_Username = rs.getString(2);
+                String person_id = rs.getString(3);
+                float latitude = rs.getFloat(4);
+                float longitude = rs.getFloat(5);
+                String country = rs.getString(6);
+                String city = rs.getString(7);
+                String event_type = rs.getString(8);
+                int year = rs.getInt(9);
+
+                event = new Event(event_id,associated_Username,person_id,latitude,longitude,country,city,event_type,year);
+                return event;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DataAccessException("Error encountered while finding Person");
+        } finally {
+            if(rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+        return null;
+    }
+
+
+
+
 
     /**
      * Finds and returns the Event data object corresponding to the given Event ID

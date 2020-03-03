@@ -35,6 +35,10 @@ public class UserDao {
         connection = conn;
     }
 
+    public UserDao() {
+
+    }
+
 
     public Connection getConnection() {
         return connection;
@@ -95,7 +99,7 @@ public class UserDao {
 
         }catch (SQLException e) {
             e.printStackTrace();
-            throw new DataAccessException("Error encountered while inserting into the database");
+            throw new DataAccessException("Username is already taken");
         }
 
         finally {
@@ -118,53 +122,63 @@ public class UserDao {
 
     }
 
-//    public void resetTable()  { //Also clears tables
-//        try {
-//            Statement stmt = null;
-//            try {
-//                stmt = connection.createStatement();
-//
-//                stmt.executeUpdate("drop table if exists User");
-//                stmt.executeUpdate("create table User (id VARCHAR(255) NOT NULL PRIMARY KEY, password VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, first_name VARCHAR(255) NOT NULL, " +
-//                        "last_name VARCHAR(255) NOT NULL, gender VARCHAR (1) NOT NULL, Person_id VARCHAR(255) NOT NULL, CONSTRAINT User_info UNIQUE (Username))");
-//            }
-//            finally {
-//                if (stmt != null) {
-//                    stmt.close();
-//                    stmt = null;
-//                }
-//            }
-//        }
-//        catch (SQLException e) {
-//
+
+    public void removeUser(User user) throws DataAccessException {
+        try {
+            Statement stmt = null;
+            try {
+                stmt = connection.createStatement();
+                String sql = "delete from user where id = '" + user.getId() + "'";
+                stmt.executeUpdate(sql);
+
+
+            }
+            finally {
+                if (stmt != null) {
+                    stmt.close();
+                }
+            }
+        }
+        catch (SQLException e) {
+            throw new DataAccessException("delete user from database failed");
+        }
+    }
+
+//    public void removeUser(String ID) throws DataAccessException {
+//        String sql = "DELETE FROM user WHERE id = ?;";
+//        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+//            stmt.setString(1, ID);
+//            stmt.executeQuery();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            throw new DataAccessException("Error encountered while deleting user");
 //        }
 //    }
-
 
     /**
      * removes a User specified
      * @param us model User
      * @throws SQLException input output SQL exception
      */
-    public void removeUser(User us) throws SQLException {
-        PreparedStatement stmt = null;
-        try {
-            String sql; //= "delete from User";
-            //stmt = connection.prepareStatement(sql);
-
-            //int count = stmt.executeUpdate();
-
-            // Reset the auto-increment counter so new books start over with an id of 1
-            sql = "delete from User where name = '"+ us.getId()+"'";
-            stmt = connection.prepareStatement(sql);
-            stmt.executeUpdate();
-            System.out.printf("Deleted User: %s\n", us.getId());
-        } finally {
-            if (stmt != null) {
-                stmt.close();
-            }
-        }
-    }
+//    public void removeUser(User us) throws SQLException {
+//        PreparedStatement stmt = null;
+//        try {
+//            String sql; //= "delete from User";
+//            //stmt = connection.prepareStatement(sql);
+//
+//            //int count = stmt.executeUpdate();
+//
+//            // Reset the auto-increment counter so new books start over with an id of 1
+//            sql = "delete from User where name = '"+ us.getId()+"'";
+//            stmt = connection.prepareStatement(sql);
+//            stmt.executeUpdate();
+//            System.out.printf("Deleted User: %s\n", us.getId());
+//        } finally {
+//            if (stmt != null) {
+//                stmt.close();
+//            }
+//        }
+//    }
 
 
     /**
@@ -278,5 +292,43 @@ public class UserDao {
         }
         return null;
     }
+
+
+    /**
+     * Finds a object in the database with a matching ID, returns it.
+     * @param ID
+     * @return
+     * @throws DataAccessException
+     */
+    public User findUser(String ID) throws DataAccessException {
+        User User;
+        ResultSet rs = null;
+        String sql = "SELECT * FROM User WHERE id = ?;";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, ID);
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                User = new User(rs.getString("id"), rs.getString("password"),rs.getString("email"),
+                        rs.getString("first_name"), rs.getString("last_name"),rs.getString("gender"), rs.getString("Person_id"));
+                return User;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DataAccessException("Error encountered while finding Person");
+        } finally {
+            if(rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+        return null;
+    }
+
+
+
 
 }
