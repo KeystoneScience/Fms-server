@@ -41,10 +41,10 @@ public class FillHandler extends HandlerHelper implements HttpHandler {
                         fr.setSuccess(false);
                         fr.setMessage("Input is not formatted correctly.");
                     } else {
-                        int numGenerations = 4;
+                        int numGenerations = 4; //Default case
                         if(UrlRequests.size() == 3){
-                            numGenerations = Integer.parseInt(UrlRequests.get(2));
-                        }//FIXME add some try catch for non-integer given.
+                            numGenerations = Integer.parseInt(UrlRequests.get(2)); //specified number of generations if needed
+                        }
                         FillRequest fR = new FillRequest(UrlRequests.get(1),numGenerations);
 
                         fr = fs.fill(fR);
@@ -67,12 +67,8 @@ public class FillHandler extends HandlerHelper implements HttpHandler {
                     }
                     else {
                         exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
-
-
-
-                        fr.nullify();
+                        fr.nullify(); //changes the nessesary variables to null to match the output desired.
                         writter(fr,exchange);
-
                         // output stream, indicating that the response is complete.
                         exchange.getResponseBody().close();
                     }
@@ -81,9 +77,8 @@ public class FillHandler extends HandlerHelper implements HttpHandler {
         catch (IOException | DataAccessException e) {
             exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
 
-
-
             fr.nullify();
+
             writter(fr,exchange);
 
             // output stream, indicating that the response is complete.

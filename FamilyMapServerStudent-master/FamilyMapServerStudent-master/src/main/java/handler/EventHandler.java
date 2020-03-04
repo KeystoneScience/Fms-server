@@ -41,9 +41,9 @@ public class EventHandler extends HandlerHelper implements HttpHandler {
                     String authToken = reqHeaders.getFirst("Authorization");
 
                     String theUrl = exchange.getRequestURI().toString();
-                    List<String> UrlRequests = breakUpURL(theUrl);
+                    List<String> UrlRequests = breakUpURL(theUrl); //Breaks the URL into portions that may be examined
 
-                    if (UrlRequests.size() < 1 || UrlRequests.size() > 2) {
+                    if (UrlRequests.size() <= 0 || UrlRequests.size() >= 3) {
                         er.setSuccess(false);
                         er.setMessage("Input is not formatted correctly.");
                         exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);

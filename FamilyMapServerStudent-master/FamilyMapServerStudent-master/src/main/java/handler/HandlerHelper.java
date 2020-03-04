@@ -24,6 +24,8 @@ public class HandlerHelper {
     /*
     The readString method shows how to read a String from an InputStream.
 */
+
+    //Reads an input stream.
     public String readString(InputStream is) throws IOException {
         StringBuilder sb = new StringBuilder();
         InputStreamReader sr = new InputStreamReader(is);
@@ -35,6 +37,8 @@ public class HandlerHelper {
         return sb.toString();
     }
 
+
+    //Function used to break up a given url into a list of commands
     public List<String> breakUpURL(String theUrl){
         List<String> UrlRequests = new ArrayList<>();
         StringBuilder partition = new StringBuilder();

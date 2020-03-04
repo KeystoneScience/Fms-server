@@ -37,7 +37,6 @@ public class RegisterHandler extends HandlerHelper implements HttpHandler{
 
                 System.out.println(reqData);
 
-                //Reader toBeRead = new InputStreamReader(exchange.getRequestBody());
                 Gson gson = new Gson();
 
                 rq = gson.fromJson(reqData, RegisterRequest.class); //reqData was toBeRead
@@ -69,8 +68,6 @@ public class RegisterHandler extends HandlerHelper implements HttpHandler{
             // client's fault), so we return an "internal server error" status code
             // to the client.
             exchange.sendResponseHeaders(HttpURLConnection.HTTP_SERVER_ERROR, 0);
-            // We are not sending a response body, so close the response body
-            // output stream, indicating that the response is complete.
             exchange.getResponseBody().close();
 
             // Display/log the stack trace

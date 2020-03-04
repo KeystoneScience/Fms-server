@@ -133,25 +133,5 @@ public class PersonResult extends ParentResult{
         this.data = people;
     }
 
-    /**
-     * Function to return the successful response for personID api.
-     * (More to add here later)
-     * @return type string, returns response
-     */
-    public String successfulResponsepersonID(){
 
-        //I will construct this string with a string builder, and return it
-        return null;
-    }
-
-    /**
-     * Function to return the successful response for Person api.
-     * (More to add here later)
-     * @return type string, returns response
-     */
-    public String successfulResponsePerson(){
-
-        //I will construct this string with a string builder, and return it
-        return null;
-    }
 }

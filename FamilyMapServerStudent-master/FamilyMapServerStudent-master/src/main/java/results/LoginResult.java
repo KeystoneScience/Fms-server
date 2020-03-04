@@ -23,13 +23,6 @@ public class LoginResult extends ParentResult {
         this.personID = personID;
     }
 
-    /**
-     * login was successful response string
-     * @return success response string
-     */
-    public String successResponse(){
-        return null;
-    }
 
     public String getAutherizationToken() {
         return authToken;

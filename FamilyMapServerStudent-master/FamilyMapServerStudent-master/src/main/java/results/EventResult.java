@@ -26,13 +26,6 @@ public class EventResult extends ParentResult {
      */
     public EventResult(){};
 
-    /**
-     * EventID request was successful
-     * @return success string message
-     */
-    public String successResponse(){
-        return null;
-    }
 
     public String getDecendant() {
         return associatedUsername;

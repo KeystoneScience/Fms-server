@@ -34,10 +34,10 @@ public class ClearHandler extends HandlerHelper implements HttpHandler {
 
                 exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
 
-
+                //Writes an output stream for the exchange
                 writter(cr,exchange);
 
-                // output stream, indicating that the response is complete.
+                //Response is completed
                 exchange.getResponseBody().close();
 
             }

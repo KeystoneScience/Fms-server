@@ -19,10 +19,9 @@ public class ClearService {
         ClearResult cR = new ClearResult();
         try {
             db.openConnection();
-
             db.clearTables();
-
             db.closeConnection(true);
+
             cR.setSuccess(true);
             cR.setMessage("clear succeeded.");
 

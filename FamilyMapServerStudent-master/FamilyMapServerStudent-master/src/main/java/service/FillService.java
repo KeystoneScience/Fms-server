@@ -151,8 +151,6 @@ public class FillService
             edao.generateDeath(mom,deathYearMom);
             edao.generateDeath(dad,deathYearDad);
 
-            int marriageYear = childBirth.getYear() - 1 - r.nextInt(5);
-
             MarriageOfTwo(mom.getPerson_id(),dad.getPerson_id(),child.getPerson_id());
 
         } catch (SQLException e) {

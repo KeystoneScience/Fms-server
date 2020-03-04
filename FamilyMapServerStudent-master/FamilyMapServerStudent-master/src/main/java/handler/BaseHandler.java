@@ -19,6 +19,7 @@ public class BaseHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
 
+        //determines if handle was done successfully
         boolean wasSuccessful = false;
 
         try {
@@ -32,7 +33,7 @@ public class BaseHandler implements HttpHandler {
                 //String containing the url desired
                 String URLrequested = exchange.getRequestURI().toString();
 
-                //Checks to see if it is just the open URL, this is mapped to index.html
+                //Checks to see if it is just the open URL as ex: localhost:8080, this is mapped to index.html, this is the case for nothing added.
                 if (URLrequested.length() == 1){
 
 
@@ -55,7 +56,7 @@ public class BaseHandler implements HttpHandler {
 
                     exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
 
-                    //Copies Files into the response body
+                    //Copies Files into the exchange's responsive body header
                     Files.copy(filePath, exchange.getResponseBody());
 
                     exchange.getResponseBody().close();
@@ -87,7 +88,7 @@ public class BaseHandler implements HttpHandler {
                     Files.copy(filePath, exchange.getResponseBody());
 
 
-
+                    //Completes the exchange
                     exchange.getResponseBody().close();
                 }
                 wasSuccessful = true;
@@ -98,13 +99,15 @@ public class BaseHandler implements HttpHandler {
             if (!wasSuccessful) {
                 //Bad Server Response
                 exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+
+                //Completes the exchange
                 exchange.getResponseBody().close();
             }
         }
         catch (IOException e) {
             //Bad Server Response
             exchange.sendResponseHeaders(HttpURLConnection.HTTP_SERVER_ERROR, 0);
-            //Comp
+            //Completes the exchange
             exchange.getResponseBody().close();
             e.printStackTrace();
         }

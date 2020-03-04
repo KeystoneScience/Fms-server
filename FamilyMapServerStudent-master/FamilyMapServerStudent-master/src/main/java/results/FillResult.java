@@ -43,11 +43,4 @@ public class FillResult extends ParentResult{
     /** constructs the fill result object*/
     public FillResult(){};
 
-    /**
-     * fill was successful response string
-     * @return success string message
-     */
-    public String successResponse(){
-        return null;
-    }
 }

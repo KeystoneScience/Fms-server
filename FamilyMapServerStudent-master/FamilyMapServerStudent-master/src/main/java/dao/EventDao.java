@@ -306,45 +306,6 @@ public class EventDao {
     }
 
 
-
-
-
-    /**
-     * Finds and returns the Event data object corresponding to the given Event ID
-     * @param EventID specifies Event information to return
-     * @return Event data object with values drawn from Event ID.
-     * @throws DataAccessException error finding the Event.
-     */
-    public Event find1(String EventID) throws DataAccessException {
-        Event Event;
-        ResultSet rs = null;
-        String sql = "SELECT * FROM Event WHERE Event_id = ?;";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, EventID);
-            rs = stmt.executeQuery();
-            if (rs.next()) {
-                Event = new Event(rs.getString("Event_id"), rs.getString("associated_Username"),
-                        rs.getString("Person_id"), rs.getFloat("latitude"), rs.getFloat("longitude"),
-                        rs.getString("country"), rs.getString("city"), rs.getString("Event_type"),
-                        rs.getInt("year"));
-                return Event;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new DataAccessException("Error encountered while finding Event");
-        } finally {
-            if(rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-
-        }
-        return null;
-    }
-
     public Event find(String EventID) throws DataAccessException {
         Event Event;
         ResultSet rs = null;

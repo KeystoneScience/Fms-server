@@ -130,8 +130,6 @@ public class UserDao {
                 stmt = connection.createStatement();
                 String sql = "delete from user where id = '" + user.getId() + "'";
                 stmt.executeUpdate(sql);
-
-
             }
             finally {
                 if (stmt != null) {
@@ -144,41 +142,7 @@ public class UserDao {
         }
     }
 
-//    public void removeUser(String ID) throws DataAccessException {
-//        String sql = "DELETE FROM user WHERE id = ?;";
-//        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-//            stmt.setString(1, ID);
-//            stmt.executeQuery();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//            throw new DataAccessException("Error encountered while deleting user");
-//        }
-//    }
 
-    /**
-     * removes a User specified
-     * @param us model User
-     * @throws SQLException input output SQL exception
-     */
-//    public void removeUser(User us) throws SQLException {
-//        PreparedStatement stmt = null;
-//        try {
-//            String sql; //= "delete from User";
-//            //stmt = connection.prepareStatement(sql);
-//
-//            //int count = stmt.executeUpdate();
-//
-//            // Reset the auto-increment counter so new books start over with an id of 1
-//            sql = "delete from User where name = '"+ us.getId()+"'";
-//            stmt = connection.prepareStatement(sql);
-//            stmt.executeUpdate();
-//            System.out.printf("Deleted User: %s\n", us.getId());
-//        } finally {
-//            if (stmt != null) {
-//                stmt.close();
-//            }
-//        }
-//    }
 
 
     /**
@@ -247,9 +211,9 @@ public class UserDao {
             stmt.setString(7, User.getPerson_id());
             stmt.setString(8,UserIdToUpdate);
             if(stmt.executeUpdate() == 1) {
-                System.out.println("Updated User " + User.getId());
+                System.out.println("Updated User: " + User.getId());
             } else {
-                System.out.println("Error:  Failed to update User " + UserIdToUpdate);
+                System.out.println("Error: Failed to update the User: " + UserIdToUpdate);
             }
         } finally {
             if (stmt != null) {
@@ -268,7 +232,7 @@ public class UserDao {
     public User find(String ID) throws DataAccessException {
         User User;
         ResultSet rs = null;
-        String sql = "SELECT * FROM User WHERE id = ?;";
+        String sql = "select * FROM User WHERE id = ?;";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, ID);
             rs = stmt.executeQuery();
@@ -292,43 +256,6 @@ public class UserDao {
         }
         return null;
     }
-
-
-    /**
-     * Finds a object in the database with a matching ID, returns it.
-     * @param ID
-     * @return
-     * @throws DataAccessException
-     */
-    public User findUser(String ID) throws DataAccessException {
-        User User;
-        ResultSet rs = null;
-        String sql = "SELECT * FROM User WHERE id = ?;";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, ID);
-            rs = stmt.executeQuery();
-            if (rs.next()) {
-                User = new User(rs.getString("id"), rs.getString("password"),rs.getString("email"),
-                        rs.getString("first_name"), rs.getString("last_name"),rs.getString("gender"), rs.getString("Person_id"));
-                return User;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new DataAccessException("Error: encountered while finding Person");
-        } finally {
-            if(rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-
-        }
-        return null;
-    }
-
-
 
 
 }

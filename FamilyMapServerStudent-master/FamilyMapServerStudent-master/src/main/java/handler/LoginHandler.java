@@ -71,25 +71,14 @@ public class LoginHandler extends HandlerHelper implements HttpHandler {
             // output stream, indicating that the response is complete.
             lr.setMessage(e.getMessage());
 
-            writter(lr,exchange); //WAS CHANGED
+            writter(lr,exchange); //writes information
 
             exchange.getResponseBody().close();
 
-//            String responseJsonString ="{\"message\" : \"" + e.getMessage() + "\"}";
-//
-//
-//
-//            OutputStreamWriter osq = new OutputStreamWriter(exchange.getResponseBody());
-//            osq.write(responseJsonString);
-//            osq.flush();
-//
-//            // output stream, indicating that the response is complete.
-//            exchange.getResponseBody().close();
+
         }
     }
 
-    /*
-        The readString method shows how to read a String from an InputStream.
-    */
+
 
 }

@@ -16,24 +16,6 @@ public class RegisterResult extends ParentResult {
 
 
 
-    /**
-     * Function to return the successful response.
-     * (More to add here later)
-     * @return type string, returns response
-     */
-    public String successfulResponse(){
-        //here is where i will put the information found in the specs:
-        //        "authToken": "cf7a368f", // Non-empty auth token string
-        //                "userName": "susan", // User name passed in with request
-        //                "PersonID": "39f9fe46" // Non-empty string containing the Person ID of the
-        //// User’s generated Person object
-        //"success":"true" // Boolean identifier
-
-        //I will construct this string with a string builder, and return it
-        return null;
-    }
-
-
     public RegisterResult(){
         super();
 

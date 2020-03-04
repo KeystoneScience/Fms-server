@@ -61,7 +61,7 @@ public class RegisterService {
 
             udao.insertUser(newUser);
             db.closeConnection(true);
-           // udao.find(newUser.getId());
+
             FillRequest fr = new FillRequest(newUser.getId(),4);
 
             FillService fs = new FillService();
@@ -95,10 +95,4 @@ public class RegisterService {
 
         return result;
     }
-
-
-
-    //Requests are from a jason string
-    // if we have a json string comming in, we use gson, thats what the request is.
-
 }
