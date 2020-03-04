@@ -12,7 +12,7 @@ import results.ClearResult;
 import service.ClearService;
 
 
-public class ClearHandler implements HttpHandler {
+public class ClearHandler extends HandlerHelper implements HttpHandler {
 
 
     public ClearHandler(){
@@ -34,14 +34,8 @@ public class ClearHandler implements HttpHandler {
 
                 exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
 
-                Gson gson = new Gson();
 
-                String responseJsonString = gson.toJson(cr);
-
-
-                OutputStreamWriter osq = new OutputStreamWriter(exchange.getResponseBody());
-                osq.write(responseJsonString);
-                osq.flush();
+                writter(cr,exchange);
 
                 // output stream, indicating that the response is complete.
                 exchange.getResponseBody().close();

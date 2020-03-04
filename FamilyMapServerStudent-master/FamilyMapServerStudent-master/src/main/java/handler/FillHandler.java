@@ -14,7 +14,7 @@ import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FillHandler implements HttpHandler {
+public class FillHandler extends HandlerHelper implements HttpHandler {
 
 
     @Override
@@ -35,20 +35,7 @@ public class FillHandler implements HttpHandler {
 
 
                     String theUrl = exchange.getRequestURI().toString();
-                    List<String> UrlRequests = new ArrayList<>();
-                    StringBuilder partition = new StringBuilder();
-
-                    //Breaks up the Url to be handled
-                    for (int i = 1; i < theUrl.length(); i++) {
-                        if (theUrl.charAt(i) != '/') {
-                            partition.append(theUrl.charAt(i) + "");
-                        } else {
-                            UrlRequests.add(partition.toString());
-                            partition.delete(0, partition.length());
-                        }
-
-                    }
-                    UrlRequests.add(partition.toString());
+                    List<String> UrlRequests = breakUpURL(theUrl);
 
                     if (UrlRequests.size() <= 1 || UrlRequests.size() > 3) {
                         fr.setSuccess(false);
@@ -71,15 +58,8 @@ public class FillHandler implements HttpHandler {
                         exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
 
 
-                        Gson gson = new Gson();
-                        //Fixme might need to check case work.
                         fr.nullify();
-                        String responseJsonString = gson.toJson(fr);
-
-
-                        OutputStreamWriter osq = new OutputStreamWriter(exchange.getResponseBody());
-                        osq.write(responseJsonString);
-                        osq.flush();
+                        writter(fr,exchange);
 
                         // output stream, indicating that the response is complete.
                         exchange.getResponseBody().close();
@@ -89,15 +69,9 @@ public class FillHandler implements HttpHandler {
                         exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
 
 
-                        Gson gson = new Gson();
-                        //Fixme might need to check case work.
+
                         fr.nullify();
-                        String responseJsonString = gson.toJson(fr);
-
-
-                        OutputStreamWriter osq = new OutputStreamWriter(exchange.getResponseBody());
-                        osq.write(responseJsonString);
-                        osq.flush();
+                        writter(fr,exchange);
 
                         // output stream, indicating that the response is complete.
                         exchange.getResponseBody().close();
@@ -108,15 +82,9 @@ public class FillHandler implements HttpHandler {
             exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
 
 
-            Gson gson = new Gson();
-            //Fixme might need to check case work.
+
             fr.nullify();
-            String responseJsonString = gson.toJson(fr);
-
-
-            OutputStreamWriter osq = new OutputStreamWriter(exchange.getResponseBody());
-            osq.write(responseJsonString);
-            osq.flush();
+            writter(fr,exchange);
 
             // output stream, indicating that the response is complete.
             exchange.getResponseBody().close();

@@ -10,7 +10,7 @@ import service.RegisterService;
 import java.io.*;
 import java.net.HttpURLConnection;
 
-public class RegisterHandler implements HttpHandler{
+public class RegisterHandler extends HandlerHelper implements HttpHandler{
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
@@ -47,30 +47,16 @@ public class RegisterHandler implements HttpHandler{
                 if (rr.isSuccess()) {
                     exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
 
-
-
-                    /*
-                    Do some handling with oerhaps an output stream, then write that
-                    string to a response body
-                     */
-
-
                 } else {
                     // The HTTP request was invalid somehow, so we return a "bad request"
-                    // status code to the client.
+
                     exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
 
 
 
                 }
 
-                String responseJsonString = gson.toJson(rr);
-
-
-
-                OutputStreamWriter osq = new OutputStreamWriter(exchange.getResponseBody());
-                osq.write(responseJsonString);
-                osq.flush();
+                writter(rr,exchange);
 
                 // output stream, indicating that the response is complete.
                 exchange.getResponseBody().close();
@@ -92,17 +78,4 @@ public class RegisterHandler implements HttpHandler{
         }
     }
 
-    /*
-        The readString method shows how to read a String from an InputStream.
-    */
-    private String readString(InputStream is) throws IOException {
-        StringBuilder sb = new StringBuilder();
-        InputStreamReader sr = new InputStreamReader(is);
-        char[] buf = new char[1024];
-        int len;
-        while ((len = sr.read(buf)) > 0) {
-            sb.append(buf, 0, len);
-        }
-        return sb.toString();
-    }
 }

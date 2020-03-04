@@ -10,7 +10,7 @@ import service.LoadService;
 import java.io.*;
 import java.net.HttpURLConnection;
 
-public class LoadHandler implements HttpHandler {
+public class LoadHandler extends HandlerHelper implements HttpHandler {
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
@@ -45,12 +45,7 @@ public class LoadHandler implements HttpHandler {
                 if (lr.isSuccess()) {
                     exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
 
-                    String responseJsonString = gson.toJson(lr);
-
-
-                    OutputStreamWriter osq = new OutputStreamWriter(exchange.getResponseBody());
-                    osq.write(responseJsonString);
-                    osq.flush();
+                    writter(lr,exchange);
 
                     // output stream, indicating that the response is complete.
                     exchange.getResponseBody().close();
@@ -61,13 +56,7 @@ public class LoadHandler implements HttpHandler {
                     exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
 
 
-                    //Fixme might need to check case work.
-                    String responseJsonString = gson.toJson(lr);
-
-
-                    OutputStreamWriter osq = new OutputStreamWriter(exchange.getResponseBody());
-                    osq.write(responseJsonString);
-                    osq.flush();
+                    writter(lr,exchange);
 
                     // output stream, indicating that the response is complete.
                     exchange.getResponseBody().close();
@@ -80,31 +69,11 @@ public class LoadHandler implements HttpHandler {
             exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
 
 
-            Gson gson = new Gson();
-            //Fixme might need to check case work.
-            String responseJsonString = gson.toJson(lr);
-
-
-            OutputStreamWriter osq = new OutputStreamWriter(exchange.getResponseBody());
-            osq.write(responseJsonString);
-            osq.flush();
+            writter(lr,exchange);
 
             // output stream, indicating that the response is complete.
             exchange.getResponseBody().close();
         }
     }
 
-    /*
-        The readString method shows how to read a String from an InputStream.
-    */
-    private String readString(InputStream is) throws IOException {
-        StringBuilder sb = new StringBuilder();
-        InputStreamReader sr = new InputStreamReader(is);
-        char[] buf = new char[1024];
-        int len;
-        while ((len = sr.read(buf)) > 0) {
-            sb.append(buf, 0, len);
-        }
-        return sb.toString();
-    }
 }
