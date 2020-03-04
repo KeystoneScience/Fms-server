@@ -7,8 +7,10 @@ import model.Event;
 import model.Person;
 import model.User;
 import request.FillRequest;
+import request.LoginRequest;
 import request.RegisterRequest;
 import result.FillResult;
+import result.LoginResult;
 import result.RegisterResult;
 
 import java.sql.SQLException;
@@ -56,13 +58,13 @@ public class RegisterService {
             EventDao edao = new EventDao(db.getConnection());
             AuthTokenDao adao = new AuthTokenDao(db.getConnection());
             if(!r.getGender().toLowerCase().equals("m") &&  !r.getGender().toLowerCase().equals("f")){
-                throw new DataAccessException("Please use a valid gender.");
+                throw new DataAccessException("Error: please use a valid gender.");
             }
             String newID = UUID.randomUUID().toString();
             User newUser = new User(r.getuserName(), r.getPassword(), r.getEmail(), r.getFirstName(), r.getLastName(), r.getGender(),newID);
 
             udao.insertUser(newUser);
-            db.commit();
+            db.closeConnection(true);
            // udao.find(newUser.getId());
             FillRequest fr = new FillRequest(newUser.getId(),4);
 
@@ -70,14 +72,18 @@ public class RegisterService {
 
             FillResult fR = fs.fill(fr);
 
-            String token = UUID.randomUUID().toString();
-            AuthToken authToken = new AuthToken(token,newUser.getId());
-            result.setauthToken(authToken.getToken());
+            LoginService ls = new LoginService();
+            LoginRequest lr = new LoginRequest();
+            lr.setPassword(newUser.getPassword());
+            lr.setuserName(newUser.getId());
+            LoginResult lR;
+            lR = ls.login(lr);
+            result.setauthToken(lR.getAutherizationToken());
             result.setuserName(newUser.getId());
             result.setpersonID(fR.getUserPerson());
 
             result.setSuccess(true);
-            db.closeConnection(true);
+            //db.closeConnection(true);
 
 
 

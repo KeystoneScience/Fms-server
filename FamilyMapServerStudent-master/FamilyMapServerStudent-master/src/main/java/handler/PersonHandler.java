@@ -103,7 +103,7 @@ public class PersonHandler implements HttpHandler {
                         exchange.getResponseBody().close();
 
                     } else if (UrlRequests.size() == 2) {
-                        pr = ps.findPerson(UrlRequests.get(0),authToken);
+                        pr = ps.findPerson(UrlRequests.get(1),authToken);
                         if(pr.isSuccess()){
                             exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
 

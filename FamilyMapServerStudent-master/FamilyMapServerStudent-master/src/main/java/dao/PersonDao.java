@@ -214,7 +214,7 @@ public class PersonDao {
             }
         }
         catch (SQLException e) {
-            throw new DataAccessException("delete user from database failed");
+            throw new DataAccessException("Error: delete Person from database failed");
         }
     }
 

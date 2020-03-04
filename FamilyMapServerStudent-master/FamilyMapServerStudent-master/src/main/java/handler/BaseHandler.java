@@ -1,16 +1,17 @@
 package handler;
 
 import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
+
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
+import java.net.HttpURLConnection;
+
 import java.nio.file.Path;
 
+import com.sun.net.httpserver.HttpHandler;
 
-//FIXME CHANGE THIS FILE
 
 
 public class BaseHandler implements HttpHandler {
@@ -44,7 +45,7 @@ public class BaseHandler implements HttpHandler {
 
                     exchange.getResponseBody().close();
 
-                } else {
+                } else if (URLrequested.equals("/")) {
 
                     //
                     String location = "web" + URLrequested;
@@ -59,6 +60,35 @@ public class BaseHandler implements HttpHandler {
 
                     exchange.getResponseBody().close();
 
+                }
+                else if(URLrequested.equals("/css/main.css")){
+                    String location = "web/css/main.css";
+                    //Obtain the file path, this is the same method used for the name and locations data draw
+                    Path filePath = FileSystems.getDefault().getPath(location);
+
+                    exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+
+                    //Copies Files into the response body
+                    Files.copy(filePath, exchange.getResponseBody());
+
+                    exchange.getResponseBody().close();
+
+                }
+                else{
+                    String location = "web/HTML/404.html";
+
+                    //Obtain the file path, this is the same method used for the name and locations data draw
+                    Path filePath = FileSystems.getDefault().getPath(location);
+
+                    //Response header needs to come first.
+                    exchange.sendResponseHeaders(HttpURLConnection.HTTP_NOT_FOUND, 0);
+
+                    //Copies Files into the response body
+                    Files.copy(filePath, exchange.getResponseBody());
+
+
+
+                    exchange.getResponseBody().close();
                 }
                 wasSuccessful = true;
 

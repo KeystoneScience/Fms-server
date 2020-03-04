@@ -68,6 +68,8 @@ public class Database {
                 stmt.executeUpdate(sql);
                 sql = "DELETE FROM person";
                 stmt.executeUpdate(sql);
+                sql = "DELETE FROM authToken";
+                stmt.executeUpdate(sql);
 
 
             } catch (Throwable var5) {

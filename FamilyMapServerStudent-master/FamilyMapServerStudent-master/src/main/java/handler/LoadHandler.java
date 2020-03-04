@@ -49,15 +49,7 @@ public class LoadHandler implements HttpHandler {
                 if (lr.isSuccess()) {
                     exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
 
-
-
-                    /*
-                    Do some handling with oerhaps an output stream, then write that
-                    string to a response body
-                     */
-
-                    String responseJsonString = "{\"message\" : \"" + lr.getMessage() + "\"}";
-
+                    String responseJsonString = gson.toJson(lr);
 
 
                     OutputStreamWriter osq = new OutputStreamWriter(exchange.getResponseBody());
@@ -67,21 +59,14 @@ public class LoadHandler implements HttpHandler {
                     // output stream, indicating that the response is complete.
                     exchange.getResponseBody().close();
 
-
                 } else {
                     // The HTTP request was invalid somehow, so we return a "bad request"
                     // status code to the client.
                     exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
 
 
-                    // We are not sending a response body, so close the response body
-                    /*
-                    Do some handling with oerhaps an output stream, then write that
-                    string to a response body
-                     */
-
-                    String responseJsonString = "{\"message\" : \"" + lr.getMessage() + "\"}";
-
+                    //Fixme might need to check case work.
+                    String responseJsonString = gson.toJson(lr);
 
 
                     OutputStreamWriter osq = new OutputStreamWriter(exchange.getResponseBody());
@@ -96,12 +81,12 @@ public class LoadHandler implements HttpHandler {
             }
         }
         catch (IOException e) {
-            // Some kind of internal error has occurred inside the server (not the
-            // client's fault), so we return an "internal server error" status code
-            // to the client.
-            exchange.sendResponseHeaders(HttpURLConnection.HTTP_SERVER_ERROR, 0);
-            String responseJsonString = "{\"message\" : \"" + "Internal server error" + "\"}";
+            exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
 
+
+            Gson gson = new Gson();
+            //Fixme might need to check case work.
+            String responseJsonString = gson.toJson(lr);
 
 
             OutputStreamWriter osq = new OutputStreamWriter(exchange.getResponseBody());
@@ -110,7 +95,6 @@ public class LoadHandler implements HttpHandler {
 
             // output stream, indicating that the response is complete.
             exchange.getResponseBody().close();
-            //e.printStackTrace();
         }
     }
 

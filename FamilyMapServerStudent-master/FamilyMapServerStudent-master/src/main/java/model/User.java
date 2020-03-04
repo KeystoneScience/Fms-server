@@ -6,13 +6,13 @@ import java.util.Objects;
  * Model class for the User data
  */
 public class User {
-    private String id;
+    private String userName;
     private String password;
     private String email;
-    private String first_name;
-    private String last_name;
+    private String firstName;
+    private String lastName;
     private String gender;
-    private String Person_id;
+    private String personID;
 
     public String getGender() {
         return gender;
@@ -52,21 +52,21 @@ public class User {
      * @param Person_id unique identifier for the Person
      */
     public User(String id, String password, String email, String first_name, String last_name, String gender, String Person_id) {
-        this.id = id;
+        this.userName = id;
         this.password = password;
         this.email = email;
-        this.first_name = first_name;
-        this.last_name = last_name;
+        this.firstName = first_name;
+        this.lastName = last_name;
         this.gender = gender;
-        this.Person_id = Person_id;
+        this.personID = Person_id;
     }
 
     public String getId() {
-        return id;
+        return userName;
     }
 
     public void setId(String id) {
-        this.id = id;
+        this.userName = id;
     }
 
     public String getPassword() {
@@ -86,26 +86,26 @@ public class User {
     }
 
     public String getFirst_name() {
-        return first_name;
+        return firstName;
     }
 
     public void setFirst_name(String first_name) {
-        this.first_name = first_name;
+        this.firstName = first_name;
     }
 
     public String getLast_name() {
-        return last_name;
+        return lastName;
     }
 
     public void setLast_name(String last_name) {
-        this.last_name = last_name;
+        this.lastName = last_name;
     }
 
     public String getPerson_id() {
-        return Person_id;
+        return personID;
     }
 
     public void setPerson_id(String Person_id) {
-        this.Person_id = Person_id;
+        this.personID = Person_id;
     }
 }

@@ -12,7 +12,7 @@ import java.util.List;
  */
 
 public class PersonResult extends ParentResult{
-    private List<Person> data = new ArrayList<>();
+    private List<Person> data;
     private String associatedUsername;
     private String personID;
     private String firstName;

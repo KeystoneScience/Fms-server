@@ -92,9 +92,9 @@ public class Server {
         server.createContext("/user/login", new LoginHandler());
         server.createContext("/user/register", new RegisterHandler());
         server.createContext("/fill/", new FillHandler());
-        server.createContext("/event/", new EventHandler());
+        server.createContext("/event", new EventHandler());
         server.createContext("/load", new LoadHandler());
-        server.createContext("/person/", new PersonHandler());
+        server.createContext("/person", new PersonHandler());
 
 
 

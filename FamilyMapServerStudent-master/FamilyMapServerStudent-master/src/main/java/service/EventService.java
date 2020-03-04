@@ -45,13 +45,13 @@ public class EventService {
 
             AuthToken at = atd.find(authToken);
             if(at == null){
-                throw new DataAccessException("Auth Token Incorrect.");
+                throw new DataAccessException("Error: Auth Token Incorrect.");
             }
 
             Event event = ed.find(eventId,at.getUsername());
 
             if(event == null){
-                throw new DataAccessException("No Event Found.");
+                throw new DataAccessException("Error: No Event Found.");
             }
 
 
@@ -101,7 +101,7 @@ public class EventService {
 
         AuthToken at = atd.find(authenticationToken);
         if(at == null){
-            throw new DataAccessException("Auth Token Incorrect.");
+            throw new DataAccessException("Error: Auth Token Incorrect.");
         }
         List<Event> events = ed.getUserEvents(at.getUsername());
 

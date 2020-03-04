@@ -40,9 +40,9 @@ public class LoadService {
             // clear all data from tables
             db.clearTables();
 
-            UserDao ud = new UserDao(db.openConnection());
-            EventDao ed = new EventDao(db.openConnection());
-            PersonDao pd = new PersonDao(db.openConnection());
+            UserDao ud = new UserDao(db.getConnection());
+            EventDao ed = new EventDao(db.getConnection());
+            PersonDao pd = new PersonDao(db.getConnection());
 
             //Get information from the login request
             ArrayList<User> users = lr.getUsers();

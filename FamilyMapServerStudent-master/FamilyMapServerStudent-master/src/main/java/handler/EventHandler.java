@@ -42,7 +42,7 @@ public class EventHandler implements HttpHandler {
             // client is "posting" information to the server for processing.
             if (exchange.getRequestMethod().toLowerCase().equals("get")) {
 
-                 EventService es = new EventService();
+                EventService es = new EventService();
 
 
                 Headers reqHeaders = exchange.getRequestHeaders();
@@ -74,7 +74,7 @@ public class EventHandler implements HttpHandler {
                         er.setMessage("Input is not formatted correctly.");
                         exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
                         Gson gson = new Gson();
-                        //Fixme might need to check case work.
+
                         String responseJsonString = gson.toJson(er);
 
 

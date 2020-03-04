@@ -1,7 +1,9 @@
 package handler;
 
+import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import dao.DataAccessException;
 import request.FillRequest;
 import result.FillResult;
 import service.FillService;
@@ -59,12 +61,20 @@ public class FillHandler implements HttpHandler {
                         FillRequest fR = new FillRequest(UrlRequests.get(1),numGenerations);
 
                         fr = fs.fill(fR);
-                        fr.setMessage("Successfully added " + fr.getNumPeople() + "people to the database.");
+                        if(!fr.isSuccess()){
+                            throw new DataAccessException(fr.getMessage());
+                        }
+                        fr.setMessage("Successfully added " + fr.getNumPeople() + " persons and "+ fr.getNumEvents()+" events to the database.");
 
                     }
                     if (fr.isSuccess()){
                         exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
-                        String responseJsonString = "{\"message\" : \"" + fr.getMessage() + "\"}";
+
+
+                        Gson gson = new Gson();
+                        //Fixme might need to check case work.
+                        fr.nullify();
+                        String responseJsonString = gson.toJson(fr);
 
 
                         OutputStreamWriter osq = new OutputStreamWriter(exchange.getResponseBody());
@@ -77,7 +87,12 @@ public class FillHandler implements HttpHandler {
                     }
                     else {
                         exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
-                        String responseJsonString = "{\"message\" : \"" + fr.getMessage()+ "\"}";
+
+
+                        Gson gson = new Gson();
+                        //Fixme might need to check case work.
+                        fr.nullify();
+                        String responseJsonString = gson.toJson(fr);
 
 
                         OutputStreamWriter osq = new OutputStreamWriter(exchange.getResponseBody());
@@ -89,9 +104,14 @@ public class FillHandler implements HttpHandler {
                     }
             }
         }
-        catch (IOException e) {
+        catch (IOException | DataAccessException e) {
             exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
-            String responseJsonString = "{\"message\" : \"" + "Internal server error"+ "\"}";
+
+
+            Gson gson = new Gson();
+            //Fixme might need to check case work.
+            fr.nullify();
+            String responseJsonString = gson.toJson(fr);
 
 
             OutputStreamWriter osq = new OutputStreamWriter(exchange.getResponseBody());
@@ -100,7 +120,6 @@ public class FillHandler implements HttpHandler {
 
             // output stream, indicating that the response is complete.
             exchange.getResponseBody().close();
-            e.printStackTrace();
         }
     }
 

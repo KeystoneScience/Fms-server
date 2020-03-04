@@ -50,7 +50,7 @@ public class EventDao {
             }
         }
         catch (SQLException e) {
-            throw new DataAccessException("delete user from database failed");
+            throw new DataAccessException("Error:  delete event from database failed");
         }
     }
 
@@ -484,6 +484,12 @@ public class EventDao {
         return true;
     }
 
+
+    public Location generateLocation() throws SQLException, DataAccessException {
+        generateLists();
+
+        return locations.getRandom();
+    }
 
 
 

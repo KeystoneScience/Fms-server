@@ -1,0 +1,49 @@
+[Tue Mar 03 23:18:42 MST 2020] - INFO passoff.ServerTest: 	Setting up Fill 2 Valid Test...
+[Tue Mar 03 23:18:42 MST 2020] - INFO client.Proxy: 	Clear called
+[Tue Mar 03 23:18:42 MST 2020] - INFO client.Client: 	Post without Request Body called
+[Tue Mar 03 23:18:42 MST 2020] - INFO client.Client: 	Attempting to open connection to server
+[Tue Mar 03 23:18:42 MST 2020] - INFO client.Client: 	Connection opened to server
+[Tue Mar 03 23:18:42 MST 2020] - INFO client.Client: 	Setting request method to POST
+[Tue Mar 03 23:18:42 MST 2020] - INFO client.Client: 	Request method set to POST
+[Tue Mar 03 23:18:42 MST 2020] - INFO client.Client: 	Setting Do Output to true
+[Tue Mar 03 23:18:42 MST 2020] - INFO client.Client: 	Do Output set to true
+[Tue Mar 03 23:18:42 MST 2020] - INFO client.Client: 	Connecting to server
+[Tue Mar 03 23:18:42 MST 2020] - INFO client.Client: 	Connected to server
+[Tue Mar 03 23:18:42 MST 2020] - INFO client.Client: 	Getting response code from server
+[Tue Mar 03 23:18:42 MST 2020] - INFO client.Client: 	Response code 200 returned
+[Tue Mar 03 23:18:42 MST 2020] - INFO client.Client: 	Getting input stream from server
+[Tue Mar 03 23:18:42 MST 2020] - INFO client.Client: 	Reading input stream into a string
+[Tue Mar 03 23:18:42 MST 2020] - INFO passoff.ServerTest: 	Running Fill 2 Valid Test...
+[Tue Mar 03 23:18:42 MST 2020] - INFO client.Proxy: 	Register called
+[Tue Mar 03 23:18:42 MST 2020] - INFO client.Client: 	Post with Request Body called
+[Tue Mar 03 23:18:42 MST 2020] - INFO client.Client: 	Attempting to open connection to server
+[Tue Mar 03 23:18:42 MST 2020] - INFO client.Client: 	Connection opened to server
+[Tue Mar 03 23:18:42 MST 2020] - INFO client.Client: 	Setting request method to POST
+[Tue Mar 03 23:18:42 MST 2020] - INFO client.Client: 	Request method set to POST
+[Tue Mar 03 23:18:42 MST 2020] - INFO client.Client: 	Setting Do Output to true
+[Tue Mar 03 23:18:42 MST 2020] - INFO client.Client: 	Do Output set to true
+[Tue Mar 03 23:18:42 MST 2020] - INFO client.Client: 	Connecting to server
+[Tue Mar 03 23:18:42 MST 2020] - INFO client.Client: 	Connected to server
+[Tue Mar 03 23:18:42 MST 2020] - INFO client.Client: 	Opening output stream to server
+[Tue Mar 03 23:18:42 MST 2020] - INFO client.Client: 	Writing request to server output stream
+[Tue Mar 03 23:18:42 MST 2020] - INFO client.Client: 	Request written to server output stream
+[Tue Mar 03 23:18:42 MST 2020] - INFO client.Client: 	Closing output stream to server
+[Tue Mar 03 23:18:42 MST 2020] - INFO client.Client: 	Output stream to server closed
+[Tue Mar 03 23:18:42 MST 2020] - INFO client.Client: 	Getting response code from server
+[Tue Mar 03 23:18:43 MST 2020] - INFO client.Client: 	Response code 200 returned
+[Tue Mar 03 23:18:43 MST 2020] - INFO client.Client: 	Getting input stream from server
+[Tue Mar 03 23:18:43 MST 2020] - INFO client.Client: 	Reading input stream into a string
+[Tue Mar 03 23:18:43 MST 2020] - INFO client.Proxy: 	Fill called
+[Tue Mar 03 23:18:43 MST 2020] - INFO client.Client: 	Post without Request Body called
+[Tue Mar 03 23:18:43 MST 2020] - INFO client.Client: 	Attempting to open connection to server
+[Tue Mar 03 23:18:43 MST 2020] - INFO client.Client: 	Connection opened to server
+[Tue Mar 03 23:18:43 MST 2020] - INFO client.Client: 	Setting request method to POST
+[Tue Mar 03 23:18:43 MST 2020] - INFO client.Client: 	Request method set to POST
+[Tue Mar 03 23:18:43 MST 2020] - INFO client.Client: 	Setting Do Output to true
+[Tue Mar 03 23:18:43 MST 2020] - INFO client.Client: 	Do Output set to true
+[Tue Mar 03 23:18:43 MST 2020] - INFO client.Client: 	Connecting to server
+[Tue Mar 03 23:18:43 MST 2020] - INFO client.Client: 	Connected to server
+[Tue Mar 03 23:18:43 MST 2020] - INFO client.Client: 	Getting response code from server
+[Tue Mar 03 23:18:43 MST 2020] - INFO client.Client: 	Response code 200 returned
+[Tue Mar 03 23:18:43 MST 2020] - INFO client.Client: 	Getting input stream from server
+[Tue Mar 03 23:18:43 MST 2020] - INFO client.Client: 	Reading input stream into a string

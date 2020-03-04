@@ -11,11 +11,20 @@ public class Person {
     private String firstName;
     private String lastName;
     private String gender;
-    private String fatherID = "";
-    private String motherID = "";
-    private String spouseID = "";
+    private String fatherID;
+    private String motherID;
+    private String spouseID;
 
     public Person() {
+
+    }
+
+    public Person(String person_id, String id, String first_name, String last_name, String gender) {
+        personID=person_id;
+        associatedUsername = id;
+        firstName=first_name;
+        lastName = last_name;
+        this.gender = gender;
 
     }
 

@@ -62,22 +62,7 @@ public class RegisterHandler implements HttpHandler {
                     exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
 
 
-                    // We are not sending a response body, so close the response body
-                    /*
-                    Do some handling with oerhaps an output stream, then write that
-                    string to a response body
-//                     */
-//
-//                    String responseJsonString = "{\"message\" : \"" + rr.getMessage() + "\"}";
-//
-//
-//
-//                    OutputStreamWriter osq = new OutputStreamWriter(exchange.getResponseBody());
-//                    osq.write(responseJsonString);
-//                    osq.flush();
-//
-//                    // output stream, indicating that the response is complete.
-//                    exchange.getResponseBody().close();
+
                 }
 
                 String responseJsonString = gson.toJson(rr);

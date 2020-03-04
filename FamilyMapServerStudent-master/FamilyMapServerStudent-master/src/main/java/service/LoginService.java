@@ -49,12 +49,12 @@ public class LoginService {
                     lR.setSuccess(true);
                 }
                 else{
-                    lR.setMessage("Password Incorrect.");
+                    lR.setMessage("Error: Password Incorrect.");
                     lR.setSuccess(false);
                 }
             }
             else{
-                lR.setMessage("Username not found.");
+                lR.setMessage("Error: Username not found.");
                 lR.setSuccess(false);
             }
             db.closeConnection(true);

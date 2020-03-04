@@ -99,7 +99,7 @@ public class UserDao {
 
         }catch (SQLException e) {
             e.printStackTrace();
-            throw new DataAccessException("Username is already taken");
+            throw new DataAccessException("Error: Username is already taken");
         }
 
         finally {
@@ -140,7 +140,7 @@ public class UserDao {
             }
         }
         catch (SQLException e) {
-            throw new DataAccessException("delete user from database failed");
+            throw new DataAccessException("Error: delete user from database failed");
         }
     }
 
@@ -249,7 +249,7 @@ public class UserDao {
             if(stmt.executeUpdate() == 1) {
                 System.out.println("Updated User " + User.getId());
             } else {
-                System.out.println("Failed to update User " + UserIdToUpdate);
+                System.out.println("Error:  Failed to update User " + UserIdToUpdate);
             }
         } finally {
             if (stmt != null) {
@@ -314,7 +314,7 @@ public class UserDao {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new DataAccessException("Error encountered while finding Person");
+            throw new DataAccessException("Error: encountered while finding Person");
         } finally {
             if(rs != null) {
                 try {

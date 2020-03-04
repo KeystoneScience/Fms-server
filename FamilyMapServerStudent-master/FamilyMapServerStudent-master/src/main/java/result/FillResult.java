@@ -5,10 +5,22 @@ package result;
  * fill request
  */
 public class FillResult extends ParentResult{
-    private int numPeople;
-    private int EVENTS_PER_PERSON = 3;
-    private int numEvents;
+    private Integer numPeople;
+    private Integer EVENTS_PER_PERSON = 3;
+    private Integer numEvents;
     private String userPerson;
+
+    public void nullify(){
+        numPeople=null;
+        EVENTS_PER_PERSON=null;
+        numEvents=null;
+        userPerson=null;
+
+    }
+
+    public Integer getNumEvents() {
+        return numEvents;
+    }
 
     public String getUserPerson() {
         return userPerson;

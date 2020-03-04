@@ -6,14 +6,14 @@ import java.util.Objects;
  * Model class for the Event data
  */
 public class Event {
-    private String Event_id;
-    private String associated_Username;
-    private String Person_id;
+    private String associatedUsername;
+    private String eventID;
+    private String personID;
     private float latitude;
     private float longitude;
     private String country;
     private String city;
-    private String Event_type;
+    private String eventType;
     private int year;
 
     public Event() {
@@ -54,39 +54,39 @@ public class Event {
      * @param year year
      */
     public Event(String Event_id, String associated_Username, String Person_id, float latitude, float longitude, String country, String city, String Event_type, int year) {
-        this.Event_id = Event_id;
-        this.associated_Username = associated_Username;
-        this.Person_id = Person_id;
+        this.eventID = Event_id;
+        this.associatedUsername = associated_Username;
+        this.personID = Person_id;
         this.latitude = latitude;
         this.longitude = longitude;
         this.country = country;
         this.city = city;
-        this.Event_type = Event_type;
+        this.eventType = Event_type;
         this.year = year;
     }
 
     public String getEvent_id() {
-        return Event_id;
+        return eventID;
     }
 
     public void setEvent_id(String Event_id) {
-        this.Event_id = Event_id;
+        this.eventID = Event_id;
     }
 
     public String getAssociated_Username() {
-        return associated_Username;
+        return associatedUsername;
     }
 
     public void setAssociated_Username(String associated_Username) {
-        this.associated_Username = associated_Username;
+        this.associatedUsername = associated_Username;
     }
 
     public String getPerson_id() {
-        return Person_id;
+        return personID;
     }
 
     public void setPerson_id(String Person_id) {
-        this.Person_id = Person_id;
+        this.personID = Person_id;
     }
 
     public float getLatitude() {
@@ -122,11 +122,11 @@ public class Event {
     }
 
     public String getEvent_type() {
-        return Event_type;
+        return eventType;
     }
 
     public void setEvent_type(String Event_type) {
-        this.Event_type = Event_type;
+        this.eventType = Event_type;
     }
 
     public int getYear() {

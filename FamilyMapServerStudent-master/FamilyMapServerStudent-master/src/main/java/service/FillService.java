@@ -2,6 +2,7 @@ package service;
 
 import dao.*;
 import model.Event;
+import model.Location;
 import model.Person;
 import model.User;
 import request.FillRequest;
@@ -53,22 +54,35 @@ public class FillService
             User user = udao.find(fr.getuserName());
 
             if (user == null){ //Checks if user exists
-                throw new DataAccessException("Username is not in the database.");
+                throw new DataAccessException("Error: username is not in the database.");
             }
 
             pdao.removePerson(user);
             edao.removeEvent(user);
-
-            Person userPerson = new Person(user.getPerson_id(),user.getId(),user.getFirst_name(),user.getLast_name(),user.getGender(),"","",""); // Construct person object based on user
+//            Person userPerson = new Person(); //FIXME BREAK UP INTO ONE SECITON
+//
+//            userPerson.setFirst_name(user.getFirst_name());
+//            userPerson.setLast_name(user.getLast_name());
+//            userPerson.setLast_name(user.getId());
+//            userPerson.setGender(user.getGender());
+//            userPerson.setPerson_id(user.getPerson_id());
+//
+//
+            Person userPerson = new Person(user.getPerson_id(),user.getId(),user.getFirst_name(),user.getLast_name(),user.getGender()); // Construct person object based on user
             pdao.insertPerson(userPerson);
             fR.setUserPerson(userPerson.getPerson_id());
             edao.generateBirth(userPerson,1999);
 
+            if(fr.getNumGenerations() < 0){
+                throw new DataAccessException("Error: incorrect number of generations.");
+            }
 
-
-            GenerateGenerations(userPerson, fr.getNumGenerations());
+            if(fr.getNumGenerations() != 0) {
+                GenerateGenerations(userPerson, fr.getNumGenerations());
+            }
             fR.setSuccess(true);
             fR.setNumPeople(fr.getNumGenerations());
+
             db.closeConnection(true);
 
 
@@ -169,14 +183,14 @@ public class FillService
 
         //Generates reasonable birth and death based off of child birth.
         int marriageYear = childBirth.getYear() - 1 - r.nextInt(5);
-
-        float latitude = 0.0f;
-        float longitude = 0.0f;
+        Location newLocal = edao.generateLocation();
+        float latitude = newLocal.getLatitude();
+        float longitude = newLocal.getLongitude();
         String id1 = UUID.randomUUID().toString();
         String id2 = UUID.randomUUID().toString();
 
-        String country =""; //FIXME
-        String city = "";
+        String country = newLocal.getCountry();
+        String city = newLocal.getCity();
 
 
         Event spouse1Event = new Event(id1, childBirth.getAssociated_Username(),spouse1,latitude,longitude,country, city, "marriage", marriageYear);

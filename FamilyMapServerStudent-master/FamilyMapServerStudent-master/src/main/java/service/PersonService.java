@@ -37,12 +37,19 @@ public class PersonService {
             db.openConnection();
 
 
-            AuthTokenDao atd = new AuthTokenDao(db.openConnection());
-            PersonDao pd = new PersonDao(db.openConnection());
+            AuthTokenDao atd = new AuthTokenDao(db.getConnection());
+            PersonDao pd = new PersonDao(db.getConnection());
 
 
             model.AuthToken at = atd.find(authToken);
+            if(at == null){
+                throw new DataAccessException("Error: AuthToken does not exist.");
+
+            }
             Person person = pd.find(PersonID,at.getUsername());
+            if (person == null){
+                throw new DataAccessException("Error: Person with ID given does not exist.");
+            }
             pr.fillPerson(person);
 
             pr.setSuccess(true);
@@ -81,7 +88,7 @@ public class PersonService {
 
             model.AuthToken at = atd.find(AuthToken);
             if(at == null){
-                throw new DataAccessException("Auth Token Incorrect.");
+                throw new DataAccessException("Error: Auth Token Incorrect.");
             }
             List<Person> persons = pd.findPersons(at.getUsername());
 
