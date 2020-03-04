@@ -35,7 +35,7 @@ public class EventServiceTest{
 
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         cs.clear();
         registerRequest = new RegisterRequest("username","password","coolguy@gmail.com","Elon","Musk","m");
         rs = new RegisterService();
@@ -47,27 +47,35 @@ public class EventServiceTest{
 
 
     @AfterEach
-    public void tearDown() throws Exception {
+    public void tearDown() {
         cs.clear();
 
     }
 
 
 
-    @Test // tests empty response and bad auth
-    public void eventList() throws Exception {
+    @Test
+    public void eventListValid() {
 
         eventResult = es.getAllUserEvents(registerResult.getauthToken());
         assertNotNull(eventResult.getEvents());
         assertEquals(eventResult.getEvents().size(),91 );
-        eventResult = es.getAllUserEvents("fake Auth");
-        assertNull(eventResult.getEvents());
-        assertTrue(eventResult.getMessage().toLowerCase().contains("error"));
+        assertTrue(eventResult.isSuccess());
 
     }
 
-    @Test // tests empty response and bad auth
-    public void eventSearch() throws Exception {
+
+    @Test
+    public void eventListInvalid() {
+
+        eventResult = es.getAllUserEvents("fake Auth");
+        assertNull(eventResult.getEvents());
+        assertTrue(eventResult.getMessage().toLowerCase().contains("error"));
+        assertFalse(eventResult.isSuccess());
+    }
+
+    @Test
+    public void eventSearchValid() {
 
         eventResult = es.getAllUserEvents(registerResult.getauthToken());
         assertNotNull(eventResult.getEvents());
@@ -77,13 +85,19 @@ public class EventServiceTest{
 
         assertNotNull(eventResult);
         assertEquals(eventResult.getCity(),ev.getCity());
+        assertTrue(eventResult.isSuccess());
 
+    }
+
+    @Test
+    public void eventSearchInvalid() {
 
         eventResult = es.getEvent("fakeResult",registerResult.getauthToken());
 
 
         assertNull(eventResult.getCity());
         assertTrue(eventResult.getMessage().toLowerCase().contains("error"));
+        assertFalse(eventResult.isSuccess());
 
     }
 

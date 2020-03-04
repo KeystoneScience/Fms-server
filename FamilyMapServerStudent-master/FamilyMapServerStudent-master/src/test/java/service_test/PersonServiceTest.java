@@ -56,11 +56,19 @@ public class PersonServiceTest{
 
 
     @Test // tests empty response and bad auth
-    public void personList() {
+    public void personListValid() {
 
         personResult = ps.Persons(registerResult.getauthToken());
         assertNotNull(personResult.getPeople());
         assertEquals(personResult.getPeople().size(),31 );
+
+
+    }
+
+    @Test // tests empty response and bad auth
+    public void personListInvalid() {
+
+
         personResult = ps.Persons("BAD AUTH");
         assertNull(personResult.getPeople());
         assertTrue(personResult.getMessage().toLowerCase().contains("error"));
@@ -68,7 +76,7 @@ public class PersonServiceTest{
     }
 
     @Test // tests empty response and bad auth
-    public void eventSearch() {
+    public void personSearchValid() {
 
         personResult = ps.Persons(registerResult.getauthToken());
         assertNotNull(personResult.getPeople());
@@ -78,6 +86,21 @@ public class PersonServiceTest{
 
         assertNotNull(personResult);
         assertEquals(personResult.getFatherID(),person.getFather_id());
+
+
+        personResult = ps.findPerson(person.getPerson_id(),"oof, bad");
+
+        assertNull(personResult.getpersonID());
+        assertTrue(personResult.getMessage().toLowerCase().contains("error"));
+
+    }
+
+    @Test // tests empty response and bad auth
+    public void personSearchInvalid() {
+
+        personResult = ps.Persons(registerResult.getauthToken());
+        assertNotNull(personResult.getPeople());
+        Person person = personResult.getPeople().get(1);
 
 
         personResult = ps.findPerson(person.getPerson_id(),"oof, bad");
