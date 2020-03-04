@@ -1,8 +1,7 @@
-package result;
+package results;
 
 import model.Event;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

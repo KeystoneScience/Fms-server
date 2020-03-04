@@ -1,4 +1,4 @@
-package request;
+package requests;
 
 /**
  * Data structure for a fill request. contains the information for number of generations

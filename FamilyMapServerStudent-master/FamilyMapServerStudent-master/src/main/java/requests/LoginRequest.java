@@ -1,4 +1,4 @@
-package request;
+package requests;
 
 /**
  * Data object for the log in request

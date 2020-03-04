@@ -4,8 +4,8 @@ import dao.*;
 import model.Event;
 import model.Person;
 import model.User;
-import request.LoadRequest;
-import result.LoadResult;
+import requests.LoadRequest;
+import results.LoadResult;
 
 import java.sql.SQLException;
 import java.util.ArrayList;

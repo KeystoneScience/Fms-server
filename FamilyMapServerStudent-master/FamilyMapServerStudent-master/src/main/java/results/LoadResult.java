@@ -1,4 +1,4 @@
-package result;
+package results;
 
 /**
  * class that contains the string result after a failed or

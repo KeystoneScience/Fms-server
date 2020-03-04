@@ -1,4 +1,4 @@
-package result;
+package results;
 
 /**
  * Return success vs error messages from clear service

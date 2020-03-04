@@ -5,14 +5,8 @@ import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import dao.DataAccessException;
-import dao.Database;
-import model.Person;
-import request.RegisterRequest;
-import result.PersonResult;
-import result.PersonsResult;
-import result.RegisterResult;
+import results.PersonResult;
 import service.PersonService;
-import service.RegisterService;
 
 import java.io.IOException;
 import java.io.InputStream;

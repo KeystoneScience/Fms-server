@@ -5,8 +5,8 @@ import model.Event;
 import model.Location;
 import model.Person;
 import model.User;
-import request.FillRequest;
-import result.FillResult;
+import requests.FillRequest;
+import results.FillResult;
 
 import java.sql.SQLException;
 import java.util.Random;
@@ -59,15 +59,7 @@ public class FillService
 
             pdao.removePerson(user);
             edao.removeEvent(user);
-//            Person userPerson = new Person(); //FIXME BREAK UP INTO ONE SECITON
-//
-//            userPerson.setFirst_name(user.getFirst_name());
-//            userPerson.setLast_name(user.getLast_name());
-//            userPerson.setLast_name(user.getId());
-//            userPerson.setGender(user.getGender());
-//            userPerson.setPerson_id(user.getPerson_id());
-//
-//
+
             Person userPerson = new Person(user.getPerson_id(),user.getId(),user.getFirst_name(),user.getLast_name(),user.getGender()); // Construct person object based on user
             pdao.insertPerson(userPerson);
             fR.setUserPerson(userPerson.getPerson_id());

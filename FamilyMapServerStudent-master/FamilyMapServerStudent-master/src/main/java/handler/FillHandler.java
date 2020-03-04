@@ -4,8 +4,8 @@ import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import dao.DataAccessException;
-import request.FillRequest;
-import result.FillResult;
+import requests.FillRequest;
+import results.FillResult;
 import service.FillService;
 
 import java.io.IOException;

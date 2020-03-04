@@ -1,4 +1,4 @@
-package result;
+package results;
 
 /**
  * Fail and success messages from the fillServer acting on the

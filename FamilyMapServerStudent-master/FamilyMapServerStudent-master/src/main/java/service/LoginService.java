@@ -6,8 +6,8 @@ import dao.Database;
 import dao.UserDao;
 import model.AuthToken;
 import model.User;
-import request.LoginRequest;
-import result.LoginResult;
+import requests.LoginRequest;
+import results.LoginResult;
 
 import java.sql.SQLException;
 import java.util.UUID;

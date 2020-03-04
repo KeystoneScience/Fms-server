@@ -2,19 +2,15 @@ package service;
 
 
 import dao.*;
-import model.AuthToken;
-import model.Event;
-import model.Person;
 import model.User;
-import request.FillRequest;
-import request.LoginRequest;
-import request.RegisterRequest;
-import result.FillResult;
-import result.LoginResult;
-import result.RegisterResult;
+import requests.FillRequest;
+import requests.LoginRequest;
+import requests.RegisterRequest;
+import results.FillResult;
+import results.LoginResult;
+import results.RegisterResult;
 
 import java.sql.SQLException;
-import java.util.Random;
 import java.util.UUID;
 
 /**

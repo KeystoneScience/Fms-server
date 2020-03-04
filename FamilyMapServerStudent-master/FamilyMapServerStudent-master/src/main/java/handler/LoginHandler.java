@@ -1,15 +1,11 @@
 package handler;
 
 import com.google.gson.Gson;
-import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import request.LoginRequest;
-import request.RegisterRequest;
-import result.LoginResult;
-import result.RegisterResult;
+import requests.LoginRequest;
+import results.LoginResult;
 import service.LoginService;
-import service.RegisterService;
 
 import java.io.*;
 import java.net.HttpURLConnection;

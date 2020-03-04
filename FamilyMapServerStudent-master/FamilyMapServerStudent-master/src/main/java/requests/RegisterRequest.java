@@ -1,4 +1,4 @@
-package request;
+package requests;
 
 /**
  * This class contains the information submitted from the client for queuing a registration
@@ -23,6 +23,14 @@ public class RegisterRequest {
      */
     public RegisterRequest(){};
 
+    public RegisterRequest(String userName, String password, String email, String firstName, String lastName, String gender) {
+        this.userName = userName;
+        this.password = password;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.gender = gender;
+    }
 
     public String getuserName() {
         return userName;

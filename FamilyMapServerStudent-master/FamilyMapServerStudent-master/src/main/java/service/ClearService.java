@@ -2,7 +2,7 @@ package service;
 
 import dao.DataAccessException;
 import dao.Database;
-import result.ClearResult;
+import results.ClearResult;
 
 /**
  * serves to clear the entire data base.

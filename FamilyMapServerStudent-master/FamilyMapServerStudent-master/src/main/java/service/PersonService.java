@@ -4,9 +4,8 @@ import dao.AuthTokenDao;
 import dao.DataAccessException;
 import dao.Database;
 import dao.PersonDao;
-import model.AuthToken;
 import model.Person;
-import result.PersonResult;
+import results.PersonResult;
 
 import java.util.List;
 
