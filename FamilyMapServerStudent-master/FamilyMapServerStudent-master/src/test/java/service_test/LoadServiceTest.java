@@ -41,9 +41,9 @@ public class LoadServiceTest{
     private results.PersonResult personResult;
     private results.EventResult eventResult;
     private ClearService cs = new ClearService();
-    private ArrayList<Person> persons;
-    private ArrayList<Event> events;
-    private ArrayList<User> users;
+    private ArrayList<Person> persons = new ArrayList<>();
+    private ArrayList<Event> events = new ArrayList<>();
+    private ArrayList<User> users = new ArrayList<>();
 
 
 
