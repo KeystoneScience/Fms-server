@@ -4,6 +4,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation fileTree(dir: 'libs', include: ['*.aar', '*.jar'], exclude: [])
     implementation files('libs\\gson-2.6.2.jar')
+    implementation project(path: ':shared')
 }
 
 sourceCompatibility = "7"

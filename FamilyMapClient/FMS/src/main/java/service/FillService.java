@@ -17,13 +17,10 @@ import java.util.UUID;
  */
 public class FillService
 {
-    //private boolean[] changeLastName = [true];
     private Database db = new Database();
     private PersonDao pdao;// = new PersonDao();
     private EventDao edao;// = new EventDao();
     private UserDao udao;// = new UserDao();
-
-    boolean success;
 
     public FillService(){
     };
