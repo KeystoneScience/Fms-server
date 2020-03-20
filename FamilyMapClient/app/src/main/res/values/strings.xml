@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">FamilyMapClient</string>
+    <string name="question_text">Canberra is the capital of Australia.</string>
+    <string name="true_button">True</string>
+    <string name="false_button">False</string>
+    <string name="server_host">Server Host:</string>
+    <string name="server_port">Server Port:</string>
+    <string name="user_name">User Name:</string>
+    <string name="password">Password:</string>
+    <string name="first_name">First Name:</string>
+    <string name="last_name">Last Name:</string>
+    <string name="email">Email:</string>
+    <string name="gender">Gender:</string>
+    <string name="male_button">Male</string>
+    <string name="female_button">Female</string>
+    <string name="sign_in_button">SIGN IN</string>
+    <string name="register_button">REGISTER</string>
 </resources>
