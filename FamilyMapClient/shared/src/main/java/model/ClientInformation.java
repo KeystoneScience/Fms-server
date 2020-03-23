@@ -4,7 +4,9 @@ import java.util.Map;
 
 import requests.LoginRequest;
 import requests.RegisterRequest;
+import results.EventResult;
 import results.LoginResult;
+import results.PersonResult;
 import results.RegisterResult;
 
 public class ClientInformation {
@@ -13,10 +15,28 @@ public class ClientInformation {
     private LoginResult loginResult;
     private RegisterRequest registerRequest;
     private RegisterResult registerResult;
+    private PersonResult personResult;
+    private EventResult eventResult;
     private Map<String,Person> associatedPeople;
     private Map<String, Event> associatedEvents;
     //FIXME
 
+
+    public PersonResult getPersonResult() {
+        return personResult;
+    }
+
+    public void setPersonResult(PersonResult personResult) {
+        this.personResult = personResult;
+    }
+
+    public EventResult getEventResult() {
+        return eventResult;
+    }
+
+    public void setEventResult(EventResult eventResult) {
+        this.eventResult = eventResult;
+    }
 
     public LoginRequest getLoginRequest() {
         return loginRequest;
