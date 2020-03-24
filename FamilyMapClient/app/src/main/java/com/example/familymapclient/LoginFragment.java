@@ -5,6 +5,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.widget.Toast;
 import com.google.gson.Gson;
@@ -64,6 +66,49 @@ public class LoginFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    private void signInAvalible(){
+        serverHost = mServerHost.getText().toString();
+        serverPort = mServerPort.getText().toString();
+        userName = mUserName.getText().toString();
+        password = mPassword.getText().toString();
+        if(serverPort.isEmpty() || serverHost.isEmpty() || userName.isEmpty() || password.isEmpty() ){
+            mSignIn.setEnabled(false);
+            return;
+        }
+        mSignIn.setEnabled(true);
+    }
+    private void registerAvalible(){
+
+        serverHost = mServerHost.getText().toString();
+        serverPort = mServerPort.getText().toString();
+
+
+        userName = mUserName.getText().toString();
+        password = mPassword.getText().toString();
+        firstName = mFirstName.getText().toString();
+        lastName = mLastName.getText().toString();
+        email = mEmail.getText().toString();
+
+        //Checks to see what button was pressed.
+
+        if(mGender.getCheckedRadioButtonId() == mMale.getId()){
+            gender = "m";
+        }
+        else if (mGender.getCheckedRadioButtonId() == mFemale.getId()){
+            gender = "f";
+        }
+        else{
+            gender = "";
+        }
+        if(serverHost.isEmpty()||serverPort.isEmpty()||userName.isEmpty()|| password.isEmpty() ||
+                firstName.isEmpty()|| lastName.isEmpty()  || email.isEmpty()|| gender.isEmpty()){
+            mRegister.setEnabled(false);
+            return;
+        }
+        mRegister.setEnabled(true);
+
+    }
+
 
 
     //@Override
@@ -86,6 +131,110 @@ public class LoginFragment extends Fragment {
         mLastName = view.findViewById(R.id.last_name);
         mSignIn = view.findViewById(R.id.sign_in_button);
         mRegister = view.findViewById(R.id.register_button);
+
+        mSignIn.setEnabled(false);
+        mRegister.setEnabled(false);
+
+        mGender.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                registerAvalible();
+
+            }
+        });
+
+
+        mEmail.addTextChangedListener(new TextWatcher() {
+
+            public void afterTextChanged(Editable s) {}
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                signInAvalible();
+                registerAvalible();
+
+            }
+        });
+
+        mLastName.addTextChangedListener(new TextWatcher() {
+
+            public void afterTextChanged(Editable s) {}
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                signInAvalible();
+                registerAvalible();
+
+            }
+        });
+
+        mFirstName.addTextChangedListener(new TextWatcher() {
+
+            public void afterTextChanged(Editable s) {}
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                signInAvalible();
+                registerAvalible();
+
+            }
+        });
+
+        mServerPort.addTextChangedListener(new TextWatcher() {
+
+            public void afterTextChanged(Editable s) {}
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                signInAvalible();
+                registerAvalible();
+
+            }
+        });
+
+        mServerHost.addTextChangedListener(new TextWatcher() {
+
+            public void afterTextChanged(Editable s) {}
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                signInAvalible();
+                registerAvalible();
+
+            }
+        });
+
+        mUserName.addTextChangedListener(new TextWatcher() {
+
+            public void afterTextChanged(Editable s) {}
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                signInAvalible();
+                registerAvalible();
+
+            }
+        });
+
+        mPassword.addTextChangedListener(new TextWatcher() {
+
+            public void afterTextChanged(Editable s) {}
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                signInAvalible();
+                registerAvalible();
+
+            }
+        });
+
 
         mSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
