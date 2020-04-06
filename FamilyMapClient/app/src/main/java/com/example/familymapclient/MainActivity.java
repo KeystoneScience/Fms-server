@@ -20,7 +20,13 @@ import model.User;
 
 public class MainActivity extends AppCompatActivity {
     private LoginFragment loginFragment;
+    private MapFragment mapFragment;
     private FragmentManager fragmentManager = getSupportFragmentManager();
+    private ClientInformation clientInformation;
+
+    public void setClientInformation(ClientInformation clientInformation) {
+        this.clientInformation = clientInformation;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,12 +34,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         loginFragment = new LoginFragment();
         loginFragment.setArguments(new Bundle());
-        fragmentManager.beginTransaction()
-                //.add(R.id.mainActivityLayout, loginFragment)
-                .replace(R.id.main_activity, loginFragment)
-                .addToBackStack("login")
-                .commit();
+        fragmentManager.beginTransaction().replace(R.id.main_activity, loginFragment).addToBackStack("login").commit();
 
+
+    }
+
+
+    public void startMap(){
+        mapFragment = new MapFragment();
+        mapFragment.setClientInformation(clientInformation);
+        fragmentManager.beginTransaction().replace(R.id.main_activity, mapFragment).addToBackStack("mapFragment").commit();
 
     }
 

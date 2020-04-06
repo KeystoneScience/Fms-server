@@ -56,6 +56,7 @@ public class LoginFragment extends Fragment {
             password, firstName, lastName, email, gender;
     private User user;
     private ClientInformation clientInfo = new ClientInformation();
+    private MainActivity defaultActivity;
 
 
     public LoginFragment() { }
@@ -135,7 +136,7 @@ public class LoginFragment extends Fragment {
         mSignIn.setEnabled(false);
         mRegister.setEnabled(false);
 
-        mGender.setOnClickListener(new View.OnClickListener() {
+        mGender.setOnClickListener(new View.OnClickListener() { //Put one for m and f buttons, then it may be more responsive
             @Override
             public void onClick(View view) {
                 registerAvalible();
@@ -494,6 +495,12 @@ public class LoginFragment extends Fragment {
                         output,
                         Toast.LENGTH_SHORT).show();
             }
+
+            defaultActivity = (MainActivity) getContext();
+            defaultActivity.setClientInformation(clientInfo);
+            defaultActivity.startMap();
+
+
 
         }
     }
