@@ -2,21 +2,10 @@ package com.example.familymapclient;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
-import android.graphics.ColorSpace;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.familymapclient.R;
-
-import model.ClientInformation;
-import model.User;
+import com.joanzapata.iconify.Iconify;
+import com.joanzapata.iconify.fonts.FontAwesomeModule;
 
 public class MainActivity extends AppCompatActivity {
     private LoginFragment loginFragment;
@@ -30,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Iconify.with(new FontAwesomeModule());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         loginFragment = new LoginFragment();

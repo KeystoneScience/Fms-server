@@ -31,4 +31,6 @@ dependencies {
     implementation 'com.google.android.material:material:1.0.0'
     implementation project(path: ':shared')
     implementation files('C:\\Users\\TonyStone\\Documents\\GitHub\\Fms-server\\FamilyMapClient\\FMS\\libs\\gson-2.6.2.jar')
+    implementation 'com.joanzapata.iconify:android-iconify:2.2.2'
+    implementation 'com.joanzapata.iconify:android-iconify-fontawesome:2.2.2'
 }

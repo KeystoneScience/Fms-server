@@ -1,13 +1,18 @@
-package model;
+package com.example.familymapclient;
 
+import java.util.HashMap;
 import java.util.Map;
 
+import model.Event;
+import model.Person;
 import requests.LoginRequest;
 import requests.RegisterRequest;
 import results.EventResult;
 import results.LoginResult;
 import results.PersonResult;
 import results.RegisterResult;
+import com.google.android.gms.maps.model.Marker;
+
 
 public class ClientInformation {
     private String authToken,userPersonID,serverHost,serverPort;
@@ -17,10 +22,26 @@ public class ClientInformation {
     private RegisterResult registerResult;
     private PersonResult personResult;
     private EventResult eventResult;
-    private Map<String,Person> associatedPeople;
+    private Map<String,Person> personIDtoPerson = new HashMap<>();
+    private Map<String, Person> associatedPeople;
     private Map<String, Event> associatedEvents;
-    //FIXME
+    private Map<Marker,Event>  waypointToEvent = new HashMap<>();
 
+    public void generatePersonPersonIDMap(){
+        for (Person person: personResult.getPeople()) {
+            personIDtoPerson.put(person.getPerson_id(),person);
+        }
+    }
+    public Person getPersonFromID(String id){
+        return personIDtoPerson.get(id);
+    }
+
+    public void addWaypoint(Marker waypoint, Event ev){
+        waypointToEvent.put(waypoint,ev);
+    }
+    public Event getEventFromWaypoint(Marker waypoint){
+        return waypointToEvent.get(waypoint);
+    }
 
     public PersonResult getPersonResult() {
         return personResult;
@@ -28,6 +49,7 @@ public class ClientInformation {
 
     public void setPersonResult(PersonResult personResult) {
         this.personResult = personResult;
+        generatePersonPersonIDMap();
     }
 
     public EventResult getEventResult() {

@@ -1,19 +1,14 @@
 package com.example.familymapclient;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.widget.Toast;
 import com.google.gson.Gson;
 
 
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,11 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
-import android.widget.Toast;
-import com.example.familymapclient.R;
 
-import com.example.familymapclient.R;
 import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
@@ -36,7 +27,6 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import model.ClientInformation;
 import model.User;
 import requests.LoginRequest;
 import requests.RegisterRequest;
@@ -280,7 +270,6 @@ public class LoginFragment extends Fragment {
                     gender = null;
                 }
                 if(serverHost.isEmpty()||serverPort.isEmpty()||userName.isEmpty()|| password.isEmpty() || firstName.isEmpty()|| lastName.isEmpty()  || email.isEmpty()|| gender.isEmpty()){
-                    Toast.makeText(getContext(),"Fill In missing Parts.",Toast.LENGTH_SHORT).show();
                     return;
                 }
                 RegisterFetchr register = new RegisterFetchr();
@@ -476,7 +465,7 @@ public class LoginFragment extends Fragment {
         protected Integer doInBackground(Void... voids) {
 
             PersonResult pR =  (PersonResult) taskGetProxy(serverHost, serverPort,"/person",new PersonResult());
-            EventResult eR =  (EventResult) taskGetProxy(serverHost, serverPort,"/person",new EventResult());
+            EventResult eR =  (EventResult) taskGetProxy(serverHost, serverPort,"/event",new EventResult());
 
 
             clientInfo.setPersonResult(pR);
@@ -491,9 +480,7 @@ public class LoginFragment extends Fragment {
             }
             else{
                 String output = "First Name: " + clientInfo.getPersonResult().getPeople().get(0).getFirst_name() + '\n' + "Last Name: " + clientInfo.getPersonResult().getPeople().get(0).getLast_name();
-                Toast.makeText(getContext(),
-                        output,
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), output, Toast.LENGTH_SHORT).show();
             }
 
             defaultActivity = (MainActivity) getContext();
