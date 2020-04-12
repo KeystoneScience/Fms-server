@@ -119,12 +119,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
     }
     private void markLines(Event ev){
+        //TODO these are controlled through the settings, add toggle booleans
         for (Polyline pl: familyTree) {
             pl.remove();
         }
         familyTree.clear();
-        float thickness= 25;
-        generateFamilyTreeLines(thickness,clientInformation.getPersonFromID(ev.getPerson_id()));
+        generateFamilyTreeLines(ev);
         if(marriageLine != null) {
             marriageLine.remove();
         }
@@ -134,7 +134,51 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
         lifeStory.clear();
         generateLifeStoryLines(ev);
+    }
 
+
+    private Polyline lineBetweenEvents(Event rootBase, Event first, float thickness, int color){
+        PolylineOptions polylineOptions = new PolylineOptions();
+        LatLng rootLatLng = new LatLng(rootBase.getLatitude(),rootBase.getLongitude());
+        LatLng second = new LatLng(first.getLatitude(),first.getLongitude());
+        polylineOptions.add(rootLatLng,second).clickable(false).color(color).width(thickness);
+        return theMap.addPolyline(polylineOptions);
+    }
+
+    private void generateFamilyTreeLines(Event ev){
+        float thickness= 25;
+        Person root = clientInformation.getPersonFromID(ev.getPerson_id());
+        if(!(root.getMother_id() == null)){
+            Event first = clientInformation.chronologicalEvents(root.getMother_id()).get(0);
+            Person mother = clientInformation.getPersonFromID(root.getMother_id());
+            familyTree.add(lineBetweenEvents(ev,first,thickness, Color.GREEN));
+            generateFamilyTreeLines(thickness*.55f,mother);
+        }
+        if(!(root.getFather_id() == null)){
+            Event first = clientInformation.chronologicalEvents(root.getFather_id()).get(0);
+            familyTree.add(lineBetweenEvents(ev,first,thickness, Color.GREEN));
+            Person father = clientInformation.getPersonFromID(root.getFather_id());
+            generateFamilyTreeLines(thickness*.55f,father);
+        }
+
+
+    }
+
+
+    public void generateFamilyTreeLines(float thickness, Person root){
+        Event rootBase = clientInformation.chronologicalEvents(root.getPerson_id()).get(0);
+        if(!(root.getMother_id() == null)){
+            Event first = clientInformation.chronologicalEvents(root.getMother_id()).get(0);
+            Person mother = clientInformation.getPersonFromID(root.getMother_id());
+            familyTree.add(lineBetweenEvents(rootBase,first,thickness, Color.GREEN));
+            generateFamilyTreeLines(thickness*.55f,mother);
+        }
+        if(!(root.getFather_id() == null)){
+            Event first = clientInformation.chronologicalEvents(root.getFather_id()).get(0);
+            familyTree.add(lineBetweenEvents(rootBase,first,thickness, Color.GREEN));
+            Person father = clientInformation.getPersonFromID(root.getFather_id());
+            generateFamilyTreeLines(thickness*.55f,father);
+        }
 
     }
 
@@ -199,32 +243,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
-    private Polyline lineBetweenEvents(Event rootBase, Event first, float thickness, int color){
-        PolylineOptions polylineOptions = new PolylineOptions();
-        LatLng rootLatLng = new LatLng(rootBase.getLatitude(),rootBase.getLongitude());
-        LatLng second = new LatLng(first.getLatitude(),first.getLongitude());
-        polylineOptions.add(rootLatLng,second).clickable(false).color(color).width(thickness);
-        return theMap.addPolyline(polylineOptions);
-    }
 
-
-
-    public void generateFamilyTreeLines(float thickness, Person root){
-        Event rootBase = clientInformation.chronologicalEvents(root.getPerson_id()).get(0);
-        if(!(root.getMother_id() == null)){
-            Event first = clientInformation.chronologicalEvents(root.getMother_id()).get(0);
-            Person mother = clientInformation.getPersonFromID(root.getMother_id());
-            familyTree.add(lineBetweenEvents(rootBase,first,thickness, Color.GREEN));
-            generateFamilyTreeLines(thickness*.55f,mother);
-        }
-        if(!(root.getFather_id() == null)){
-            Event first = clientInformation.chronologicalEvents(root.getFather_id()).get(0);
-            familyTree.add(lineBetweenEvents(rootBase,first,thickness, Color.GREEN));
-            Person father = clientInformation.getPersonFromID(root.getFather_id());
-            generateFamilyTreeLines(thickness*.55f,father);
-        }
-
-    }
 
 
 //    @Override
