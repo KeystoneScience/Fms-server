@@ -29,6 +29,73 @@ public class ClientInformation {
     private Map<String, Event> associatedEvents;
     private Map<Marker,Event>  waypointToEvent = new HashMap<>();
 
+
+
+    private boolean lifeStoryLines;
+    private boolean familyTreeLines;
+    private boolean spouseLine;
+    private boolean fatherSide;
+    private boolean motherSide;
+    private boolean maleEvents;
+
+    public boolean isLifeStoryLines() {
+        return lifeStoryLines;
+    }
+
+    public void setLifeStoryLines(boolean lifeStoryLines) {
+        this.lifeStoryLines = lifeStoryLines;
+    }
+
+    public boolean isFamilyTreeLines() {
+        return familyTreeLines;
+    }
+
+    public void setFamilyTreeLines(boolean familyTreeLines) {
+        this.familyTreeLines = familyTreeLines;
+    }
+
+    public boolean isSpouseLine() {
+        return spouseLine;
+    }
+
+    public void setSpouseLine(boolean spouseLine) {
+        this.spouseLine = spouseLine;
+    }
+
+    public boolean isFatherSide() {
+        return fatherSide;
+    }
+
+    public void setFatherSide(boolean fatherSide) {
+        this.fatherSide = fatherSide;
+    }
+
+    public boolean isMotherSide() {
+        return motherSide;
+    }
+
+    public void setMotherSide(boolean motherSide) {
+        this.motherSide = motherSide;
+    }
+
+    public boolean isMaleEvents() {
+        return maleEvents;
+    }
+
+    public void setMaleEvents(boolean maleEvents) {
+        this.maleEvents = maleEvents;
+    }
+
+    public boolean isFemaleEvents() {
+        return femaleEvents;
+    }
+
+    public void setFemaleEvents(boolean femaleEvents) {
+        this.femaleEvents = femaleEvents;
+    }
+
+    private boolean femaleEvents;
+
     public void clearWaypointToEvent(){
         waypointToEvent.clear();
     }
