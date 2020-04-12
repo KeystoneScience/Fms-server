@@ -57,6 +57,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private View view;
     private LinearLayout markerInformation;
     private List<Polyline> familyTree = new ArrayList<>();
+    private List<Polyline> lifeStory = new ArrayList<>();
     private Polyline marriageLine;
     private GoogleMap theMap;
 
@@ -128,8 +129,20 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             marriageLine.remove();
         }
         generateMarriageLine(ev);
+        for (Polyline pl: lifeStory) {
+            pl.remove();
+        }
+        lifeStory.clear();
+        generateLifeStoryLines(ev);
 
 
+    }
+
+    private void generateLifeStoryLines(Event ev){
+        List<Event> lifeEvents = clientInformation.chronologicalEvents(ev.getPerson_id());
+        for (int i = 0; i < lifeEvents.size()-1; i++) {
+            lifeStory.add(lineBetweenEvents(lifeEvents.get(i),lifeEvents.get(i+1),5f,Color.YELLOW));
+        }
     }
 
     private void generateMarriageLine(Event ev){
