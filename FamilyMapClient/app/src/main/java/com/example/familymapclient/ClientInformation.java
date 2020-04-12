@@ -1,6 +1,8 @@
 package com.example.familymapclient;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import model.Event;
@@ -26,6 +28,10 @@ public class ClientInformation {
     private Map<String, Person> associatedPeople;
     private Map<String, Event> associatedEvents;
     private Map<Marker,Event>  waypointToEvent = new HashMap<>();
+
+    public void clearWaypointToEvent(){
+        waypointToEvent.clear();
+    }
 
     public void generatePersonPersonIDMap(){
         for (Person person: personResult.getPeople()) {
@@ -138,5 +144,36 @@ public class ClientInformation {
 
     public void setAssociatedEvents(Map<String, Event> associatedEvents) {
         this.associatedEvents = associatedEvents;
+    }
+
+    public List<Event> chronologicalEvents(String personID){
+        List<Event> events = new ArrayList<>();
+        for (Event ev: eventResult.getEvents()) {
+            if(ev.getPerson_id().equals(personID)){
+                events.add(ev);
+            }
+        }
+        if(events.size()==1){
+            return events;
+        }
+        while(true){
+            boolean sorted = false;
+            for (int i = 0; i < events.size()-1; i++) {
+                if(events.get(i).getYear() > events.get(i+1).getYear()){
+                    Event ev = events.get(i);
+                    events.set(i,events.get(i+1));
+                    events.set(i+1,ev);
+                    sorted = false;
+                }
+                else{
+                    sorted = true;
+                }
+            }
+            if(sorted){
+                break;
+            }
+        }
+        return events;
+
     }
 }

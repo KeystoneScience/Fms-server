@@ -2,6 +2,7 @@ package com.example.familymapclient;
 
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -9,6 +10,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -28,6 +32,9 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import model.Event;
 import model.Person;
@@ -49,6 +56,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private ClientInformation clientInformation;
     private View view;
     private LinearLayout markerInformation;
+    private List<Polyline> familyTree = new ArrayList<>();
+    private Polyline marriageLine;
+    private GoogleMap theMap;
+
 
     public void setClientInformation(ClientInformation clientInformation) {
         this.clientInformation = clientInformation;
@@ -107,12 +118,32 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
     }
     private void markLines(Event ev){
+        for (Polyline pl: familyTree) {
+            pl.remove();
+        }
+        familyTree.clear();
+        float thickness= 25;
+        generateFamilyTreeLines(thickness,clientInformation.getPersonFromID(ev.getPerson_id()));
+        if(marriageLine != null) {
+            marriageLine.remove();
+        }
+        generateMarriageLine(ev);
 
 
     }
 
+    private void generateMarriageLine(Event ev){
+        Person root = clientInformation.getPersonFromID(ev.getPerson_id());
+        if(root.getSpouse_id() != null) {
+            Event spouseBirth = clientInformation.chronologicalEvents(root.getSpouse_id()).get(0);
+            marriageLine = lineBetweenEvents(ev,spouseBirth,5f,Color.RED);
+        }
+    }
+
     @Override
     public void onMapReady(GoogleMap googleMap){
+
+        theMap=googleMap;
 
 
         googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
@@ -120,8 +151,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 public boolean onMarkerClick(Marker marker) {
                     Event selectedEvent = clientInformation.getEventFromWaypoint(marker);
                    // Toast.makeText(getContext(),selectedEvent.getCity(),Toast.LENGTH_SHORT).show();
-                    //Create Lines
-
+                    markLines(selectedEvent);
                     //Show event info.
                    TextView uText = view.findViewById(R.id.markerInformationUText);
                    TextView lText = view.findViewById(R.id.markerInformationLText);
@@ -140,18 +170,76 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     return false;
                 }
             });
-
-            for (Event ev : clientInformation.getEventResult().getEvents()) {
-                LatLng latitudeAndLongitude = new LatLng(ev.getLatitude(), ev.getLongitude());
-                MarkerOptions markerOptions = new MarkerOptions();
-                markerOptions.position(latitudeAndLongitude);
-                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(getColor(ev.getEvent_type())));
-                clientInformation.addWaypoint(googleMap.addMarker(markerOptions),ev);
-        }
-
-
-
-
+        addAllEvents();
 
     }
+
+    private void addAllEvents(){
+        theMap.clear();
+       // clientInformation.clearWaypointToEvent();
+        for (Event ev : clientInformation.getEventResult().getEvents()) {
+            LatLng latitudeAndLongitude = new LatLng(ev.getLatitude(), ev.getLongitude());
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.position(latitudeAndLongitude);
+            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(getColor(ev.getEvent_type())));
+            clientInformation.addWaypoint(theMap.addMarker(markerOptions),ev);
+        }
+    }
+
+    private Polyline lineBetweenEvents(Event rootBase, Event first, float thickness, int color){
+        PolylineOptions polylineOptions = new PolylineOptions();
+        LatLng rootLatLng = new LatLng(rootBase.getLatitude(),rootBase.getLongitude());
+        LatLng second = new LatLng(first.getLatitude(),first.getLongitude());
+        polylineOptions.add(rootLatLng,second).clickable(false).color(color).width(thickness);
+        return theMap.addPolyline(polylineOptions);
+    }
+
+
+
+    public void generateFamilyTreeLines(float thickness, Person root){
+        Event rootBase = clientInformation.chronologicalEvents(root.getPerson_id()).get(0);
+        if(!(root.getMother_id() == null)){
+            Event first = clientInformation.chronologicalEvents(root.getMother_id()).get(0);
+            Person mother = clientInformation.getPersonFromID(root.getMother_id());
+            familyTree.add(lineBetweenEvents(rootBase,first,thickness, Color.GREEN));
+            generateFamilyTreeLines(thickness*.55f,mother);
+        }
+        if(!(root.getFather_id() == null)){
+            Event first = clientInformation.chronologicalEvents(root.getFather_id()).get(0);
+            familyTree.add(lineBetweenEvents(rootBase,first,thickness, Color.GREEN));
+            Person father = clientInformation.getPersonFromID(root.getFather_id());
+            generateFamilyTreeLines(thickness*.55f,father);
+        }
+
+    }
+
+
+//    @Override
+//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+//        super.onCreateOptionsMenu(menu, inflater);
+//
+//        //if (mIsMainActivity) {
+//            inflater.inflate(R.menu.fragment_maps, menu);
+//
+//            //ActionBar icon(s)
+//            menu.findItem(R.id.searchMenuItem).setIcon(
+//                    new IconDrawable(getActivity(), FontAwesomeIcons.fa_search)
+//                            .colorRes(R.color.toolbarIcon)
+//                            .actionBarSize());
+//
+//            menu.findItem(R.id.filterMenuItem).setIcon(
+//                    new IconDrawable(getActivity(), FontAwesomeIcons.fa_filter)
+//                            .colorRes(R.color.toolbarIcon)
+//                            .actionBarSize());
+//
+//            menu.findItem(R.id.settingsMenuItem).setIcon(
+//                    new IconDrawable(getActivity(), FontAwesomeIcons.fa_gear)
+//                            .colorRes(R.color.toolbarIcon)
+//                            .actionBarSize());
+////        }
+////        else {
+////            // Todo: instead of this, make a menu with just the up button
+////            inflater.inflate(R.menu.fragment_maps_map_activity, menu);
+////        }
+//    }
 }
