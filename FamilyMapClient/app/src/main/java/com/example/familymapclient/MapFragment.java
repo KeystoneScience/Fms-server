@@ -1,6 +1,7 @@
 package com.example.familymapclient;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.graphics.drawable.Drawable;
@@ -32,6 +34,7 @@ import model.Person;
 
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_GREEN;
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_RED;
+import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_VIOLET;
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_YELLOW;
 
 
@@ -45,21 +48,39 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private ClientInformation clientInformation;
     private View view;
+    private LinearLayout markerInformation;
 
     public void setClientInformation(ClientInformation clientInformation) {
         this.clientInformation = clientInformation;
     }
 
     public MapFragment() {
-        // Required empty public constructor
+    }
+
+    private void markerInformationPortal(){
+        Toast.makeText(getContext(), "Info Window Clicked", Toast.LENGTH_SHORT).show();
+
+        //Person Activity
     }
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         view = inflater.inflate(R.layout.fragment_map, container, false);
+        markerInformation = view.findViewById(R.id.markerInformation);
+        markerInformation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                markerInformationPortal();
+            }
+
+        });
+
+        ImageView imageView =  view.findViewById(R.id.markerInformationIcon);
+        imageView.setImageDrawable(new IconDrawable(getActivity(), FontAwesomeIcons.fa_android)
+                .sizeDp(40));
+
         mapFragment=(SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         if(mapFragment == null){
             FragmentManager fragmentManager = getFragmentManager();
@@ -73,7 +94,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private float getColor(String eventType){
         if(eventType.equals("death")){
-            return 0;
+            return HUE_VIOLET;
         }
         if(eventType.equals("marriage")){
             return HUE_YELLOW;
