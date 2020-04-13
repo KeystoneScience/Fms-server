@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void startMap(){
+        Iconify.with(new FontAwesomeModule());
         mapFragment = new MapFragment();
         mapFragment.setClientInformation(clientInformation);
         fragmentManager.beginTransaction().replace(R.id.main_activity, mapFragment).addToBackStack("mapFragment").commit();

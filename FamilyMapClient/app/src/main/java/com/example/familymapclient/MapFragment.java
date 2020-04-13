@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.graphics.drawable.Drawable;
 
+
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -34,12 +35,15 @@ import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import model.Event;
 import model.Person;
 
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_GREEN;
+import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_MAGENTA;
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_RED;
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_VIOLET;
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_YELLOW;
@@ -60,6 +64,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private List<Polyline> lifeStory = new ArrayList<>();
     private Polyline marriageLine;
     private GoogleMap theMap;
+    private Map<Event,Boolean> filteredEvents = new HashMap<>();
 
 
     public void setClientInformation(ClientInformation clientInformation) {
@@ -71,7 +76,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private void markerInformationPortal(){
         Toast.makeText(getContext(), "Info Window Clicked", Toast.LENGTH_SHORT).show();
-
+        clientInformation.setFemaleEvents(false);
+        checkFilters();
         //Person Activity
     }
 
@@ -90,7 +96,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         });
 
         ImageView imageView =  view.findViewById(R.id.markerInformationIcon);
-        imageView.setImageDrawable(new IconDrawable(getActivity(), FontAwesomeIcons.fa_android)
+        imageView.setImageDrawable(new IconDrawable(getActivity(), FontAwesomeIcons.fa_android).colorRes(R.color.common_google_signin_btn_text_light)
                 .sizeDp(40));
 
         mapFragment=(SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
@@ -137,6 +143,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
 
+
+
     private Polyline lineBetweenEvents(Event rootBase, Event first, float thickness, int color){
         PolylineOptions polylineOptions = new PolylineOptions();
         LatLng rootLatLng = new LatLng(rootBase.getLatitude(),rootBase.getLongitude());
@@ -150,15 +158,20 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         Person root = clientInformation.getPersonFromID(ev.getPerson_id());
         if(!(root.getMother_id() == null)){
             Event first = clientInformation.chronologicalEvents(root.getMother_id()).get(0);
-            Person mother = clientInformation.getPersonFromID(root.getMother_id());
-            familyTree.add(lineBetweenEvents(ev,first,thickness, Color.GREEN));
-            generateFamilyTreeLines(thickness*.55f,mother);
+            if(!filteredEvents.get(first)) {
+                Person mother = clientInformation.getPersonFromID(root.getMother_id());
+                familyTree.add(lineBetweenEvents(ev, first, thickness, Color.GREEN));
+                generateFamilyTreeLines(thickness * .55f, mother);
+            }
         }
         if(!(root.getFather_id() == null)){
             Event first = clientInformation.chronologicalEvents(root.getFather_id()).get(0);
-            familyTree.add(lineBetweenEvents(ev,first,thickness, Color.GREEN));
-            Person father = clientInformation.getPersonFromID(root.getFather_id());
-            generateFamilyTreeLines(thickness*.55f,father);
+            if(!filteredEvents.get(first)) {
+
+                familyTree.add(lineBetweenEvents(ev, first, thickness, Color.GREEN));
+                Person father = clientInformation.getPersonFromID(root.getFather_id());
+                generateFamilyTreeLines(thickness * .55f, father);
+            }
         }
 
 
@@ -169,15 +182,20 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         Event rootBase = clientInformation.chronologicalEvents(root.getPerson_id()).get(0);
         if(!(root.getMother_id() == null)){
             Event first = clientInformation.chronologicalEvents(root.getMother_id()).get(0);
-            Person mother = clientInformation.getPersonFromID(root.getMother_id());
-            familyTree.add(lineBetweenEvents(rootBase,first,thickness, Color.GREEN));
-            generateFamilyTreeLines(thickness*.55f,mother);
+            if(!filteredEvents.get(first)) {
+                Person mother = clientInformation.getPersonFromID(root.getMother_id());
+                familyTree.add(lineBetweenEvents(rootBase, first, thickness, Color.GREEN));
+                generateFamilyTreeLines(thickness * .55f, mother);
+            }
         }
         if(!(root.getFather_id() == null)){
             Event first = clientInformation.chronologicalEvents(root.getFather_id()).get(0);
-            familyTree.add(lineBetweenEvents(rootBase,first,thickness, Color.GREEN));
-            Person father = clientInformation.getPersonFromID(root.getFather_id());
-            generateFamilyTreeLines(thickness*.55f,father);
+            if(!filteredEvents.get(first)) {
+
+                familyTree.add(lineBetweenEvents(rootBase, first, thickness, Color.GREEN));
+                Person father = clientInformation.getPersonFromID(root.getFather_id());
+                generateFamilyTreeLines(thickness * .55f, father);
+            }
         }
 
     }
@@ -193,7 +211,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         Person root = clientInformation.getPersonFromID(ev.getPerson_id());
         if(root.getSpouse_id() != null) {
             Event spouseBirth = clientInformation.chronologicalEvents(root.getSpouse_id()).get(0);
-            marriageLine = lineBetweenEvents(ev,spouseBirth,5f,Color.RED);
+            if(!filteredEvents.get(spouseBirth)){
+                marriageLine = lineBetweenEvents(ev,spouseBirth,5f,Color.RED);
+            }
         }
     }
 
@@ -227,8 +247,40 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     return false;
                 }
             });
-        addAllEvents();
+        checkFilters();
 
+    }
+
+    private void checkFilters(){ //Function to update map markers based on filters activated.
+        theMap.clear();
+        filteredEvents.clear();
+        clientInformation.clearWaypointToEvent();
+        for (Event ev : clientInformation.getEventResult().getEvents()) {
+            Person temp = clientInformation.getPersonFromID(ev.getPerson_id());
+            //Does gender filtering.
+            if(temp.getGender().equals("m") && !clientInformation.isMaleEvents()){
+                filteredEvents.put(ev,Boolean.TRUE);
+                continue;
+            }
+            if(temp.getGender().equals("f") && !clientInformation.isFemaleEvents()){
+                filteredEvents.put(ev,Boolean.TRUE);
+                continue;
+            }
+            if(clientInformation.getPersonToSideOfFamily().get(temp).equals("mom") && !clientInformation.isMotherSide()){
+                filteredEvents.put(ev,Boolean.TRUE);
+                continue;
+            }
+            if(clientInformation.getPersonToSideOfFamily().get(temp).equals("dad") && !clientInformation.isFatherSide()){
+                filteredEvents.put(ev,Boolean.TRUE);
+                continue;
+            }
+            filteredEvents.put(ev,Boolean.FALSE);
+            LatLng latitudeAndLongitude = new LatLng(ev.getLatitude(), ev.getLongitude());
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.position(latitudeAndLongitude);
+            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(getColor(ev.getEvent_type())));
+            clientInformation.addWaypoint(theMap.addMarker(markerOptions),ev);
+        }
     }
 
     private void addAllEvents(){
@@ -245,7 +297,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
 
 
-
+//
 //    @Override
 //    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 //        super.onCreateOptionsMenu(menu, inflater);
@@ -256,7 +308,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 //            //ActionBar icon(s)
 //            menu.findItem(R.id.searchMenuItem).setIcon(
 //                    new IconDrawable(getActivity(), FontAwesomeIcons.fa_search)
-//                            .colorRes(R.color.toolbarIcon)
+//                            .colorRes(R.color.common_google_signin_btn_text_light)
 //                            .actionBarSize());
 //
 //            menu.findItem(R.id.filterMenuItem).setIcon(

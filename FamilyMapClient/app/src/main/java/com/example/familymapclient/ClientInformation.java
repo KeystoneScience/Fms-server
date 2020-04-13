@@ -28,15 +28,73 @@ public class ClientInformation {
     private Map<String, Person> associatedPeople;
     private Map<String, Event> associatedEvents;
     private Map<Marker,Event>  waypointToEvent = new HashMap<>();
+    private Map<Person, String> personToSideOfFamily = new HashMap<>();
 
 
 
-    private boolean lifeStoryLines;
-    private boolean familyTreeLines;
-    private boolean spouseLine;
-    private boolean fatherSide;
-    private boolean motherSide;
-    private boolean maleEvents;
+    private boolean lifeStoryLines = true;
+    private boolean familyTreeLines = true;
+    private boolean spouseLine = true;
+    private boolean fatherSide = true;
+    private boolean motherSide = true;
+    private boolean maleEvents = true;
+    private boolean femaleEvents = true;
+
+
+
+    public void clearAll(){
+        authToken=null;
+        userPersonID = null;
+        serverHost=null;
+        serverPort = null;
+        loginRequest=null;
+        loginResult=null;
+        registerRequest=null;
+        registerResult=null;
+        eventResult=null;
+        personResult=null;
+        personIDtoPerson=null;
+        associatedEvents=null;
+        associatedPeople=null;
+        waypointToEvent=null;
+
+    }
+
+    public Map<String, Person> getPersonIDtoPerson() {
+        return personIDtoPerson;
+    }
+
+    public Map<Marker, Event> getWaypointToEvent() {
+        return waypointToEvent;
+    }
+
+    public Map<Person, String> getPersonToSideOfFamily() {
+        return personToSideOfFamily;
+    }
+
+    public void fillPersonToSide(){
+        Person root = personIDtoPerson.get(loginResult.getpersonID());
+        personToSideOfFamily.put(root,"root");
+        Person mom = personIDtoPerson.get(root.getMother_id());
+        Person dad = personIDtoPerson.get(root.getFather_id());
+        personToSideOfFamily.put(mom, "mom");
+        personToSideOfFamily.put(dad, "dad");
+        fillPersonToSide(mom,"mom");
+        fillPersonToSide(dad,"dad");
+    }
+
+    public void fillPersonToSide(Person root, String side){
+        if(!(root.getMother_id() == null)){
+            Person mom = personIDtoPerson.get(root.getMother_id());
+            personToSideOfFamily.put(mom, side);
+            fillPersonToSide(mom,side);
+        }
+        if(!(root.getFather_id() == null)){
+            Person dad = personIDtoPerson.get(root.getFather_id());
+            personToSideOfFamily.put(dad, side);
+            fillPersonToSide(dad,side);
+        }
+    }
 
     public boolean isLifeStoryLines() {
         return lifeStoryLines;
@@ -94,7 +152,6 @@ public class ClientInformation {
         this.femaleEvents = femaleEvents;
     }
 
-    private boolean femaleEvents;
 
     public void clearWaypointToEvent(){
         waypointToEvent.clear();
@@ -123,6 +180,7 @@ public class ClientInformation {
     public void setPersonResult(PersonResult personResult) {
         this.personResult = personResult;
         generatePersonPersonIDMap();
+        fillPersonToSide();
     }
 
     public EventResult getEventResult() {

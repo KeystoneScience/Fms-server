@@ -1,6 +1,8 @@
 package com.example.familymapclient;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.Switch;
@@ -77,8 +79,16 @@ public class SettingsActivity extends AppCompatActivity {
                 clientInformation.setFemaleEvents(isChecked);
             }
         });
-        //TODO do something here for the logout layout click. IDK what to do yet.
 
+        mLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent main = new Intent(SettingsActivity.this,MainActivity.class);
+                clientInformation.clearAll();
+                startActivity(main);
+
+            }
+        });
 
 
         getSupportFragmentManager()
