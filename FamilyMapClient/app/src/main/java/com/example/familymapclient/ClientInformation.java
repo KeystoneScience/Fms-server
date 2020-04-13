@@ -40,7 +40,15 @@ public class ClientInformation {
     private boolean maleEvents = true;
     private boolean femaleEvents = true;
 
-
+    public void filterDefaults(){
+        lifeStoryLines=true;
+        familyTreeLines=true;
+        spouseLine=true;
+        fatherSide=true;
+        motherSide=true;
+        maleEvents=true;
+        femaleEvents=true;
+    }
 
     public void clearAll(){
         authToken=null;

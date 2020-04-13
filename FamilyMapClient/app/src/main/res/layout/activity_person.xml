@@ -1,9 +1,170 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".PersonActivity">
+    android:fillViewport="true"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/personActivityFirstName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="13dp"
+                android:paddingTop="13dp"
+                android:text="firstName"
+                android:textSize="16sp"
+                android:textAllCaps="false"
+                android:textStyle="bold">
+
+            </TextView>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="13dp"
+                android:text="First Name"
+                android:textSize="13sp"
+                android:textAllCaps="false">
+
+            </TextView>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#000000"
+                />
+
+
+        </LinearLayout>
+
+
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/personActivityLastName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="13dp"
+                android:paddingTop="13dp"
+                android:text="lastName"
+                android:textSize="16sp"
+                android:textAllCaps="false"
+                android:textStyle="bold">
+
+            </TextView>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="13dp"
+                android:text="Last Name"
+                android:textSize="13sp"
+
+                android:textAllCaps="false">
+
+            </TextView>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#000000"
+                />
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/personActivityGender"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="13dp"
+                android:paddingTop="13dp"
+                android:textSize="16sp"
+                android:text="gender"
+                android:textAllCaps="false"
+                android:textStyle="bold">
+
+            </TextView>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="13dp"
+                android:text="Gender"
+                android:textSize="13sp"
+                android:textAllCaps="false">
+
+            </TextView>
+
+
+
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#000000"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="LIFE EVENTS"
+            android:textAllCaps="true"
+            android:textStyle="bold"
+            android:textSize="13dp"
+            android:id="@+id/personActivityLifeEvents">
+
+        </TextView>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/personActivityLifeEventsRecycler"
+            android:layout_width="match_parent"
+            android:layout_marginBottom="13dp"
+            android:layout_height="wrap_content">
+        </android.support.v7.widget.RecyclerView>
+
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="FAMILY"
+            android:textAllCaps="true"
+            android:textStyle="bold"
+            android:textSize="13dp"
+            android:id="@+id/personActivityFamily">
+
+        </TextView>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/personActivityFamilyRecycler"
+            android:layout_width="match_parent"
+            android:layout_marginBottom="13dp"
+            android:layout_height="wrap_content">
+        </android.support.v7.widget.RecyclerView>
+
+
+
+
+    </LinearLayout>
+</ScrollView>
+
+
+
