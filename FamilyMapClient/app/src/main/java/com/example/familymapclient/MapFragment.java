@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -81,6 +82,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         //Person Activity
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -95,9 +101,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         });
 
+        TextView uText = view.findViewById(R.id.markerInformationUText);
+        TextView lText = view.findViewById(R.id.markerInformationLText);
+        uText.setText("Click A Marker");
+        lText.setText("to learn more");
+
+
         ImageView imageView =  view.findViewById(R.id.markerInformationIcon);
         imageView.setImageDrawable(new IconDrawable(getActivity(), FontAwesomeIcons.fa_android).colorRes(R.color.android_green)
                 .sizeDp(40));
+
 
         mapFragment=(SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         if(mapFragment == null){
@@ -316,27 +329,25 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
 
 
-//    @Override
-//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-//        super.onCreateOptionsMenu(menu, inflater);
-//
-//        //if (mIsMainActivity) {
-//            inflater.inflate(R.menu.fragment_maps, menu);
-//
-//            //ActionBar icon(s)
-//            menu.findItem(R.id.searchMenuItem).setIcon(
-//                    new IconDrawable(getActivity(), FontAwesomeIcons.fa_search)
-//                            .colorRes(R.color.action_bar)
-//                            .actionBarSize());
-//
-//            menu.findItem(R.id.settingsMenuItem).setIcon(
-//                    new IconDrawable(getActivity(), FontAwesomeIcons.fa_gear)
-//                            .colorRes(R.color.action_bar)
-//                            .actionBarSize());
-////        }
-////        else {
-////            // Todo: instead of this, make a menu with just the up button
-////            inflater.inflate(R.menu.fragment_maps_map_activity, menu);
-////        }
-//    }
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        //None of this is working.... TODO: create icon in a better way, add listener.
+
+        //if (mIsMainActivity) {
+            inflater.inflate(R.menu.map_fragment_action_bar, menu);
+
+            //ActionBar icon(s)
+            menu.findItem(R.id.search).setIcon(
+                    new IconDrawable(getActivity(), FontAwesomeIcons.fa_search)
+                            .colorRes(R.color.action_bar)
+                            .actionBarSize());
+
+            menu.findItem(R.id.settings).setIcon(new IconDrawable(getActivity(), FontAwesomeIcons.fa_gear).colorRes(R.color.action_bar).actionBarSize());
+//        }
+//        else {
+//            // Todo: instead of this, make a menu with just the up button
+//            inflater.inflate(R.menu.fragment_maps_map_activity, menu);
+//        }
+    }
 }
