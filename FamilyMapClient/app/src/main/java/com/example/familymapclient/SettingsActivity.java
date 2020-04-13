@@ -11,21 +11,19 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceFragmentCompat;
 
+import java.util.zip.Inflater;
+
 public class SettingsActivity extends AppCompatActivity {
 
-    private ClientInformation clientInformation;
     private Switch mLifeStory,mFamilyTree,mSpouse,mFather,mMother,mMale,mFemale;
     private LinearLayout mLogout;
 
-    public void setClientInformation(ClientInformation clientInformation) {
-        this.clientInformation = clientInformation;
-    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_activity);
-
 
         mLifeStory = findViewById(R.id.LifeStorySwitch);
         mFamilyTree = findViewById(R.id.FamiltTreeLinesSwitch);
@@ -36,47 +34,56 @@ public class SettingsActivity extends AppCompatActivity {
         mSpouse = findViewById(R.id.SpouseLinesSwitch);
         mLogout = findViewById(R.id.LogoutSettingsLayout);
 
+        mFamilyTree.setChecked(ClientInfo.getInstance().isFamilyTreeLines());
+        mLifeStory.setChecked(ClientInfo.getInstance().isLifeStoryLines());
+        mFather.setChecked(ClientInfo.getInstance().isFatherSide());
+        mMother.setChecked(ClientInfo.getInstance().isMotherSide());
+        mMale.setChecked(ClientInfo.getInstance().isMaleEvents());
+        mFemale.setChecked(ClientInfo.getInstance().isFemaleEvents());
+        mSpouse.setChecked(ClientInfo.getInstance().isSpouseLine());
+
+
         mFamilyTree.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                clientInformation.setFamilyTreeLines(isChecked);
+                ClientInfo.getInstance().setFamilyTreeLines(isChecked);
             }
         });
         mLifeStory.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                clientInformation.setLifeStoryLines(isChecked);
+                ClientInfo.getInstance().setLifeStoryLines(isChecked);
             }
         });
         mSpouse.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                clientInformation.setSpouseLine(isChecked);
+                ClientInfo.getInstance().setSpouseLine(isChecked);
             }
         });
 
         mFather.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                clientInformation.setFatherSide(isChecked);
+                ClientInfo.getInstance().setFatherSide(isChecked);
             }
         });
         mMother.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                clientInformation.setMotherSide(isChecked);
+                ClientInfo.getInstance().setMotherSide(isChecked);
             }
         });
         mMale.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                clientInformation.setMaleEvents(isChecked);
+                ClientInfo.getInstance().setMaleEvents(isChecked);
             }
         });
         mFemale.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                clientInformation.setFemaleEvents(isChecked);
+                ClientInfo.getInstance().setFemaleEvents(isChecked);
             }
         });
 
@@ -84,27 +91,27 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent main = new Intent(SettingsActivity.this,MainActivity.class);
-                clientInformation.clearAll();
+                ClientInfo.getInstance().clearAll();
                 startActivity(main);
 
             }
         });
 
 
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.settings, new SettingsFragment())
-                .commit();
+//        getSupportFragmentManager()
+//                .beginTransaction()
+//                .replace(R.id.settings, new SettingsFragment())
+//                .commit();
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
     }
 
-    public static class SettingsFragment extends PreferenceFragmentCompat {
-        @Override
-        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-            setPreferencesFromResource(R.xml.root_preferences, rootKey);
-        }
-    }
+//    public static class SettingsFragment extends PreferenceFragmentCompat {
+//        @Override
+//        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+//            setPreferencesFromResource(R.xml.root_preferences, rootKey);
+//        }
+//    }
 }

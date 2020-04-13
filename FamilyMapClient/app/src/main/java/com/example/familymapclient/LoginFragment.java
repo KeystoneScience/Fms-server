@@ -45,7 +45,6 @@ public class LoginFragment extends Fragment {
     private String serverHost, serverPort, userName,
             password, firstName, lastName, email, gender;
     private User user;
-    private ClientInformation clientInfo = new ClientInformation();
     private MainActivity defaultActivity;
 
 
@@ -344,7 +343,7 @@ public class LoginFragment extends Fragment {
             HttpURLConnection connection = (HttpURLConnection) new URL("http://" + serverHost + ":" + serverPort + pathExtension).openConnection();
             connection.setDoOutput(false);
             connection.setRequestMethod("GET");
-            connection.addRequestProperty("Authorization", clientInfo.getAuthToken());
+            connection.addRequestProperty("Authorization", ClientInfo.getInstance().getAuthToken());
             connection.addRequestProperty("Accept", "application/json");
 
             connection.connect();
@@ -401,11 +400,11 @@ public class LoginFragment extends Fragment {
             }
             else {
 
-                clientInfo.setLoginResult(lR);
-                clientInfo.setAuthToken(lR.getAutherizationToken());
-                clientInfo.setServerHost(serverHost);
-                clientInfo.setServerPort(serverPort);
-                clientInfo.setUserPersonID(lR.getpersonID());
+                ClientInfo.getInstance().setLoginResult(lR);
+                ClientInfo.getInstance().setAuthToken(lR.getAutherizationToken());
+                ClientInfo.getInstance().setServerHost(serverHost);
+                ClientInfo.getInstance().setServerPort(serverPort);
+                ClientInfo.getInstance().setUserPersonID(lR.getpersonID());
                 Toast.makeText(getContext(), "Login Successful.", Toast.LENGTH_SHORT).show();
 
                 UserDataFetchr udf = new UserDataFetchr();
@@ -442,11 +441,11 @@ public class LoginFragment extends Fragment {
             if (!rR.isSuccess()) {
                 Toast.makeText(getContext(), "Registration Failed.", Toast.LENGTH_SHORT).show();
             } else {
-                clientInfo.setRegisterResult(rR);
-                clientInfo.setAuthToken(rR.getauthToken());
-                clientInfo.setUserPersonID(rR.getpersonID());
-                clientInfo.setServerHost(serverHost);
-                clientInfo.setServerPort(serverPort);
+                ClientInfo.getInstance().setRegisterResult(rR);
+                ClientInfo.getInstance().setAuthToken(rR.getauthToken());
+                ClientInfo.getInstance().setUserPersonID(rR.getpersonID());
+                ClientInfo.getInstance().setServerHost(serverHost);
+                ClientInfo.getInstance().setServerPort(serverPort);
                 Toast.makeText(getContext(),
                         "Registration Successful.",
                         Toast.LENGTH_SHORT).show();
@@ -468,23 +467,22 @@ public class LoginFragment extends Fragment {
             EventResult eR =  (EventResult) taskGetProxy(serverHost, serverPort,"/event",new EventResult());
 
 
-            clientInfo.setPersonResult(pR);
-            clientInfo.setEventResult(eR);
+            ClientInfo.getInstance().setPersonResult(pR);
+            ClientInfo.getInstance().setEventResult(eR);
             return 1;
         }
 
         protected void onPostExecute(Integer integer) {
 
-            if (!clientInfo.getPersonResult().isSuccess()) {
+            if (!ClientInfo.getInstance().getPersonResult().isSuccess()) {
                 Toast.makeText(getContext(), "Person Gather failed Failed.", Toast.LENGTH_SHORT).show();
             }
             else{
-                String output = "First Name: " + clientInfo.getPersonResult().getPeople().get(0).getFirst_name() + '\n' + "Last Name: " + clientInfo.getPersonResult().getPeople().get(0).getLast_name();
+                String output = "First Name: " + ClientInfo.getInstance().getPersonResult().getPeople().get(0).getFirst_name() + '\n' + "Last Name: " + ClientInfo.getInstance().getPersonResult().getPeople().get(0).getLast_name();
                 Toast.makeText(getContext(), output, Toast.LENGTH_SHORT).show();
             }
 
             defaultActivity = (MainActivity) getContext();
-            defaultActivity.setClientInformation(clientInfo);
             defaultActivity.startMap();
 
 

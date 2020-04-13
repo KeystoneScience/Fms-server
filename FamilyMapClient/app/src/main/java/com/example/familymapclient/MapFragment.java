@@ -58,7 +58,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     SupportMapFragment mapFragment;
 
-    private ClientInformation clientInformation;
     private View view;
     private LinearLayout markerInformation;
     private List<Polyline> familyTree = new ArrayList<>();
@@ -66,18 +65,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private Polyline marriageLine;
     private GoogleMap theMap;
     private Map<Event,Boolean> filteredEvents = new HashMap<>();
+    private boolean firstTime = true;
 
-
-    public void setClientInformation(ClientInformation clientInformation) {
-        this.clientInformation = clientInformation;
-    }
 
     public MapFragment() {
     }
 
     private void markerInformationPortal(){
         Toast.makeText(getContext(), "Info Window Clicked", Toast.LENGTH_SHORT).show();
-        clientInformation.setMaleEvents(false);
+        ClientInfo.getInstance().setMaleEvents(false);
         checkFilters();
         //Person Activity
     }
@@ -143,16 +139,22 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             pl.remove();
         }
         familyTree.clear();
-        generateFamilyTreeLines(ev);
+        if(ClientInfo.getInstance().isFamilyTreeLines()) {
+            generateFamilyTreeLines(ev);
+        }
         if(marriageLine != null) {
             marriageLine.remove();
         }
-        generateMarriageLine(ev);
+        if(ClientInfo.getInstance().isSpouseLine()) {
+            generateMarriageLine(ev);
+        }
         for (Polyline pl: lifeStory) {
             pl.remove();
         }
         lifeStory.clear();
-        generateLifeStoryLines(ev);
+        if(ClientInfo.getInstance().isLifeStoryLines()) {
+            generateLifeStoryLines(ev);
+        }
     }
 
 
@@ -168,10 +170,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private void generateFamilyTreeLines(Event ev){
         float thickness= 25;
-        Person root = clientInformation.getPersonFromID(ev.getPerson_id());
+        Person root = ClientInfo.getInstance().getPersonFromID(ev.getPerson_id());
         if(!(root.getMother_id() == null)){
-            Event first = clientInformation.chronologicalEvents(root.getMother_id()).get(0);
-            Person mother = clientInformation.getPersonFromID(root.getMother_id());
+            Event first = ClientInfo.getInstance().chronologicalEvents(root.getMother_id()).get(0);
+            Person mother = ClientInfo.getInstance().getPersonFromID(root.getMother_id());
             if(!filteredEvents.get(first)) {
                 familyTree.add(lineBetweenEvents(ev, first, thickness, Color.GREEN));
                 generateFamilyTreeLines(thickness * .55f, mother,first);
@@ -182,8 +184,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             }
         }
         if(!(root.getFather_id() == null)){
-            Event first = clientInformation.chronologicalEvents(root.getFather_id()).get(0);
-            Person father = clientInformation.getPersonFromID(root.getFather_id());
+            Event first = ClientInfo.getInstance().chronologicalEvents(root.getFather_id()).get(0);
+            Person father = ClientInfo.getInstance().getPersonFromID(root.getFather_id());
             if(!filteredEvents.get(first)) {
                 familyTree.add(lineBetweenEvents(ev, first, thickness, Color.GREEN));
                 generateFamilyTreeLines(thickness * .55f, father,first);
@@ -197,12 +199,22 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(firstTime){
+            firstTime=false;
+        }
+        else {
+            checkFilters();
+        }
+    }
 
-    public void generateFamilyTreeLines(float thickness, Person root,Event lastDrawable){
-        Event rootBase = clientInformation.chronologicalEvents(root.getPerson_id()).get(0);
+    public void generateFamilyTreeLines(float thickness, Person root, Event lastDrawable){
+        Event rootBase = ClientInfo.getInstance().chronologicalEvents(root.getPerson_id()).get(0);
         if(!(root.getMother_id() == null)){
-            Event first = clientInformation.chronologicalEvents(root.getMother_id()).get(0);
-            Person mother = clientInformation.getPersonFromID(root.getMother_id());
+            Event first = ClientInfo.getInstance().chronologicalEvents(root.getMother_id()).get(0);
+            Person mother = ClientInfo.getInstance().getPersonFromID(root.getMother_id());
             if(!filteredEvents.get(first)) {
                 familyTree.add(lineBetweenEvents(lastDrawable, first, thickness, Color.GREEN));
                 generateFamilyTreeLines(thickness * .55f, mother,first);
@@ -213,8 +225,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             }
         }
         if(!(root.getFather_id() == null)){
-            Event first = clientInformation.chronologicalEvents(root.getFather_id()).get(0);
-            Person father = clientInformation.getPersonFromID(root.getFather_id());
+            Event first = ClientInfo.getInstance().chronologicalEvents(root.getFather_id()).get(0);
+            Person father = ClientInfo.getInstance().getPersonFromID(root.getFather_id());
             if(!filteredEvents.get(first)) {
                 familyTree.add(lineBetweenEvents(lastDrawable, first, thickness, Color.GREEN));
                 generateFamilyTreeLines(thickness * .55f, father,first);
@@ -228,16 +240,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void generateLifeStoryLines(Event ev){
-        List<Event> lifeEvents = clientInformation.chronologicalEvents(ev.getPerson_id());
+        List<Event> lifeEvents = ClientInfo.getInstance().chronologicalEvents(ev.getPerson_id());
         for (int i = 0; i < lifeEvents.size()-1; i++) {
             lifeStory.add(lineBetweenEvents(lifeEvents.get(i),lifeEvents.get(i+1),5f,Color.YELLOW));
         }
     }
 
     private void generateMarriageLine(Event ev){
-        Person root = clientInformation.getPersonFromID(ev.getPerson_id());
+        Person root = ClientInfo.getInstance().getPersonFromID(ev.getPerson_id());
         if(root.getSpouse_id() != null) {
-            Event spouseBirth = clientInformation.chronologicalEvents(root.getSpouse_id()).get(0);
+            Event spouseBirth = ClientInfo.getInstance().chronologicalEvents(root.getSpouse_id()).get(0);
             if(!filteredEvents.get(spouseBirth)){
                 marriageLine = lineBetweenEvents(ev,spouseBirth,5f,Color.RED);
             }
@@ -253,13 +265,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                 @Override
                 public boolean onMarkerClick(Marker marker) {
-                    Event selectedEvent = clientInformation.getEventFromWaypoint(marker);
+                    Event selectedEvent = ClientInfo.getInstance().getEventFromWaypoint(marker);
                    // Toast.makeText(getContext(),selectedEvent.getCity(),Toast.LENGTH_SHORT).show();
                     markLines(selectedEvent);
-                    //Show event info.
                    TextView uText = view.findViewById(R.id.markerInformationUText);
                    TextView lText = view.findViewById(R.id.markerInformationLText);
-                   Person person = clientInformation.getPersonFromID(selectedEvent.getPerson_id());
+                   Person person = ClientInfo.getInstance().getPersonFromID(selectedEvent.getPerson_id());
                    uText.setText(person.getFirst_name() + " " + person.getLast_name());
                    lText.setText(selectedEvent.getEvent_type() +": " + selectedEvent.getCity() + ", " + selectedEvent.getCountry()
                                  + " (" + selectedEvent.getYear() +")");
@@ -274,7 +285,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     return false;
                 }
             });
-        clientInformation.filterDefaults();
+        ClientInfo.getInstance().filterDefaults();
         checkFilters();
 
     }
@@ -285,23 +296,23 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private void checkFilters(){ //Function to update map markers based on filters activated.
         theMap.clear();
         filteredEvents.clear();
-        clientInformation.clearWaypointToEvent();
-        for (Event ev : clientInformation.getEventResult().getEvents()) {
-            Person temp = clientInformation.getPersonFromID(ev.getPerson_id());
+        ClientInfo.getInstance().clearWaypointToEvent();
+        for (Event ev : ClientInfo.getInstance().getEventResult().getEvents()) {
+            Person temp = ClientInfo.getInstance().getPersonFromID(ev.getPerson_id());
             //Does gender filtering.
-            if(temp.getGender().equals("m") && !clientInformation.isMaleEvents()){
+            if(temp.getGender().equals("m") && !ClientInfo.getInstance().isMaleEvents()){
                 filteredEvents.put(ev,Boolean.TRUE);
                 continue;
             }
-            if(temp.getGender().equals("f") && !clientInformation.isFemaleEvents()){
+            if(temp.getGender().equals("f") && !ClientInfo.getInstance().isFemaleEvents()){
                 filteredEvents.put(ev,Boolean.TRUE);
                 continue;
             }
-            if(clientInformation.getPersonToSideOfFamily().get(temp).equals("mom") && !clientInformation.isMotherSide()){
+            if(ClientInfo.getInstance().getPersonToSideOfFamily().get(temp).equals("mom") && !ClientInfo.getInstance().isMotherSide()){
                 filteredEvents.put(ev,Boolean.TRUE);
                 continue;
             }
-            if(clientInformation.getPersonToSideOfFamily().get(temp).equals("dad") && !clientInformation.isFatherSide()){
+            if(ClientInfo.getInstance().getPersonToSideOfFamily().get(temp).equals("dad") && !ClientInfo.getInstance().isFatherSide()){
                 filteredEvents.put(ev,Boolean.TRUE);
                 continue;
             }
@@ -310,20 +321,30 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             MarkerOptions markerOptions = new MarkerOptions();
             markerOptions.position(latitudeAndLongitude);
             markerOptions.icon(BitmapDescriptorFactory.defaultMarker(getColor(ev.getEvent_type())));
-            clientInformation.addWaypoint(theMap.addMarker(markerOptions),ev);
+            ClientInfo.getInstance().addWaypoint(theMap.addMarker(markerOptions),ev);
         }
     }
 
-    private void addAllEvents(){
-        theMap.clear();
-       // clientInformation.clearWaypointToEvent();
-        for (Event ev : clientInformation.getEventResult().getEvents()) {
-            LatLng latitudeAndLongitude = new LatLng(ev.getLatitude(), ev.getLongitude());
-            MarkerOptions markerOptions = new MarkerOptions();
-            markerOptions.position(latitudeAndLongitude);
-            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(getColor(ev.getEvent_type())));
-            clientInformation.addWaypoint(theMap.addMarker(markerOptions),ev);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent;
+
+        if(item.getItemId() == R.id.search_button_maps){
+            Toast.makeText(getContext(), "Search Clicked", Toast.LENGTH_SHORT).show();
+
+//            intent = new Intent(getActivity(), SearchActivity.class);
+//            startActivity(intent);
+            return true;
         }
+        if(item.getItemId() == R.id.settings_button_maps){
+
+            intent = new Intent(getActivity(), SettingsActivity.class);
+            startActivity(intent);
+            return true;
+
+        }
+        return false;
+
     }
 
 
@@ -338,12 +359,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             inflater.inflate(R.menu.map_fragment_action_bar, menu);
 
             //ActionBar icon(s)
-            menu.findItem(R.id.search).setIcon(
+            menu.findItem(R.id.search_button_maps).setIcon(
                     new IconDrawable(getActivity(), FontAwesomeIcons.fa_search)
                             .colorRes(R.color.action_bar)
                             .actionBarSize());
 
-            menu.findItem(R.id.settings).setIcon(new IconDrawable(getActivity(), FontAwesomeIcons.fa_gear).colorRes(R.color.action_bar).actionBarSize());
+            menu.findItem(R.id.settings_button_maps).setIcon(new IconDrawable(getActivity(), FontAwesomeIcons.fa_gear).colorRes(R.color.action_bar).actionBarSize());
 //        }
 //        else {
 //            // Todo: instead of this, make a menu with just the up button

@@ -11,11 +11,8 @@ public class MainActivity extends AppCompatActivity {
     private LoginFragment loginFragment;
     private MapFragment mapFragment;
     private FragmentManager fragmentManager = getSupportFragmentManager();
-    private ClientInformation clientInformation;
 
-    public void setClientInformation(ClientInformation clientInformation) {
-        this.clientInformation = clientInformation;
-    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
     public void startMap(){
         Iconify.with(new FontAwesomeModule());
         mapFragment = new MapFragment();
-        mapFragment.setClientInformation(clientInformation);
         fragmentManager.beginTransaction().replace(R.id.main_activity, mapFragment).addToBackStack("mapFragment").commit();
 
     }
