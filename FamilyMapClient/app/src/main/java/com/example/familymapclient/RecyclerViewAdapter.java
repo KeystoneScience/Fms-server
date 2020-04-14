@@ -92,7 +92,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     private void commitEvent(@NonNull ViewHolder holder,int position){
         final Event event = Events.get(position);
-        String top = event.getEvent_type()+": " + event.getCity() + ", " + event.getCountry() + "(" + event.getYear() + ")";
+        String top = event.getEvent_type()+": " + event.getCity() + ", " + event.getCountry() + " (" + event.getYear() + ")";
         Person person = ClientInfo.getInstance().getPersonFromID(event.getPerson_id());
         String bottom = person.getFirst_name()+" "+person.getLast_name();
 
