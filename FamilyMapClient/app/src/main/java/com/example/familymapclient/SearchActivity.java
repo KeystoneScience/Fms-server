@@ -137,6 +137,10 @@ public class SearchActivity extends AppCompatActivity {
                     events.add(ev);
                     continue;
                 }
+                if(ev.getEvent_type().contains(index)){
+                    events.add(ev);
+                    continue;
+                }
 
             }
 
