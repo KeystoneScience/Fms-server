@@ -92,6 +92,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
+    public void resetInfoWindow(){
+        TextView uText = view.findViewById(R.id.markerInformationUText);
+        TextView lText = view.findViewById(R.id.markerInformationLText);
+        uText.setText("Click A Marker");
+        lText.setText("to learn more");
+
+
+        ImageView imageView =  view.findViewById(R.id.markerInformationIcon);
+        imageView.setImageDrawable(new IconDrawable(getActivity(), FontAwesomeIcons.fa_android).colorRes(R.color.android_green)
+                .sizeDp(40));
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -106,15 +117,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         });
 
-        TextView uText = view.findViewById(R.id.markerInformationUText);
-        TextView lText = view.findViewById(R.id.markerInformationLText);
-        uText.setText("Click A Marker");
-        lText.setText("to learn more");
-
-
-        ImageView imageView =  view.findViewById(R.id.markerInformationIcon);
-        imageView.setImageDrawable(new IconDrawable(getActivity(), FontAwesomeIcons.fa_android).colorRes(R.color.android_green)
-                .sizeDp(40));
+        resetInfoWindow();
 
 
         mapFragment=(SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
@@ -144,25 +147,30 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
     private void markLines(Event ev){
         //TODO these are controlled through the settings, add toggle booleans
-        for (Polyline pl: familyTree) {
-            pl.remove();
+        if(!filteredEvents.get(ev)) {
+            for (Polyline pl : familyTree) {
+                pl.remove();
+            }
+            familyTree.clear();
+            if (ClientInfo.getInstance().isFamilyTreeLines()) {
+                generateFamilyTreeLines(ev);
+            }
+            if (marriageLine != null) {
+                marriageLine.remove();
+            }
+            if (ClientInfo.getInstance().isSpouseLine()) {
+                generateMarriageLine(ev);
+            }
+            for (Polyline pl : lifeStory) {
+                pl.remove();
+            }
+            lifeStory.clear();
+            if (ClientInfo.getInstance().isLifeStoryLines()) {
+                generateLifeStoryLines(ev);
+            }
         }
-        familyTree.clear();
-        if(ClientInfo.getInstance().isFamilyTreeLines()) {
-            generateFamilyTreeLines(ev);
-        }
-        if(marriageLine != null) {
-            marriageLine.remove();
-        }
-        if(ClientInfo.getInstance().isSpouseLine()) {
-            generateMarriageLine(ev);
-        }
-        for (Polyline pl: lifeStory) {
-            pl.remove();
-        }
-        lifeStory.clear();
-        if(ClientInfo.getInstance().isLifeStoryLines()) {
-            generateLifeStoryLines(ev);
+        else{
+            resetInfoWindow();
         }
     }
 
@@ -216,6 +224,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
         else {
             checkFilters();
+            markLines(lastSelectedEvent);
         }
     }
 
