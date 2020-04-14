@@ -365,10 +365,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         Intent intent;
 
         if(item.getItemId() == R.id.search_button_maps){
-            Toast.makeText(getContext(), "Search Clicked", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getContext(), "Search Clicked", Toast.LENGTH_SHORT).show();
 
-//            intent = new Intent(getActivity(), SearchActivity.class);
-//            startActivity(intent);
+            intent = new Intent(getActivity(), SearchActivity.class);
+            startActivity(intent);
             return true;
         }
         if(item.getItemId() == R.id.settings_button_maps){
