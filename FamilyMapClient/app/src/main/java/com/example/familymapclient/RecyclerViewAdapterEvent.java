@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -47,7 +48,7 @@ public class RecyclerViewAdapterEvent extends RecyclerView.Adapter<RecyclerViewA
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewAdapterEvent.ViewHolderEvent holder, int position) {
 
-                Event event = Events.get(position);
+                final Event event = Events.get(position);
                 String top = event.getEvent_type()+": " + event.getCity() + ", " + event.getCountry() + "(" + event.getYear() + ")";
                 Person person = ClientInfo.getInstance().getPersonFromID(event.getPerson_id());
                 String bottom = person.getFirst_name()+" "+person.getLast_name();
@@ -56,8 +57,13 @@ public class RecyclerViewAdapterEvent extends RecyclerView.Adapter<RecyclerViewA
                 holder.mLower.setText(bottom);
                 holder.mIcon.setImageDrawable(new IconDrawable(mContext, FontAwesomeIcons.fa_map_marker).colorRes(R.color.android_green).sizeDp(40));
 
+                holder.mIcon.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(mContext,event.getEvent_type(),Toast.LENGTH_SHORT).show();
 
-                //TODO put icons. this one can be any color marker.
+                    }
+                });
 
         }
 
