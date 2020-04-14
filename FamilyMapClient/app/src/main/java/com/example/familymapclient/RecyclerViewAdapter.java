@@ -1,6 +1,7 @@
 package com.example.familymapclient;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.fonts.Font;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -70,8 +71,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             holder.mIcon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(mContext,person.getFirst_name(),Toast.LENGTH_SHORT).show();
-
+                    //Starts a new Person activity with the selected person
+                    Intent data;
+                    data = new Intent(mContext, PersonActivity.class);
+                    //tell who is selected.
+                    data.putExtra("PersonID",person.getPerson_id());
+                    mContext.startActivity(data);
                 }
             });
         }

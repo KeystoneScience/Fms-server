@@ -55,7 +55,7 @@ public class RecyclerViewAdapterEvent extends RecyclerView.Adapter<RecyclerViewA
 
                 holder.mUpper.setText(top);
                 holder.mLower.setText(bottom);
-                holder.mIcon.setImageDrawable(new IconDrawable(mContext, FontAwesomeIcons.fa_map_marker).colorRes(R.color.android_green).sizeDp(40));
+                holder.mIcon.setImageDrawable(new IconDrawable(mContext, FontAwesomeIcons.fa_map_marker).colorRes(R.color.marker_color).sizeDp(40));
 
                 holder.mIcon.setOnClickListener(new View.OnClickListener() {
                     @Override

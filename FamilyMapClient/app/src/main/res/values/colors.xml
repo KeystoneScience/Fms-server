@@ -14,4 +14,5 @@
   <color name="colorAccent">#D81B60</color>
 
   <color name="action_bar">#f0eded</color>
+  <color name="marker_color"> #2b8032</color>
 </resources>
