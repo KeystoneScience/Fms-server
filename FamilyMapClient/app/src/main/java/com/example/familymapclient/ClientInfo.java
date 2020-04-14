@@ -320,4 +320,40 @@ public class ClientInfo {
         return events;
 
     }
+
+    private Person findChild(String rootID){
+        for (Person pr: personResult.getPeople()) {
+            if(pr.getFather_id()!=null) {
+                if (pr.getFather_id().equals(rootID)) {
+                    return pr;
+                }
+            }
+            if (pr.getMother_id()!=null) {
+                if (pr.getMother_id().equals(rootID)) {
+                    return pr;
+                }
+            }
+
+        }
+        return null;
+    }
+
+
+    public List<Family> getFamily(Person root){
+        List<Family> fam = new ArrayList<>();
+        if(root.getFather_id()!=null){
+            fam.add(new Family(getPersonFromID(root.getFather_id()),"Father"));
+        }
+        if(root.getMother_id()!=null){
+            fam.add(new Family(getPersonFromID(root.getMother_id()),"Mother"));
+        }
+        if(root.getSpouse_id()!=null){
+            fam.add(new Family(getPersonFromID(root.getSpouse_id()),"Spouse"));
+        }
+        Person child = findChild(root.getPerson_id());
+        if(child != null){
+            fam.add(new Family(child,"Child"));
+        }
+        return fam;
+    }
 }

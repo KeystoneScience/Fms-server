@@ -66,6 +66,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap theMap;
     private Map<Event,Boolean> filteredEvents = new HashMap<>();
     private boolean firstTime = true;
+    private Event lastSelectedEvent;
 
 
     public MapFragment() {
@@ -73,9 +74,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private void markerInformationPortal(){
         Toast.makeText(getContext(), "Info Window Clicked", Toast.LENGTH_SHORT).show();
-        ClientInfo.getInstance().setMaleEvents(false);
-        checkFilters();
+
+
         //Person Activity
+        if(lastSelectedEvent!=null) {
+            Intent data;
+            data = new Intent(getActivity(), PersonActivity.class);
+            //tell who is selected.
+            data.putExtra("PersonID",lastSelectedEvent.getPerson_id());
+            startActivity(data);
+        }
+
     }
 
     @Override
@@ -267,6 +276,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 public boolean onMarkerClick(Marker marker) {
                     Event selectedEvent = ClientInfo.getInstance().getEventFromWaypoint(marker);
                    // Toast.makeText(getContext(),selectedEvent.getCity(),Toast.LENGTH_SHORT).show();
+                    lastSelectedEvent=selectedEvent;
                     markLines(selectedEvent);
                    TextView uText = view.findViewById(R.id.markerInformationUText);
                    TextView lText = view.findViewById(R.id.markerInformationLText);

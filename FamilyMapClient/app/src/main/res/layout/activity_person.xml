@@ -128,19 +128,23 @@
             android:text="LIFE EVENTS"
             android:textAllCaps="true"
             android:textStyle="bold"
+            android:layout_marginLeft="13dp"
+            android:paddingTop="5dp"
             android:textSize="13dp"
             android:id="@+id/personActivityLifeEvents">
 
         </TextView>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#000000"
+            />
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/personActivityLifeEventsRecycler"
             android:layout_width="match_parent"
-            android:layout_marginBottom="13dp"
-            android:layout_height="wrap_content">
-        </android.support.v7.widget.RecyclerView>
-
-
+            android:layout_height="54dp"
+            android:layout_marginBottom="13dp"></androidx.recyclerview.widget.RecyclerView>
 
         <TextView
             android:layout_width="match_parent"
@@ -148,17 +152,27 @@
             android:text="FAMILY"
             android:textAllCaps="true"
             android:textStyle="bold"
+            android:layout_marginLeft="13dp"
+            android:paddingTop="5dp"
             android:textSize="13dp"
+            android:clickable="true"
             android:id="@+id/personActivityFamily">
 
         </TextView>
 
-        <android.support.v7.widget.RecyclerView
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#000000"
+            />
+
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/personActivityFamilyRecycler"
             android:layout_width="match_parent"
-            android:layout_marginBottom="13dp"
-            android:layout_height="wrap_content">
-        </android.support.v7.widget.RecyclerView>
+            android:layout_height="84dp"
+            android:layout_marginBottom="13dp"></androidx.recyclerview.widget.RecyclerView>
+
+
 
 
 
