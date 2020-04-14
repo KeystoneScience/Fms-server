@@ -31,12 +31,21 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private List<Event> Events = new ArrayList<>();
     private String type;
     private Context mContext;
+    private boolean masterList = false;
 
     public RecyclerViewAdapter(List<Family> itemIds, Context mContext) {
         Iconify.with(new FontAwesomeModule());
         this.itemIds = itemIds;
         this.mContext = mContext;
         this.type="person";
+    }
+
+    public RecyclerViewAdapter(List<Family> fam,List<Event> events, Context mContext) {
+        Iconify.with(new FontAwesomeModule());
+        this.itemIds = fam;
+        this.Events=events;
+        this.mContext = mContext;
+        masterList=true;
     }
 
     public RecyclerViewAdapter(List<Event> itemIds, Context mContext,String type) {
@@ -55,49 +64,84 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return viewHolder;
     }
 
+    private void commitPerson(@NonNull ViewHolder holder, final int position){
+        final Person person = itemIds.get(position).getFam();
+
+        if(person.getGender().equals("m")){
+            holder.mIcon.setImageDrawable( new IconDrawable(mContext,FontAwesomeIcons.fa_male).colorRes(R.color.male_color).sizeDp(40));
+        }
+        else{
+            holder.mIcon.setImageDrawable(new IconDrawable(mContext, FontAwesomeIcons.fa_female).colorRes(R.color.female_color).sizeDp(40));
+        }
+        holder.mUpper.setText(person.getFirst_name() + " " +person.getLast_name());
+        holder.mLower.setText(itemIds.get(position).getRelation());
+        holder.mIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Starts a new Person activity with the selected person
+                Intent data;
+                data = new Intent(mContext, PersonActivity.class);
+                //tell who is selected.
+                data.putExtra("PersonID",person.getPerson_id());
+                mContext.startActivity(data);
+            }
+        });
+    }
+
+
+
+    private void commitEvent(@NonNull ViewHolder holder,int position){
+        final Event event = Events.get(position);
+        String top = event.getEvent_type()+": " + event.getCity() + ", " + event.getCountry() + "(" + event.getYear() + ")";
+        Person person = ClientInfo.getInstance().getPersonFromID(event.getPerson_id());
+        String bottom = person.getFirst_name()+" "+person.getLast_name();
+
+        holder.mUpper.setText(top);
+        holder.mLower.setText(bottom);
+        holder.mIcon.setImageDrawable(new IconDrawable(mContext, FontAwesomeIcons.fa_map_marker).colorRes(R.color.marker_color).sizeDp(40));
+
+        holder.mIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent data;
+                data = new Intent(mContext, MapFragment.class);
+                //tell who is selected.
+                ClientInfo.getInstance().setPassedEvent(event);
+                mContext.startActivity(data);
+            }
+        });
+    }
+
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-        if(type.equals("person")){
-            final Person person = itemIds.get(position).getFam();
 
-            if(person.getGender().equals("m")){
-               holder.mIcon.setImageDrawable( new IconDrawable(mContext,FontAwesomeIcons.fa_male).colorRes(R.color.male_color).sizeDp(40));
+        if(masterList) {
+            if(position<itemIds.size()){
+                commitPerson(holder,position);
             }
             else{
-                holder.mIcon.setImageDrawable(new IconDrawable(mContext, FontAwesomeIcons.fa_female).colorRes(R.color.female_color).sizeDp(40));
+                commitEvent(holder,position-itemIds.size());
             }
-            holder.mUpper.setText(person.getFirst_name() + " " +person.getLast_name());
-            holder.mLower.setText(itemIds.get(position).getRelation());
-            holder.mIcon.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //Starts a new Person activity with the selected person
-                    Intent data;
-                    data = new Intent(mContext, PersonActivity.class);
-                    //tell who is selected.
-                    data.putExtra("PersonID",person.getPerson_id());
-                    mContext.startActivity(data);
-                }
-            });
+        }
+        else if(type.equals("person")){
+            commitPerson(holder,position);
         }
         else {
-            Event event = Events.get(position);
-            String top = event.getEvent_type()+": " + event.getCity() + ", " + event.getCountry() + "(" + event.getYear() + ")";
-            Person person = ClientInfo.getInstance().getPersonFromID(event.getPerson_id());
-            String bottom = person.getFirst_name()+" "+person.getLast_name();
-
-            holder.mUpper.setText(top);
-            holder.mLower.setText(bottom);
-            holder.mIcon.setImageDrawable(new IconDrawable(mContext, FontAwesomeIcons.fa_map_marker).colorRes(R.color.android_green).sizeDp(40));
-
-
-            //TODO put icons. this one can be any color marker.
+            commitEvent(holder,position);
         }
     }
 
     @Override
     public int getItemCount() {
-        return itemIds.size();
+        if(masterList){
+            return itemIds.size()+Events.size();
+        }
+        if(type.equals("person")) {
+            return itemIds.size();
+        }
+        else{
+            return Events.size();
+        }
     }
 
 

@@ -110,7 +110,7 @@ public class PersonActivity extends AppCompatActivity {
 
     private void initRecyclerViewEvents(){
         List<Event> events = ClientInfo.getInstance().chronologicalEvents(targetPerson.getPerson_id());
-        RecyclerViewAdapterEvent eventAdapter = new RecyclerViewAdapterEvent(events,this);
+        RecyclerViewAdapter eventAdapter = new RecyclerViewAdapter(events,this,"event");
         mEvents.setAdapter(eventAdapter);
         mEvents.setLayoutManager(new LinearLayoutManager(this));
     }

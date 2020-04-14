@@ -55,25 +55,15 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void postSearchResults(SearchQuery searchQuery){
-        initRecyclerViewEvents(searchQuery.events);
-        initRecyclerViewFamily(searchQuery.fam);
+        initAllRecycler(searchQuery.fam,searchQuery.events);
     }
 
 
-
-
-
-    private void initRecyclerViewFamily(List<Family> families){
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(families,this);
+    private void initAllRecycler(List<Family> families, List<Event> events){
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(families,events,this);
         mFamily.setAdapter(adapter);
         mFamily.setLayoutManager(new LinearLayoutManager(this));
 
-    }
-
-    private void initRecyclerViewEvents(List<Event> events){
-        RecyclerViewAdapterEvent eventAdapter = new RecyclerViewAdapterEvent(events,this);
-        mEvents.setAdapter(eventAdapter);
-        mEvents.setLayoutManager(new LinearLayoutManager(this));
     }
 
 
