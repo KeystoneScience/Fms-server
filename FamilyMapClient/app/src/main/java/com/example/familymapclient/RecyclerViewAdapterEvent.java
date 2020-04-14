@@ -1,6 +1,7 @@
 package com.example.familymapclient;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,21 +50,26 @@ public class RecyclerViewAdapterEvent extends RecyclerView.Adapter<RecyclerViewA
     public void onBindViewHolder(@NonNull RecyclerViewAdapterEvent.ViewHolderEvent holder, int position) {
 
                 final Event event = Events.get(position);
-                String top = event.getEvent_type()+": " + event.getCity() + ", " + event.getCountry() + "(" + event.getYear() + ")";
-                Person person = ClientInfo.getInstance().getPersonFromID(event.getPerson_id());
-                String bottom = person.getFirst_name()+" "+person.getLast_name();
+                if(!ClientInfo.getInstance().filteredEvents.get(event)) {
+                    String top = event.getEvent_type() + ": " + event.getCity() + ", " + event.getCountry() + "(" + event.getYear() + ")";
+                    Person person = ClientInfo.getInstance().getPersonFromID(event.getPerson_id());
+                    String bottom = person.getFirst_name() + " " + person.getLast_name();
 
-                holder.mUpper.setText(top);
-                holder.mLower.setText(bottom);
-                holder.mIcon.setImageDrawable(new IconDrawable(mContext, FontAwesomeIcons.fa_map_marker).colorRes(R.color.marker_color).sizeDp(40));
+                    holder.mUpper.setText(top);
+                    holder.mLower.setText(bottom);
+                    holder.mIcon.setImageDrawable(new IconDrawable(mContext, FontAwesomeIcons.fa_map_marker).colorRes(R.color.marker_color).sizeDp(40));
 
-                holder.mIcon.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(mContext,event.getEvent_type(),Toast.LENGTH_SHORT).show();
-
-                    }
-                });
+                    holder.mIcon.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent data;
+                            data = new Intent(mContext, MapFragment.class);
+                            //tell who is selected.
+                            ClientInfo.getInstance().setPassedEvent(event);
+                            mContext.startActivity(data);
+                        }
+                    });
+                }
 
         }
 

@@ -64,9 +64,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private List<Polyline> lifeStory = new ArrayList<>();
     private Polyline marriageLine;
     private GoogleMap theMap;
-    private Map<Event,Boolean> filteredEvents = new HashMap<>();
     private boolean firstTime = true;
     private Event lastSelectedEvent;
+    boolean mainView = true;
 
 
     public MapFragment() {
@@ -89,8 +89,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+
+        mainView = ClientInfo.getInstance().isMapFragmentMainView();
+        ClientInfo.getInstance().setMapFragmentMainView(false);
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        if(!mainView){
+            setHasOptionsMenu(false);
+            lastSelectedEvent = ClientInfo.getInstance().getPassedEvent();
+        }
+
     }
     public void resetInfoWindow(){
         TextView uText = view.findViewById(R.id.markerInformationUText);
@@ -117,7 +125,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         });
 
-        resetInfoWindow();
+        if(mainView) {
+
+            resetInfoWindow();
+        }
 
 
         mapFragment=(SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
@@ -147,7 +158,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
     private void markLines(Event ev){
         //TODO these are controlled through the settings, add toggle booleans
-        if(!filteredEvents.get(ev)) {
+        if(!ClientInfo.getInstance().filteredEvents.get(ev)) {
             for (Polyline pl : familyTree) {
                 pl.remove();
             }
@@ -191,7 +202,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         if(!(root.getMother_id() == null)){
             Event first = ClientInfo.getInstance().chronologicalEvents(root.getMother_id()).get(0);
             Person mother = ClientInfo.getInstance().getPersonFromID(root.getMother_id());
-            if(!filteredEvents.get(first)) {
+            if(!ClientInfo.getInstance().getFilteredEvents().get(first)) {
                 familyTree.add(lineBetweenEvents(ev, first, thickness, Color.GREEN));
                 generateFamilyTreeLines(thickness * .55f, mother,first);
 
@@ -203,7 +214,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         if(!(root.getFather_id() == null)){
             Event first = ClientInfo.getInstance().chronologicalEvents(root.getFather_id()).get(0);
             Person father = ClientInfo.getInstance().getPersonFromID(root.getFather_id());
-            if(!filteredEvents.get(first)) {
+            if(!ClientInfo.getInstance().getFilteredEvents().get(first)) {
                 familyTree.add(lineBetweenEvents(ev, first, thickness, Color.GREEN));
                 generateFamilyTreeLines(thickness * .55f, father,first);
 
@@ -224,7 +235,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
         else {
             checkFilters();
-            markLines(lastSelectedEvent);
+            if(lastSelectedEvent!=null) {
+                markLines(lastSelectedEvent);
+            }
         }
     }
 
@@ -233,7 +246,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         if(!(root.getMother_id() == null)){
             Event first = ClientInfo.getInstance().chronologicalEvents(root.getMother_id()).get(0);
             Person mother = ClientInfo.getInstance().getPersonFromID(root.getMother_id());
-            if(!filteredEvents.get(first)) {
+            if(!ClientInfo.getInstance().getFilteredEvents().get(first)) {
                 familyTree.add(lineBetweenEvents(lastDrawable, first, thickness, Color.GREEN));
                 generateFamilyTreeLines(thickness * .55f, mother,first);
 
@@ -245,7 +258,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         if(!(root.getFather_id() == null)){
             Event first = ClientInfo.getInstance().chronologicalEvents(root.getFather_id()).get(0);
             Person father = ClientInfo.getInstance().getPersonFromID(root.getFather_id());
-            if(!filteredEvents.get(first)) {
+            if(!ClientInfo.getInstance().getFilteredEvents().get(first)) {
                 familyTree.add(lineBetweenEvents(lastDrawable, first, thickness, Color.GREEN));
                 generateFamilyTreeLines(thickness * .55f, father,first);
 
@@ -268,7 +281,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         Person root = ClientInfo.getInstance().getPersonFromID(ev.getPerson_id());
         if(root.getSpouse_id() != null) {
             Event spouseBirth = ClientInfo.getInstance().chronologicalEvents(root.getSpouse_id()).get(0);
-            if(!filteredEvents.get(spouseBirth)){
+            if(!ClientInfo.getInstance().getFilteredEvents().get(spouseBirth)){
                 marriageLine = lineBetweenEvents(ev,spouseBirth,5f,Color.RED);
             }
         }
@@ -306,6 +319,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             });
         ClientInfo.getInstance().filterDefaults();
         checkFilters();
+        if(!mainView){
+            markLines(lastSelectedEvent);
+        }
 
     }
 
@@ -314,28 +330,28 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private void checkFilters(){ //Function to update map markers based on filters activated.
         theMap.clear();
-        filteredEvents.clear();
+        ClientInfo.getInstance().filteredEvents.clear();
         ClientInfo.getInstance().clearWaypointToEvent();
         for (Event ev : ClientInfo.getInstance().getEventResult().getEvents()) {
             Person temp = ClientInfo.getInstance().getPersonFromID(ev.getPerson_id());
             //Does gender filtering.
             if(temp.getGender().equals("m") && !ClientInfo.getInstance().isMaleEvents()){
-                filteredEvents.put(ev,Boolean.TRUE);
+                ClientInfo.getInstance().filteredEvents.put(ev,Boolean.TRUE);
                 continue;
             }
             if(temp.getGender().equals("f") && !ClientInfo.getInstance().isFemaleEvents()){
-                filteredEvents.put(ev,Boolean.TRUE);
+                ClientInfo.getInstance().filteredEvents.put(ev,Boolean.TRUE);
                 continue;
             }
             if(ClientInfo.getInstance().getPersonToSideOfFamily().get(temp).equals("mom") && !ClientInfo.getInstance().isMotherSide()){
-                filteredEvents.put(ev,Boolean.TRUE);
+                ClientInfo.getInstance().filteredEvents.put(ev,Boolean.TRUE);
                 continue;
             }
             if(ClientInfo.getInstance().getPersonToSideOfFamily().get(temp).equals("dad") && !ClientInfo.getInstance().isFatherSide()){
-                filteredEvents.put(ev,Boolean.TRUE);
+                ClientInfo.getInstance().filteredEvents.put(ev,Boolean.TRUE);
                 continue;
             }
-            filteredEvents.put(ev,Boolean.FALSE);
+            ClientInfo.getInstance().filteredEvents.put(ev,Boolean.FALSE);
             LatLng latitudeAndLongitude = new LatLng(ev.getLatitude(), ev.getLongitude());
             MarkerOptions markerOptions = new MarkerOptions();
             markerOptions.position(latitudeAndLongitude);
@@ -372,9 +388,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        //None of this is working.... TODO: create icon in a better way, add listener.
-
-        //if (mIsMainActivity) {
+        if (mainView) {
             inflater.inflate(R.menu.map_fragment_action_bar, menu);
 
             //ActionBar icon(s)
@@ -384,10 +398,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                             .actionBarSize());
 
             menu.findItem(R.id.settings_button_maps).setIcon(new IconDrawable(getActivity(), FontAwesomeIcons.fa_gear).colorRes(R.color.action_bar).actionBarSize());
-//        }
-//        else {
-//            // Todo: instead of this, make a menu with just the up button
-//            inflater.inflate(R.menu.fragment_maps_map_activity, menu);
-//        }
+        }
+        else{
+
+            //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
     }
 }

@@ -28,11 +28,27 @@ public class ClientInfo {
     private EventResult eventResult;
     private Map<String, Person> personIDtoPerson = new HashMap<>();
     private Map<String, Person> associatedPeople;
-    private Map<String, Event> associatedEvents;
+    public Map<Event, Boolean> filteredEvents = new HashMap<>();
     private Map<Marker,Event>  waypointToEvent = new HashMap<>();
     private Map<Person, String> personToSideOfFamily = new HashMap<>();
+    private boolean mapFragmentMainView = true;
+    private Event passedEvent;
 
+    public Event getPassedEvent() {
+        return passedEvent;
+    }
 
+    public void setPassedEvent(Event passedEvent) {
+        this.passedEvent = passedEvent;
+    }
+
+    public boolean isMapFragmentMainView() {
+        return mapFragmentMainView;
+    }
+
+    public void setMapFragmentMainView(boolean mapFragmentMainView) {
+        this.mapFragmentMainView = mapFragmentMainView;
+    }
 
     private boolean lifeStoryLines = true;
     private boolean familyTreeLines = true;
@@ -73,7 +89,7 @@ public class ClientInfo {
         eventResult=null;
         personResult=null;
         personIDtoPerson=null;
-        associatedEvents=null;
+        filteredEvents=null;
         associatedPeople=null;
         waypointToEvent=null;
 
@@ -282,12 +298,12 @@ public class ClientInfo {
         this.associatedPeople = associatedPeople;
     }
 
-    public Map<String, Event> getAssociatedEvents() {
-        return associatedEvents;
+    public Map<Event, Boolean> getFilteredEvents() {
+        return filteredEvents;
     }
 
-    public void setAssociatedEvents(Map<String, Event> associatedEvents) {
-        this.associatedEvents = associatedEvents;
+    public void setFilteredEvents(Map<Event, Boolean> associatedEvents) {
+        this.filteredEvents = associatedEvents;
     }
 
     public List<Event> chronologicalEvents(String personID){

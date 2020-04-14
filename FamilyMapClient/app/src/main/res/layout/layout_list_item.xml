@@ -16,8 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_weight="1"
-            app:srcCompat="@mipmap/ic_launcher" />
+            android:layout_weight="1" />
 
     </LinearLayout>
 
@@ -39,7 +38,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="13dp"
-            android:text="Upper"
+            android:text=""
             android:textSize="10sp">
 
         </TextView>
@@ -48,7 +47,7 @@
             android:id="@+id/layoutLower"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Lower"
+            android:text=""
             android:textSize="10sp">
 
         </TextView>
