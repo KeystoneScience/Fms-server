@@ -122,18 +122,35 @@
             android:layout_height="1dp"
             android:background="#000000"
             />
-        <TextView
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="LIFE EVENTS"
-            android:textAllCaps="true"
-            android:textStyle="bold"
-            android:layout_marginLeft="13dp"
-            android:paddingTop="5dp"
-            android:textSize="13dp"
-            android:id="@+id/personActivityLifeEvents">
+            android:orientation="horizontal">
 
-        </TextView>
+            <ImageView
+                android:id="@+id/personActivityLifeEventsIcon"
+                android:layout_width="15dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="4dp"
+                android:layout_height="15dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="LIFE EVENTS"
+                android:textAllCaps="true"
+                android:textStyle="bold"
+                android:layout_marginLeft="3dp"
+                android:paddingTop="5dp"
+                android:textSize="13dp"
+                android:id="@+id/personActivityLifeEvents"/>
+
+
+        </LinearLayout>
+
+
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
@@ -145,19 +162,34 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
-        <TextView
+
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="FAMILY"
-            android:textAllCaps="true"
-            android:textStyle="bold"
-            android:layout_marginLeft="13dp"
-            android:paddingTop="5dp"
-            android:textSize="13dp"
-            android:clickable="true"
-            android:id="@+id/personActivityFamily">
+            android:orientation="horizontal">
 
-        </TextView>
+            <ImageView
+                android:id="@+id/personActivityFamilyIcon"
+                android:layout_width="15dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="4dp"
+                android:layout_height="15dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="FAMILY"
+                android:textAllCaps="true"
+                android:textStyle="bold"
+                android:layout_marginLeft="13dp"
+                android:paddingTop="5dp"
+                android:textSize="13dp"
+                android:clickable="true"
+                android:id="@+id/personActivityFamily"/>
+
+        </LinearLayout>
+
 
         <View
             android:layout_width="match_parent"

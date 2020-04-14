@@ -125,11 +125,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         });
 
-        if(mainView) {
-
-            resetInfoWindow();
-        }
-
+        resetInfoWindow();
 
         mapFragment=(SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         if(mapFragment == null){
@@ -182,6 +178,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
         else{
             resetInfoWindow();
+
         }
     }
 
@@ -287,6 +284,25 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
+    public void refreshInfoWindow( ){
+        Event selectedEvent = lastSelectedEvent;
+        markLines(selectedEvent);
+        TextView uText = view.findViewById(R.id.markerInformationUText);
+        TextView lText = view.findViewById(R.id.markerInformationLText);
+        Person person = ClientInfo.getInstance().getPersonFromID(selectedEvent.getPerson_id());
+        uText.setText(person.getFirst_name() + " " + person.getLast_name());
+        lText.setText(selectedEvent.getEvent_type() +": " + selectedEvent.getCity() + ", " + selectedEvent.getCountry()
+                + " (" + selectedEvent.getYear() +")");
+
+        ImageView iView = view.findViewById(R.id.markerInformationIcon);
+        if(person.getGender().equals("m")){
+            iView.setImageDrawable(new IconDrawable(getActivity(), FontAwesomeIcons.fa_male).colorRes(R.color.male_color).sizeDp(40));
+        }
+        else{
+            iView.setImageDrawable(new IconDrawable(getActivity(), FontAwesomeIcons.fa_female).colorRes(R.color.female_color).sizeDp(40));
+        }
+    }
+
     @Override
     public void onMapReady(GoogleMap googleMap){
 
@@ -299,27 +315,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     Event selectedEvent = ClientInfo.getInstance().getEventFromWaypoint(marker);
                    // Toast.makeText(getContext(),selectedEvent.getCity(),Toast.LENGTH_SHORT).show();
                     lastSelectedEvent=selectedEvent;
-                    markLines(selectedEvent);
-                   TextView uText = view.findViewById(R.id.markerInformationUText);
-                   TextView lText = view.findViewById(R.id.markerInformationLText);
-                   Person person = ClientInfo.getInstance().getPersonFromID(selectedEvent.getPerson_id());
-                   uText.setText(person.getFirst_name() + " " + person.getLast_name());
-                   lText.setText(selectedEvent.getEvent_type() +": " + selectedEvent.getCity() + ", " + selectedEvent.getCountry()
-                                 + " (" + selectedEvent.getYear() +")");
-
-                   ImageView iView = view.findViewById(R.id.markerInformationIcon);
-                   if(person.getGender().equals("m")){
-                       iView.setImageDrawable(new IconDrawable(getActivity(), FontAwesomeIcons.fa_male).colorRes(R.color.male_color).sizeDp(40));
-                   }
-                   else{
-                       iView.setImageDrawable(new IconDrawable(getActivity(), FontAwesomeIcons.fa_female).colorRes(R.color.female_color).sizeDp(40));
-                   }
+                   refreshInfoWindow();
                     return false;
                 }
             });
         ClientInfo.getInstance().filterDefaults();
         checkFilters();
         if(!mainView){
+            refreshInfoWindow();
+            //center around marker
             markLines(lastSelectedEvent);
         }
 
@@ -329,7 +333,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     //public void OnCreateOptions
 
     private void checkFilters(){ //Function to update map markers based on filters activated.
-        theMap.clear();
+        if(theMap!=null) {
+            theMap.clear();
+        }
         ClientInfo.getInstance().filteredEvents.clear();
         ClientInfo.getInstance().clearWaypointToEvent();
         for (Event ev : ClientInfo.getInstance().getEventResult().getEvents()) {
@@ -366,7 +372,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         if(item.getItemId() == R.id.search_button_maps){
             //Toast.makeText(getContext(), "Search Clicked", Toast.LENGTH_SHORT).show();
-
             intent = new Intent(getActivity(), SearchActivity.class);
             startActivity(intent);
             return true;
@@ -386,23 +391,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
+    public void onCreateOptionsMenu(Menu mainMenu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(mainMenu, inflater);
         if (mainView) {
-            inflater.inflate(R.menu.map_fragment_action_bar, menu);
-
-            //ActionBar icon(s)
-            menu.findItem(R.id.search_button_maps).setIcon(
-                    new IconDrawable(getActivity(), FontAwesomeIcons.fa_search)
-                            .colorRes(R.color.action_bar)
-                            .actionBarSize());
-
-            menu.findItem(R.id.settings_button_maps).setIcon(new IconDrawable(getActivity(), FontAwesomeIcons.fa_gear).colorRes(R.color.action_bar).actionBarSize());
+            inflater.inflate(R.menu.map_fragment_action_bar, mainMenu);
+            mainMenu.findItem(R.id.search_button_maps).setIcon(new IconDrawable(getActivity(), FontAwesomeIcons.fa_search).colorRes(R.color.action_bar).actionBarSize());
+            mainMenu.findItem(R.id.settings_button_maps).setIcon(new IconDrawable(getActivity(), FontAwesomeIcons.fa_gear).colorRes(R.color.action_bar).actionBarSize());
         }
-        else{
 
-            //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
 
     }
 }

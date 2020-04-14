@@ -104,7 +104,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             @Override
             public void onClick(View v) {
                 Intent data;
-                data = new Intent(mContext, MapFragment.class);
+                data = new Intent(mContext, MapsActivity.class);
                 //tell who is selected.
                 ClientInfo.getInstance().setPassedEvent(event);
                 mContext.startActivity(data);

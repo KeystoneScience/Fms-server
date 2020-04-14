@@ -93,7 +93,6 @@ public class SettingsActivity extends AppCompatActivity {
                 Intent main = new Intent(SettingsActivity.this,MainActivity.class);
                 ClientInfo.getInstance().clearAll();
                 startActivity(main);
-
             }
         });
 
