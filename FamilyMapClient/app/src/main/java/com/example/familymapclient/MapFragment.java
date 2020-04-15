@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,6 +24,7 @@ import android.widget.Toast;
 import android.graphics.drawable.Drawable;
 
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -138,19 +140,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         return view;
     }
 
-    private float getColor(String eventType){
-        if(eventType.equals("death")){
-            return HUE_VIOLET;
+    private float getColor(String passedEventType){
+
+        String eventType = passedEventType.toLowerCase();
+        if( ClientInfo.getInstance().colorMapping.containsKey(eventType)){
+            return ClientInfo.getInstance().colorMapping.get(eventType);
         }
-        if(eventType.equals("marriage")){
-            return HUE_YELLOW;
+        if(ClientInfo.getInstance().colorMapping.size() < ClientInfo.getInstance().colors.size()-1){
+            ClientInfo.getInstance().colorMapping.put(eventType,ClientInfo.getInstance().colors.get(ClientInfo.getInstance().colorMapping.size()));
+            return ClientInfo.getInstance().colorMapping.get(eventType);
         }
-        if(eventType.equals("birth")){
-            return HUE_GREEN;
-        }
-        else{
-            return HUE_RED;
-        }
+        return ClientInfo.getInstance().colors.get(ClientInfo.getInstance().colors.size()-1);
+
     }
     private void markLines(Event ev){
         //TODO these are controlled through the settings, add toggle booleans
@@ -324,6 +325,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         if(!mainView){
             refreshInfoWindow();
             //center around marker
+            theMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lastSelectedEvent.getLatitude(),lastSelectedEvent.getLongitude()), 5));
+
             markLines(lastSelectedEvent);
         }
 
@@ -333,6 +336,57 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     //public void OnCreateOptions
 
     private void checkFilters(){ //Function to update map markers based on filters activated.
+        if(theMap!=null) {
+            theMap.clear();
+        }
+        ClientInfo.getInstance().filteredEvents.clear();
+        ClientInfo.getInstance().clearWaypointToEvent();
+        for (Event ev : ClientInfo.getInstance().getEventResult().getEvents()) {
+            Log.d("Starting Event",ev.getEvent_type());
+
+            Person temp = ClientInfo.getInstance().getPersonFromID(ev.getPerson_id());
+            //Does gender filtering.
+            if(temp.getGender().equals("m") && !ClientInfo.getInstance().isMaleEvents()){
+                Log.d("Inside Male","");
+
+                ClientInfo.getInstance().filteredEvents.put(ev,Boolean.TRUE);
+                continue;
+            }
+
+
+            Log.d("Cleared Male Filter", "_");
+
+            if(temp.getGender().equals("f") && !ClientInfo.getInstance().isFemaleEvents()){
+                ClientInfo.getInstance().filteredEvents.put(ev,Boolean.TRUE);
+                continue;
+            }
+            Log.d("Passed Gender Filter","_");
+
+            if(ClientInfo.getInstance().getPersonToSideOfFamily().get(temp).equals("mom") && !ClientInfo.getInstance().isMotherSide()){
+                ClientInfo.getInstance().filteredEvents.put(ev,Boolean.TRUE);
+                continue;
+            }
+            Log.d("Passed side Filter 1","_");
+
+            if(ClientInfo.getInstance().getPersonToSideOfFamily().get(temp).equals("dad") && !ClientInfo.getInstance().isFatherSide()){
+                ClientInfo.getInstance().filteredEvents.put(ev,Boolean.TRUE);
+                continue;
+            }
+            Log.d("Passed side of Family","_");
+            ClientInfo.getInstance().filteredEvents.put(ev,Boolean.FALSE);
+            LatLng latitudeAndLongitude = new LatLng(ev.getLatitude(), ev.getLongitude());
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.position(latitudeAndLongitude);
+            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(getColor(ev.getEvent_type())));
+            ClientInfo.getInstance().addWaypoint(theMap.addMarker(markerOptions),ev);
+            Log.d("Completed",ev.getEvent_type());
+
+        }
+    }
+
+
+
+    private void tempTest(){ //Function to update map markers based on filters activated.
         if(theMap!=null) {
             theMap.clear();
         }

@@ -107,31 +107,33 @@ public class SearchActivity extends AppCompatActivity {
             //Get matching events
 
             for (Event ev: ClientInfo.getInstance().getEventResult().getEvents()) {
-                if(Integer.toString(ev.getYear()).contains(index)){
-                    events.add(ev);
-                    continue;
-                }
-                if(ev.getCountry().toLowerCase().contains(index)){
-                    events.add(ev);
-                    continue;
-                }
-                if(ev.getCity().toLowerCase().contains(index)){
-                    events.add(ev);
-                    continue;
-                }
-                if(Float.toString(ev.getLongitude()).contains(index)){
-                    events.add(ev);
-                    continue;
-                }
-                if(Float.toString(ev.getLatitude()).contains(index)){
-                    events.add(ev);
-                    continue;
-                }
-                if(ev.getEvent_type().contains(index)){
-                    events.add(ev);
-                    continue;
-                }
+                if (!ClientInfo.getInstance().filteredEvents.get(ev)) {
+                    if (Integer.toString(ev.getYear()).contains(index)) {
+                        events.add(ev);
+                        continue;
+                    }
+                    if (ev.getCountry().toLowerCase().contains(index)) {
+                        events.add(ev);
+                        continue;
+                    }
+                    if (ev.getCity().toLowerCase().contains(index)) {
+                        events.add(ev);
+                        continue;
+                    }
+                    if (Float.toString(ev.getLongitude()).contains(index)) {
+                        events.add(ev);
+                        continue;
+                    }
+                    if (Float.toString(ev.getLatitude()).contains(index)) {
+                        events.add(ev);
+                        continue;
+                    }
+                    if (ev.getEvent_type().toLowerCase().contains(index)) {
+                        events.add(ev);
+                        continue;
+                    }
 
+                }
             }
 
 

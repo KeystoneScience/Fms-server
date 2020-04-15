@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         loginFragment = new LoginFragment();
         loginFragment.setArguments(new Bundle());
-        fragmentManager.beginTransaction().replace(R.id.main_activity, loginFragment).addToBackStack("login").commit();
+        fragmentManager.beginTransaction().replace(R.id.main_activity, loginFragment).commit();
 
 
     }
@@ -30,8 +30,7 @@ public class MainActivity extends AppCompatActivity {
     public void startMap(){
         Iconify.with(new FontAwesomeModule());
         mapFragment = new MapFragment();
-        fragmentManager.beginTransaction().replace(R.id.main_activity, mapFragment).addToBackStack("mapFragment").commit();
-
+        fragmentManager.beginTransaction().replace(R.id.main_activity, mapFragment).commit();
     }
 
 

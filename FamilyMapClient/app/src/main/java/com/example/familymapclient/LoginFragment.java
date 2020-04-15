@@ -199,6 +199,7 @@ public class LoginFragment extends Fragment {
             }
         });
 
+
         mUserName.addTextChangedListener(new TextWatcher() {
 
             public void afterTextChanged(Editable s) {}

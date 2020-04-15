@@ -1,5 +1,6 @@
 package com.example.familymapclient;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -13,10 +14,14 @@ import androidx.preference.PreferenceFragmentCompat;
 
 import java.util.zip.Inflater;
 
+import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
+import static java.security.AccessController.getContext;
+
 public class SettingsActivity extends AppCompatActivity {
 
     private Switch mLifeStory,mFamilyTree,mSpouse,mFather,mMother,mMale,mFemale;
     private LinearLayout mLogout;
+
 
 
 
@@ -90,27 +95,18 @@ public class SettingsActivity extends AppCompatActivity {
         mLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent main = new Intent(SettingsActivity.this,MainActivity.class);
-                ClientInfo.getInstance().clearAll();
+                Intent main = new Intent(SettingsActivity.this ,MainActivity.class);
+
+                //This is what sets it as the top activity
+                main.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK) ;
                 startActivity(main);
+
             }
         });
 
-
-//        getSupportFragmentManager()
-//                .beginTransaction()
-//                .replace(R.id.settings, new SettingsFragment())
-//                .commit();
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
     }
-
-//    public static class SettingsFragment extends PreferenceFragmentCompat {
-//        @Override
-//        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-//            setPreferencesFromResource(R.xml.root_preferences, rootKey);
-//        }
-//    }
 }

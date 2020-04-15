@@ -16,6 +16,17 @@ import results.LoginResult;
 import results.PersonResult;
 import results.RegisterResult;
 
+import static android.graphics.BlendMode.HUE;
+import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_AZURE;
+import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_BLUE;
+import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_CYAN;
+import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_GREEN;
+import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_MAGENTA;
+import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_ORANGE;
+import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_RED;
+import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_ROSE;
+import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_VIOLET;
+import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_YELLOW;
 
 
 public class ClientInfo {
@@ -33,6 +44,11 @@ public class ClientInfo {
     private Map<Person, String> personToSideOfFamily = new HashMap<>();
     private boolean mapFragmentMainView = true;
     private Event passedEvent;
+    Map<String,Float> colorMapping = new HashMap<>();
+    List<Float> colors = new ArrayList<Float>(){{add(HUE_GREEN);add(HUE_VIOLET);add(HUE_RED);add(HUE_AZURE);add(HUE_YELLOW);add(HUE_BLUE);add(HUE_CYAN)
+            ;add(HUE_MAGENTA);add(HUE_ROSE);add(HUE_ORANGE);}};
+
+
 
     public Event getPassedEvent() {
         return passedEvent;
@@ -110,6 +126,10 @@ public class ClientInfo {
     public void fillPersonToSide(){
         Person root = personIDtoPerson.get(loginResult.getpersonID());
         personToSideOfFamily.put(root,"root");
+        if(root.getSpouse_id()!=null){
+            Person spouse = personIDtoPerson.get(root.getSpouse_id());
+            personToSideOfFamily.put(spouse,"spouse of root");
+        }
         Person mom = personIDtoPerson.get(root.getMother_id());
         Person dad = personIDtoPerson.get(root.getFather_id());
         personToSideOfFamily.put(mom, "mom");
@@ -216,6 +236,7 @@ public class ClientInfo {
         this.personResult = personResult;
         generatePersonPersonIDMap();
         fillPersonToSide();
+        return;
     }
 
     public EventResult getEventResult() {
