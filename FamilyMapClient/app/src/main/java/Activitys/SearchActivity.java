@@ -1,24 +1,26 @@
-package com.example.familymapclient;
+package Activitys;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.View;
 import android.widget.EditText;
 
+import com.example.familymapclient.R;
 import com.joanzapata.iconify.Iconify;
 import com.joanzapata.iconify.fonts.FontAwesomeModule;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import Client_Information.ClientInfo;
 import model.Event;
+import model.Family;
 import model.Person;
+import model.RecyclerViewAdapter;
 
 public class SearchActivity extends AppCompatActivity {
 
@@ -66,12 +68,21 @@ public class SearchActivity extends AppCompatActivity {
 
     }
 
+    public List<Event> searchEventTestResults(String phrase){
+        SearchQuery sq = new SearchQuery(phrase);
+        return sq.events;
+    }
+    public List<Person> searchPersonTestResults(String phrase){
+        SearchQuery sq = new SearchQuery(phrase);
+        return sq.people;
+    }
+
 
 
     private class SearchQuery{
         private String index;
         List<Event> events = new ArrayList<>();
-        private List<Person> people = new ArrayList<>();
+        List<Person> people = new ArrayList<>();
         List<Family> fam = new ArrayList<>();
 
         public SearchQuery(String phrase){

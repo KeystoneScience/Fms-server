@@ -1,18 +1,19 @@
-package com.example.familymapclient;
+package model;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.fonts.Font;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import Activitys.MapsActivity;
+import Activitys.PersonActivity;
+import com.example.familymapclient.R;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.Iconify;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
@@ -21,8 +22,7 @@ import com.joanzapata.iconify.fonts.FontAwesomeModule;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.Event;
-import model.Person;
+import Client_Information.ClientInfo;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
     private static final String TAG = "RecyclerViewAdapter";

@@ -16,15 +16,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SearchActivity"
-            android:parentActivityName=".MainActivity"></activity>
+        <activity android:name="Activitys.SearchActivity"
+            android:parentActivityName="Activitys.MainActivity"></activity>
         <activity
-            android:name=".PersonActivity"
-            android:parentActivityName=".MainActivity"></activity>
+            android:name="Activitys.PersonActivity"
+            android:parentActivityName="Activitys.MainActivity"></activity>
         <activity
-            android:name=".SettingsActivity"
+            android:name="Activitys.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName="Activitys.MainActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -38,11 +38,11 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".MapsActivity"
-            android:parentActivityName=".MainActivity"
+            android:name="Activitys.MapsActivity"
+            android:parentActivityName="Activitys.MainActivity"
             android:label="@string/title_activity_maps" />
         <activity
-            android:name=".MainActivity"
+            android:name="Activitys.MainActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

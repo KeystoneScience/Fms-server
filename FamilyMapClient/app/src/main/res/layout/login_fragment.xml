@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:layout_margin="16dp"
     android:stretchColumns="3"
-    tools:context=".MainActivity">
+    tools:context="Activitys.MainActivity">
 
     <TableRow>
         <TextView

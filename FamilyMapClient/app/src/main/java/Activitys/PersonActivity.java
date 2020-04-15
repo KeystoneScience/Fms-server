@@ -1,4 +1,4 @@
-package com.example.familymapclient;
+package Activitys;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.familymapclient.R;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.Iconify;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
@@ -18,8 +19,11 @@ import com.joanzapata.iconify.fonts.FontAwesomeModule;
 import java.util.ArrayList;
 import java.util.List;
 
+import Client_Information.ClientInfo;
 import model.Event;
+import model.Family;
 import model.Person;
+import model.RecyclerViewAdapter;
 
 public class PersonActivity extends AppCompatActivity {
 

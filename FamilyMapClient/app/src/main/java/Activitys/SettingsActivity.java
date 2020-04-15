@@ -1,6 +1,5 @@
-package com.example.familymapclient;
+package Activitys;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -10,12 +9,10 @@ import android.widget.Switch;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.preference.PreferenceFragmentCompat;
 
-import java.util.zip.Inflater;
+import com.example.familymapclient.R;
 
-import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
-import static java.security.AccessController.getContext;
+import Client_Information.ClientInfo;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -95,7 +92,7 @@ public class SettingsActivity extends AppCompatActivity {
         mLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent main = new Intent(SettingsActivity.this ,MainActivity.class);
+                Intent main = new Intent(SettingsActivity.this , MainActivity.class);
 
                 //This is what sets it as the top activity
                 main.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK) ;

@@ -1,4 +1,4 @@
-package com.example.familymapclient;
+package Fragments;
 
 
 import android.content.Intent;
@@ -21,9 +21,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.graphics.drawable.Drawable;
 
 
+import com.example.familymapclient.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -38,18 +38,14 @@ import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+import Activitys.PersonActivity;
+import Activitys.SearchActivity;
+import Activitys.SettingsActivity;
+import Client_Information.ClientInfo;
 import model.Event;
 import model.Person;
-
-import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_GREEN;
-import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_MAGENTA;
-import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_RED;
-import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_VIOLET;
-import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_YELLOW;
 
 
 /**
@@ -386,39 +382,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
 
 
-    private void tempTest(){ //Function to update map markers based on filters activated.
-        if(theMap!=null) {
-            theMap.clear();
-        }
-        ClientInfo.getInstance().filteredEvents.clear();
-        ClientInfo.getInstance().clearWaypointToEvent();
-        for (Event ev : ClientInfo.getInstance().getEventResult().getEvents()) {
-            Person temp = ClientInfo.getInstance().getPersonFromID(ev.getPerson_id());
-            //Does gender filtering.
-            if(temp.getGender().equals("m") && !ClientInfo.getInstance().isMaleEvents()){
-                ClientInfo.getInstance().filteredEvents.put(ev,Boolean.TRUE);
-                continue;
-            }
-            if(temp.getGender().equals("f") && !ClientInfo.getInstance().isFemaleEvents()){
-                ClientInfo.getInstance().filteredEvents.put(ev,Boolean.TRUE);
-                continue;
-            }
-            if(ClientInfo.getInstance().getPersonToSideOfFamily().get(temp).equals("mom") && !ClientInfo.getInstance().isMotherSide()){
-                ClientInfo.getInstance().filteredEvents.put(ev,Boolean.TRUE);
-                continue;
-            }
-            if(ClientInfo.getInstance().getPersonToSideOfFamily().get(temp).equals("dad") && !ClientInfo.getInstance().isFatherSide()){
-                ClientInfo.getInstance().filteredEvents.put(ev,Boolean.TRUE);
-                continue;
-            }
-            ClientInfo.getInstance().filteredEvents.put(ev,Boolean.FALSE);
-            LatLng latitudeAndLongitude = new LatLng(ev.getLatitude(), ev.getLongitude());
-            MarkerOptions markerOptions = new MarkerOptions();
-            markerOptions.position(latitudeAndLongitude);
-            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(getColor(ev.getEvent_type())));
-            ClientInfo.getInstance().addWaypoint(theMap.addMarker(markerOptions),ev);
-        }
-    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

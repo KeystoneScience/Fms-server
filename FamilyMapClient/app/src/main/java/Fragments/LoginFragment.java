@@ -1,10 +1,12 @@
-package com.example.familymapclient;
+package Fragments;
 
 import androidx.fragment.app.Fragment;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.Toast;
+
+import com.example.familymapclient.R;
 import com.google.gson.Gson;
 
 
@@ -27,6 +29,8 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import Activitys.MainActivity;
+import Client_Information.ClientInfo;
 import model.User;
 import requests.LoginRequest;
 import requests.RegisterRequest;
@@ -44,8 +48,6 @@ public class LoginFragment extends Fragment {
     private Button mSignIn, mRegister;
     private String serverHost, serverPort, userName,
             password, firstName, lastName, email, gender;
-    private User user;
-    private MainActivity defaultActivity;
 
 
     public LoginFragment() { }
@@ -459,10 +461,10 @@ public class LoginFragment extends Fragment {
 
 
 
-    public class UserDataFetchr extends AsyncTask<Void, String, Integer> {
+    public class UserDataFetchr extends AsyncTask<Void, String, Boolean> {
 
 
-        protected Integer doInBackground(Void... voids) {
+        protected Boolean doInBackground(Void... voids) {
 
             PersonResult pR =  (PersonResult) taskGetProxy(serverHost, serverPort,"/person",new PersonResult());
             EventResult eR =  (EventResult) taskGetProxy(serverHost, serverPort,"/event",new EventResult());
@@ -470,10 +472,10 @@ public class LoginFragment extends Fragment {
 
             ClientInfo.getInstance().setPersonResult(pR);
             ClientInfo.getInstance().setEventResult(eR);
-            return 1;
+            return true;
         }
 
-        protected void onPostExecute(Integer integer) {
+        protected void onPostExecute(Boolean bool) {
 
             if (!ClientInfo.getInstance().getPersonResult().isSuccess()) {
                 Toast.makeText(getContext(), "Person Gather failed Failed.", Toast.LENGTH_SHORT).show();
@@ -483,8 +485,8 @@ public class LoginFragment extends Fragment {
                 Toast.makeText(getContext(), output, Toast.LENGTH_SHORT).show();
             }
 
-            defaultActivity = (MainActivity) getContext();
-            defaultActivity.startMap();
+            MainActivity main = (MainActivity) getContext();
+            main.startMap();
 
 
 
